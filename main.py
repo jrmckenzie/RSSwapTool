@@ -143,7 +143,7 @@ user_db = import_data_from_csv('tables/User.csv')
 
 # Set the layout of the GUI
 left_column = [
-    [sg.Text('Rolling Stock Swapper', font='Helvetica 16')],
+    [sg.Text('RSSwapTool', font='Helvetica 16')],
     [sg.FileBrowse('Select scenario file to process', key='Scenario_xml', tooltip='Locate the scenario .bin or .xml '
                                                                                   'file you wish to process')],
     [sg.Text('Tick the boxes below to choose the\nsubstitutions you would like to make.')],
@@ -218,7 +218,7 @@ right_column = [
                  tooltip='Tick to enable replacing of North Wales Coast / Settle Carlisle / Fife Circle Class 158s '
                          'with AP enhanced versions (Cummins, Perkins)',
                  key='Replace_C158')],
-    [sg.Button('Replace!'), sg.Button('Settings'), sg.Button('Exit')],
+    [sg.Button('Replace!'), sg.Button('Settings'), sg.Button('About'), sg.Button('Exit')],
 ]
 
 layout = [
@@ -1530,11 +1530,16 @@ def fix_short_tags(xml_string):
 
 
 if __name__ == "__main__":
-    window = sg.Window('Rolling stock swapper', layout)
+    window = sg.Window('RSSwapTool - Rolling stock swap tool', layout)
     while True:
         event, values = window.read()
         if event == 'Exit' or event == sg.WIN_CLOSED:
             break
+        elif event == 'About':
+            sg.Popup('About RSSwapTool',
+                     'Tool for swapping rolling stock in Train Simulator (Dovetail Games) scenarios',
+                     'Issued under the GNU General Public License - see https://www.gnu.org/licenses/',
+                     'Copyright 2021 JR McKenzie', 'https://github.com/jrmckenzie/RSSwapTool')
         elif event == 'Settings':
             if not config.has_section('defaults'):
                 config.add_section('defaults')
