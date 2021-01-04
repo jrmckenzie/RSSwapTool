@@ -1053,43 +1053,42 @@ def c40_replace(provider, product, blueprint, name, number):
                     name.text = this_vehicle[6]
                     rv_num = number.text
                     rv_orig = number.text
-                    if provider.text == 'DT':
-                        # Check if the loco has a pre-tops number
-                        pretops_disc = re.search('^([0-9])([0-9]{3})$', number.text)
-                        if pretops_disc:
-                            rv_dnum = '0' + pretops_disc.group(2)
-                            headcode = ap40headcodes_62_69[pretops_disc.group(1)]
-                            ap_num = dcsv_get_num(
-                                Path(railworks_path, 'Assets', this_vehicle[3], this_vehicle[4], this_vehicle[7]),
-                                rv_dnum,
-                                '([0-9]{4})(.*)')
-                            rv_num = '1' + ap_num[1:4] + headcode
-                        pretops_headcode = re.search('^([0-9][a-z][0-9]{2})([0-9]{3})$', number.text)
-                        if pretops_headcode:
-                            rv_dnum = '0' + pretops_headcode.group(2)
-                            headcode = pretops_headcode.group(1).upper()
-                            ap_num = dcsv_get_num(
-                                Path(railworks_path, 'Assets', this_vehicle[3], this_vehicle[4], this_vehicle[7]),
-                                rv_dnum,
-                                '([0-9]{4})(.*)')
-                            rv_num = '1' + ap_num[1:4] + headcode
-                        # Check if the loco has a tops number
-                        tops_domino = re.search('^(40[0-9]{3})$', number.text)
-                        if tops_domino:
-                            rv_tops = '11111' + tops_domino.group(1)
-                            rv_num = dcsv_get_num(
-                                Path(railworks_path, 'Assets', this_vehicle[3], this_vehicle[4], this_vehicle[7]),
-                                rv_tops,
-                                '([0-9]{10})(.*)')
-                        tops_disc = re.search('^([0-9])(40[0-9]{3})$', number.text)
-                        if tops_disc:
-                            rv_tops = '1111' + tops_disc.group(2)
-                            headcode = ap40headcodes_69_77[tops_disc.group(1)]
-                            ap_num = dcsv_get_num(
-                                Path(railworks_path, 'Assets', this_vehicle[3], this_vehicle[4], this_vehicle[7]),
-                                rv_tops,
-                                '([0-9]{9})(.*)')
-                            rv_num = ap_num[0:9] + headcode
+                    # Check if the loco has a pre-tops number
+                    pretops_disc = re.search('^([0-9])([0-9]{3})$', number.text)
+                    if pretops_disc:
+                        rv_dnum = '0' + pretops_disc.group(2)
+                        headcode = ap40headcodes_62_69[pretops_disc.group(1)]
+                        ap_num = dcsv_get_num(
+                            Path(railworks_path, 'Assets', this_vehicle[3], this_vehicle[4], this_vehicle[7]),
+                            rv_dnum,
+                            '([0-9]{4})(.*)')
+                        rv_num = '1' + ap_num[1:4] + headcode
+                    pretops_headcode = re.search('^([0-9][a-z][0-9]{2})([0-9]{3})$', number.text)
+                    if pretops_headcode:
+                        rv_dnum = '0' + pretops_headcode.group(2)
+                        headcode = pretops_headcode.group(1).upper()
+                        ap_num = dcsv_get_num(
+                            Path(railworks_path, 'Assets', this_vehicle[3], this_vehicle[4], this_vehicle[7]),
+                            rv_dnum,
+                            '([0-9]{4})(.*)')
+                        rv_num = '1' + ap_num[1:4] + headcode
+                    # Check if the loco has a tops number
+                    tops_domino = re.search('^(40[0-9]{3})$', number.text)
+                    if tops_domino:
+                        rv_tops = '11111' + tops_domino.group(1)
+                        rv_num = dcsv_get_num(
+                            Path(railworks_path, 'Assets', this_vehicle[3], this_vehicle[4], this_vehicle[7]),
+                            rv_tops,
+                            '([0-9]{10})(.*)')
+                    tops_disc = re.search('^([0-9])(40[0-9]{3})$', number.text)
+                    if tops_disc:
+                        rv_tops = '1111' + tops_disc.group(2)
+                        headcode = ap40headcodes_69_77[tops_disc.group(1)]
+                        ap_num = dcsv_get_num(
+                            Path(railworks_path, 'Assets', this_vehicle[3], this_vehicle[4], this_vehicle[7]),
+                            rv_tops,
+                            '([0-9]{9})(.*)')
+                        rv_num = ap_num[0:9] + headcode
                     # Set AP Class 40 number
                     number.text = str(rv_num)
                     rv_list.append(number.text)
