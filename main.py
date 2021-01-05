@@ -33,6 +33,7 @@ from data_file import haa_e_wagons, haa_l_wagons, hto_e_wagons, hto_l_wagons, ht
 rv_list = []
 rv_pairs = []
 layout = []
+vehicle_list = []
 values = {}
 vehicle_db = {}
 user_db = {}
@@ -48,7 +49,7 @@ if config.has_option('RailWorks', 'path'):
     railworks_path = config.get('RailWorks', 'path')
 else:
     loclayout = [[sg.T('')],
-                 [sg.Text('Please locate your RailWorks folder:'), sg.Input(key='-IN2-', change_submits=True),
+                 [sg.Text('Please locate your RailWorks folder:'), sg.Input(key='-IN2-', change_submits=False, readonly=True),
                   sg.FolderBrowse(key='RWloc')], [sg.Button('Submit')]]
     locwindow = sg.Window('Configure path to RailWorks folder', loclayout, size=(640, 150))
     while True:
@@ -98,6 +99,7 @@ if not config.has_section('defaults'):
     config.set('defaults', 'replace_c91', 'True')
     config.set('defaults', 'replace_c101', 'True')
     config.set('defaults', 'replace_c158', 'True')
+    config.set('defaults', 'save_report', 'False')
     config.set('defaults', 'c56_rf', c56_opts[0])
     config.set('defaults', 'c86_hc', c86_opts[0])
     with open(Path('config.ini'), 'w') as iconfigfile:
@@ -172,8 +174,8 @@ left_column = [
                  tooltip='Tick to enable replacing of VDA wagons with Fastline Simulation VDA pack',
                  key='Replace_VDA')],
     [sg.Checkbox('Replace IHH stock', default=config.getboolean('defaults', 'replace_ihh'), enable_events=True,
-                 tooltip='Tick to enable replacing of old Iron Horse House (IHH) stock, if you have any (if in doubt '
-                         'leave this unticked)',
+                 tooltip='Tick to enable replacing of old Iron Horse House (IHH) stock, if your scenario contains any'
+                         ' (if in doubt, leave this unticked)',
                  key='Replace_IHH')],
     [sg.Checkbox('Replace User-configured stock', default=config.getboolean('defaults', 'replace_user'),
                  enable_events=True,
@@ -373,8 +375,8 @@ def cl50char_to_num(this_rv):
 def cl56rsc_to_apsecdep_or_blanksecdep(this_rv):
     # This converts the RSC Class 56 RF number, sector and depot to AP numbering scheme
     # sector and/or plaque blank where no AP equivalent exists
-    this_sector = this_rv[0, 1]
-    this_depot = this_rv[1, 2]
+    this_sector = this_rv[0:1]
+    this_depot = this_rv[1:2]
     sectors = {'a': 'd', 'b': 'c', 'e': 'b', 'f': 'a'}
     if this_sector in sectors:
         this_sector = sectors[this_sector]
@@ -385,7 +387,7 @@ def cl56rsc_to_apsecdep_or_blanksecdep(this_rv):
         this_depot = depots[this_depot]
     else:
         this_depot = '*'
-    return this_sector + this_depot + this_rv[2, 7]
+    return this_sector + this_depot + this_rv[2:7]
 
 
 def set_weathering(this_weather_variant, this_vehicle):
@@ -1444,6 +1446,7 @@ def parse_xml(xml_file):
                 number = coentity.find('Component/*/UniqueNumber')
                 loaded = coentity.find('Component/cCargoComponent/IsPreLoaded')
                 vehicle_replacer(provider, product, blueprint, name, number, loaded)
+                vehicle_list.append([provider.text, product.text, blueprint.text, name.text, number.text, loaded.text])
         for driver_inrvs in citem.findall('Driver/cDriver/InitialRV'):
             # iterate through driver instructions and update changed vehicle numbers in the consist
             for drv in driver_inrvs.findall('e'):
@@ -1528,6 +1531,21 @@ def fix_short_tags(xml_string):
     return xml_string
 
 
+def convert_vlist_to_html_table(html_file_path):
+    htm = "<table border=\"1\" class=\"dataframe\">\n  <thead>\n    <tr style=\"text-align: right;\">\n" \
+          "      <th>Provider</th>\n      <th>Product</th>\n      <th>Blueprint</th>\n      <th>Name</th>\n" \
+          "      <th>Number</th>\n      <th>Loaded</th>\n    </tr>\n  </thead>\n  <tbody>\n"
+    for row in vehicle_list:
+        col_htm = ""
+        for col in row:
+            col_htm = col_htm + "      <td>" + col + "</td>\n"
+        htm = htm + "    <tr>\n" + col_htm + "    </tr>\n"
+    htm = htm + "  </tbody>\n</table>\n" + str(len(vehicle_list)) + ' rail vehicles in total in this scenario.'
+    html_file_path.touch()
+    html_file_path.write_text(htm)
+    return True
+
+
 if __name__ == "__main__":
     window = sg.Window('RSSwapTool - Rolling stock swap tool', layout)
     while True:
@@ -1593,6 +1611,10 @@ if __name__ == "__main__":
                     size=(72, 0))],
                 [sg.Combo(c56_opts, auto_size_text=True, default_value=c56_rf, key='c56_rf', readonly=True)],
                 [sg.HSeparator(color='#aaaaaa')],
+                [sg.Checkbox('Save a list of all vehicles in the scenario (useful for debugging)', key='save_report',
+                             default=config.getboolean('defaults', 'save_report'), enable_events=True,
+                             tooltip='This option will save a report listing all the rail vehicles (and their numbers)'
+                                     ' in the scenario, in .html format, alongside the scenario output file.')],
                 [sg.Button('Save changes'), sg.Button('Cancel')]
             ]
             locwindow = sg.Window('Configure path to RailWorks folder', loclayout)
@@ -1609,6 +1631,7 @@ if __name__ == "__main__":
                         config.add_section('defaults')
                     config.set('defaults', 'c86_hc', str(lvalues['c86_hc']))
                     config.set('defaults', 'c56_rf', str(lvalues['c56_rf']))
+                    config.set('defaults', 'save_report', str(lvalues['save_report']))
                     with open(Path('config.ini'), 'w') as configfile:
                         config.write(configfile)
                         configfile.close()
@@ -1673,6 +1696,11 @@ if __name__ == "__main__":
                 xmlFile = scenarioPath.parent / Path(str(scenarioPath.stem) + '.xml')
                 xmlFile.touch()
                 xmlFile.write_text(xmlString)
+                html_report_status_text = ''
+                if config.getboolean('defaults', 'save_report'):
+                    html_report_file = scenarioPath.parent / Path(str(scenarioPath.stem) + '-railvehicle_report.html')
+                    convert_vlist_to_html_table(html_report_file)
+                    html_report_status_text = 'Report listing all rail vehicles located in ' + str(html_report_file)
                 if str(scenarioPath.suffix) == '.bin':
                     # Run the serz.exe command again to generate the output scenario .bin file
                     binFile = scenarioPath.parent / Path(str(scenarioPath.stem) + '.bin')
@@ -1682,8 +1710,9 @@ if __name__ == "__main__":
                     serz_output = serz_output + '\nserz.exe ' + p2.communicate()[0].decode('ascii')
                     # Tell the user the scenario has been converted
                     sg.popup(serz_output,
-                             'Original scenario backup located in ' + str(outPathStem) + str(scenarioPath.suffix))
+                             'Original scenario backup located in ' + str(outPathStem) + str(scenarioPath.suffix),
+                             html_report_status_text)
                 else:
                     sg.popup('Scenario converted and saved to ' + str(
-                        xmlFile) + '.', 'Original scenario backup located in ' + str(outPathStem) + str(
-                        scenarioPath.suffix))
+                        xmlFile), 'Original scenario backup located in ' + str(outPathStem) + str(
+                        scenarioPath.suffix), html_report_status_text)
