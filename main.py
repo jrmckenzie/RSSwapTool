@@ -404,7 +404,7 @@ def haa_replace(provider, product, blueprint, name, number, loaded):
         this_vehicle = vehicle_db['HAA'][i]
         if this_vehicle[0] in provider.text:
             if this_vehicle[1] in product.text:
-                bp = re.search(re.escape(this_vehicle[2]), blueprint.text, flags=re.IGNORECASE)
+                bp = re.search(this_vehicle[2], blueprint.text, flags=re.IGNORECASE)
                 if bp:
                     provider.text = 'AP'
                     product.text = 'HAAWagonPack01'
@@ -1484,7 +1484,7 @@ def vehicle_replacer(provider, product, blueprint, name, number, loaded):
         return True
     if values['Replace_IHH'] and ihh_replace(provider, product, blueprint, name, number):
         return True
-    if values['Replace_User'] and ihh_replace(provider, product, blueprint, name, number):
+    if values['Replace_User'] and user_replace(provider, product, blueprint, name):
         return True
     if values['Replace_HST'] and hst_replace(provider, product, blueprint, name, number):
         return True
