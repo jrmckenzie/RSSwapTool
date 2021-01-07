@@ -281,6 +281,7 @@ def dcsv_get_num(this_dcsv, this_rv, this_re):
 
 def csv_get_blue47num(front, this_rv):
     ithis_rv = int(this_rv)
+    last_loco = vp_blue_47_db[front][0]
     diff = 0
     s = set(rv_list)
     for loco in vp_blue_47_db[front]:
@@ -775,8 +776,6 @@ def ihh_replace(provider, product, blueprint, name, number):
         return True
     if bool(ihh_c45_replace(provider, product, blueprint, name, number)):
         return True
-    if bool(ihh_c47_replace(provider, product, blueprint, name, number)):
-        return True
     return False
 
 
@@ -789,20 +788,41 @@ def ihh_bonus_replace(provider, product, blueprint, name, number):
                 if bp:
                     rv_orig = number.text
                     guv = re.search('guv', blueprint.text, flags=re.IGNORECASE)
+                    cao = re.search('20t', blueprint.text, flags=re.IGNORECASE)
+                    c47 = re.search('brush_4_bue', blueprint.text, flags=re.IGNORECASE)
                     if guv:
                         if not bool(re.match('[A-Z][0-9]{5}', number.text)):
+                            # If the number is not in expected format, choose a random one.
                             number.text = 'M' + str(random.randint(86078, 86984))
-                            rv_list.append(number.text)
-                            rv_pairs.append([rv_orig, number.text])
-                    cao = re.search('20t', blueprint.text, flags=re.IGNORECASE)
-                    if cao:
+                    elif cao:
+                        # As the IHH number format for 20t brake vans is not known, choose a random number.
                         number.text = '####B' + str(random.randint(953676, 954520)) + '#'
-                        rv_list.append(number.text)
-                        rv_pairs.append([rv_orig, number.text])
+                    elif c47:
+                        # Initialise a random Class 47/0 number in case no valid number found
+                        rv_num = str(random.randint(47001, 47298))
+                        # Try to extract loco number from IHH number string
+                        nm_tops = re.search('^47#([0-9]{3}).*', number.text)
+                        nm_pretops = re.search('^D#([0-9]{4}).*', number.text)
+                        if nm_tops:
+                            rv_num = str(47000 + int(nm_tops.group(1)))
+                        elif nm_pretops:
+                            # It's a pre-tops number - select a 47/0 TOPS number instead
+                            rv_num = str(47001 + ((int(nm_pretops.group(1)) - 1) % 298))
+                        # look up the TOPS number and retrieve details for VP blueprints and number
+                        loco = csv_get_blue47num(this_vehicle[3], rv_num)
+                        this_vehicle[3] = 'Kuju'
+                        this_vehicle[4] = 'RailSimulator'
+                        this_vehicle[5] = loco[4]
+                        this_vehicle[6] = loco[3]
+                        number.text = loco[0]
+                    else:
+                        return False
                     provider.text = this_vehicle[3]
                     product.text = this_vehicle[4]
                     blueprint.text = this_vehicle[5]
                     name.text = this_vehicle[6]
+                    rv_list.append(number.text)
+                    rv_pairs.append([rv_orig, number.text])
                     return True
     return False
 
@@ -816,15 +836,15 @@ def ihh_c20_replace(provider, product, blueprint, name, number):
                 if bp:
                     rv_orig = number.text
                     rv_num = str(random.randint(20001, 20126))
-                    nm = re.search('^-20#([0-9]{3})', number.text)
+                    nm = re.search('^.20#([0-9]{3})', number.text)
                     if nm:
                         if int(nm.group(1)) < 127:
-                            rv_num = '20' + nm.group(1)
+                            rv_num = str(20000 + int(nm.group(1)))
                     provider.text = this_vehicle[3]
                     product.text = this_vehicle[4]
                     blueprint.text = this_vehicle[5]
                     name.text = this_vehicle[6]
-                    number.text = str(rv_num)
+                    number.text = rv_num
                     rv_list.append(number.text)
                     rv_pairs.append([rv_orig, number.text])
                     return True
@@ -915,38 +935,6 @@ def ihh_c45_replace(provider, product, blueprint, name, number):
                     nm = re.search('^(45|46)#([0-9]{3}).*', number.text)
                     if nm:
                         rv_num = nm.group(1) + nm.group(2)
-                    provider.text = this_vehicle[3]
-                    product.text = this_vehicle[4]
-                    blueprint.text = this_vehicle[5]
-                    name.text = this_vehicle[6]
-                    number.text = rv_num
-                    rv_list.append(number.text)
-                    rv_pairs.append([rv_orig, number.text])
-                    return True
-    return False
-
-
-def ihh_c47_replace(provider, product, blueprint, name, number):
-    if 'IHH' in provider.text:
-        if 'Bonus Content' in product.text:
-            for i in range(0, len(vehicle_db['IHH_Class47'])):
-                this_vehicle = vehicle_db['IHH_Class47'][i]
-                bp = re.search(this_vehicle[2], blueprint.text, flags=re.IGNORECASE)
-                if bp:
-                    rv_orig = number.text
-                    rv_num = ''
-                    nm = re.search('^47#([0-9]{3}).*', number.text)
-                    if nm:
-                        rv_num = int(nm.group(1))
-                    pt = re.search('^D#([0-9]{4}).*', number.text)
-                    if pt:
-                        # It's a pre-tops number - select a random TOPS number instead
-                        rv_num = int(pt.group(1))
-                    rv_num = dcsv_get_num(
-                        Path(railworks_path, 'Assets', this_vehicle[3], this_vehicle[4], this_vehicle[7]),
-                        rv_num, '(47[0-9]{3})(.*)')
-                    rv_list.append(rv_num)
-                    rv_pairs.append([number.text, rv_num])
                     provider.text = this_vehicle[3]
                     product.text = this_vehicle[4]
                     blueprint.text = this_vehicle[5]
