@@ -284,21 +284,21 @@ def csv_get_blue47num(front, this_rv):
     diff = 0
     s = set(rv_list)
     for loco in vp_blue_47_db[front]:
-            curr_nm = loco[0]
-            dcsv_nm = int(loco[2])
-            if curr_nm in s:
-                continue
-            if ithis_rv > dcsv_nm:
-                diff = ithis_rv - dcsv_nm
-            elif ithis_rv == dcsv_nm:
+        curr_nm = loco[0]
+        dcsv_nm = int(loco[2])
+        if curr_nm in s:
+            continue
+        if ithis_rv > dcsv_nm:
+            diff = ithis_rv - dcsv_nm
+        elif ithis_rv == dcsv_nm:
+            return loco
+        elif ithis_rv < dcsv_nm:
+            if diff != 0:
+                if dcsv_nm - ithis_rv > diff:
+                    return last_loco
+            else:
                 return loco
-            elif ithis_rv < dcsv_nm:
-                if diff != 0:
-                    if dcsv_nm - ithis_rv > diff:
-                        return last_loco
-                else:
-                    return loco
-            last_loco = loco
+        last_loco = loco
     return last_loco
 
 
