@@ -37,6 +37,7 @@ vehicle_list = []
 values = {}
 vehicle_db = {}
 user_db = {}
+vp_blue_47_db = {}
 railworks_path = ''
 # sg.theme('Default1')
 c56_opts = ['Use nearest numbered AP enhanced loco', 'Retain original loco if no matching AP plaque / sector available']
@@ -89,6 +90,7 @@ if not config.has_section('defaults'):
     config.set('defaults', 'replace_c31', 'True')
     config.set('defaults', 'replace_c37', 'True')
     config.set('defaults', 'replace_c40', 'True')
+    config.set('defaults', 'replace_c47', 'True')
     config.set('defaults', 'replace_c50', 'True')
     config.set('defaults', 'replace_c56', 'True')
     config.set('defaults', 'replace_c66', 'True')
@@ -142,6 +144,7 @@ if not user_db_path.is_file():
     user_db_path.write_text(head)
 vehicle_db = import_data_from_csv('tables/Replacements.csv')
 user_db = import_data_from_csv('tables/User.csv')
+vp_blue_47_db = import_data_from_csv('tables/Class47BRBlue_numbers.csv')
 
 # Set the layout of the GUI
 left_column = [
@@ -186,11 +189,14 @@ left_column = [
 ]
 right_column = [
     [sg.Checkbox('Replace Class 31s', default=config.getboolean('defaults', 'replace_c31'), enable_events=True,
-                 tooltip='Replace class 31s with AP enhancement pack equivalent', key='Replace_C31')],
+                 tooltip='Replace Class 31s with AP enhancement pack equivalent', key='Replace_C31')],
     [sg.Checkbox('Replace Class 37s', default=config.getboolean('defaults', 'replace_c37'), enable_events=True,
-                 tooltip='Replace BR Blue Pack Class 37s with AP equivalent', key='Replace_C37')],
+                 tooltip='Replace Class 37s with AP equivalent', key='Replace_C37')],
     [sg.Checkbox('Replace Class 40s', default=config.getboolean('defaults', 'replace_c40'), enable_events=True,
                  tooltip='Replace DT Class 40s with AP/RailRight equivalent', key='Replace_C40')],
+    [sg.Checkbox('Replace Class 47s', default=config.getboolean('defaults', 'replace_c47'), enable_events=True,
+                 tooltip='Replace BR Blue Class 47s with Vulcan Productions BR Blue Class 47 Pack versions',
+                 key='Replace_C47')],
     [sg.Checkbox('Replace Class 50s', default=config.getboolean('defaults', 'replace_c50'), enable_events=True,
                  tooltip='Replace MeshTools Class 50s with AP equivalent', key='Replace_C50')],
     [sg.Checkbox('Replace Class 56s', default=config.getboolean('defaults', 'replace_c56'), enable_events=True,
@@ -271,6 +277,29 @@ def dcsv_get_num(this_dcsv, this_rv, this_re):
                     return curr_nm
             last_nm = curr_nm
     return last_nm
+
+
+def csv_get_blue47num(front, this_rv):
+    ithis_rv = int(this_rv)
+    diff = 0
+    s = set(rv_list)
+    for loco in vp_blue_47_db[front]:
+            curr_nm = loco[0]
+            dcsv_nm = int(loco[2])
+            if curr_nm in s:
+                continue
+            if ithis_rv > dcsv_nm:
+                diff = ithis_rv - dcsv_nm
+            elif ithis_rv == dcsv_nm:
+                return loco
+            elif ithis_rv < dcsv_nm:
+                if diff != 0:
+                    if dcsv_nm - ithis_rv > diff:
+                        return last_loco
+                else:
+                    return loco
+            last_loco = loco
+    return last_loco
 
 
 def dcsv_gethstloco(this_dcsv, this_rv):
@@ -904,8 +933,8 @@ def ihh_c47_replace(provider, product, blueprint, name, number):
                 this_vehicle = vehicle_db['IHH_Class47'][i]
                 bp = re.search(this_vehicle[2], blueprint.text, flags=re.IGNORECASE)
                 if bp:
-                    rv_num = number.text
                     rv_orig = number.text
+                    rv_num = ''
                     nm = re.search('^47#([0-9]{3}).*', number.text)
                     if nm:
                         rv_num = int(nm.group(1))
@@ -913,7 +942,6 @@ def ihh_c47_replace(provider, product, blueprint, name, number):
                     if pt:
                         # It's a pre-tops number - select a random TOPS number instead
                         rv_num = int(pt.group(1))
-                    rv_num = str(47001 + (int(rv_num - 1) % 298))
                     rv_num = dcsv_get_num(
                         Path(railworks_path, 'Assets', this_vehicle[3], this_vehicle[4], this_vehicle[7]),
                         rv_num, '(47[0-9]{3})(.*)')
@@ -1096,6 +1124,30 @@ def c40_replace(provider, product, blueprint, name, number):
                     rv_list.append(number.text)
                     rv_pairs.append([rv_orig, number.text])
                     return True
+    return False
+
+
+def c47_replace(provider, product, blueprint, name, number):
+    if 'Kuju' in provider.text:
+        if 'RailSimulator' in product.text:
+            for i in range(0, len(vehicle_db['Class47BRBlue'])):
+                this_vehicle = vehicle_db['Class47BRBlue'][i]
+                bp = re.search(this_vehicle[2], blueprint.text, flags=re.IGNORECASE)
+                if bp:
+                    rv_orig = number.text
+                    nm = re.search('^(47[0-9]{3})', number.text)
+                    if nm:
+                        loco = csv_get_blue47num(this_vehicle[3], nm.group(1))
+                        provider.text = 'Kuju'
+                        product.text = 'RailSimulator'
+                        blueprint.text = loco[4]
+                        name.text = loco[3]
+                        number.text = loco[0]
+                        rv_list.append(number.text)
+                        rv_pairs.append([rv_orig, number.text])
+                        return True
+                    else:
+                        return False
     return False
 
 
@@ -1425,7 +1477,7 @@ def parse_xml(xml_file):
         sg.popup('Scenario file ' + str(Path(xml_file)) + ' not found.', 'Please try again.', title='Error')
         return False
     except ET.ParseError:
-        sg.popup('Scenario file ' + str(Path(xml_file)) + ' not found.', 'Please try again.', title='Error')
+        sg.popup('Scenario file ' + str(Path(xml_file)) + ' could not be processed due to an XML parse error.', 'Please try again.', title='Error')
         return False
     ET.register_namespace("d", "http://www.kuju.com/TnT/2003/Delta")
     root = parser_tree.getroot()
@@ -1503,6 +1555,8 @@ def vehicle_replacer(provider, product, blueprint, name, number, loaded):
         return True
     if values['Replace_C40'] and c40_replace(provider, product, blueprint, name, number):
         return True
+    if values['Replace_C47'] and c47_replace(provider, product, blueprint, name, number):
+        return True
     if values['Replace_C50'] and c50_replace(provider, product, blueprint, name, number):
         return True
     if values['Replace_C56'] and c56_replace(provider, product, blueprint, name, number):
@@ -1573,6 +1627,7 @@ if __name__ == "__main__":
             config.set('defaults', 'replace_c31', str(values['Replace_C31']))
             config.set('defaults', 'replace_c37', str(values['Replace_C37']))
             config.set('defaults', 'replace_c40', str(values['Replace_C40']))
+            config.set('defaults', 'replace_c47', str(values['Replace_C47']))
             config.set('defaults', 'replace_c50', str(values['Replace_C50']))
             config.set('defaults', 'replace_c56', str(values['Replace_C56']))
             config.set('defaults', 'replace_c66', str(values['Replace_C66']))
@@ -1655,6 +1710,7 @@ if __name__ == "__main__":
             config.set('defaults', 'replace_c31', str(values['Replace_C31']))
             config.set('defaults', 'replace_c37', str(values['Replace_C37']))
             config.set('defaults', 'replace_c40', str(values['Replace_C40']))
+            config.set('defaults', 'replace_c47', str(values['Replace_C47']))
             config.set('defaults', 'replace_c50', str(values['Replace_C50']))
             config.set('defaults', 'replace_c56', str(values['Replace_C56']))
             config.set('defaults', 'replace_c66', str(values['Replace_C66']))
