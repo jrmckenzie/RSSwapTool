@@ -20,9 +20,9 @@ import sys
 import subprocess
 import configparser
 import PySimpleGUI as sg
+import webbrowser
 from pathlib import Path
 
-swaps_db = {}
 report = []
 rv_pairs = []
 vehicle_list = []
@@ -30,12 +30,10 @@ vehicle_list = []
 def parse_xml(xml_file):
     try:
         parser_tree = ET.parse(xml_file)
-    except FileNotFoundError:
-        sys.exit('Scenario file ' + str(Path(xml_file)) + ' not found.', 'Please try again.', title='Error')
-        return False
-    except ET.ParseError:
-        sys.exit('Scenario file ' + str(Path(xml_file)) + ' not found.', 'Please try again.', title='Error')
-        return False
+    except FileNotFoundError as f:
+        sys.exit('Scenario xml file not found. Please try again.\n' + str(f))
+    except ET.ParseError as e:
+        sys.exit('Scenario xml file ' + str(Path(xml_file)) + ' could not be parsed. Please try again.\n' + str(e))
     ET.register_namespace("d", "http://www.kuju.com/TnT/2003/Delta")
     root = parser_tree.getroot()
     # iterate through the consists
@@ -55,26 +53,9 @@ def parse_xml(xml_file):
                 number = coentity.find('Component/*/UniqueNumber')
                 loaded = coentity.find('Component/cCargoComponent/IsPreLoaded')
                 vehicle_list.append([provider.text, product.text, blueprint.text, name.text, number.text, loaded.text])
-        for driver_inrvs in citem.findall('Driver/cDriver/InitialRV'):
-            # iterate through driver instructions and update changed vehicle numbers in the consist
-            for drv in driver_inrvs.findall('e'):
-                for rvp in rv_pairs:
-                    if drv.text == rvp[0]:
-                        drv.text = rvp[1]
-    for citem in root.findall('./Record/cConsist'):
-        for cons_rvs in citem.findall(
-                'Driver/cDriver/DriverInstructionContainer/cDriverInstructionContainer/DriverInstruction/'
-                'cConsistOperations/DeltaTarget/cDriverInstructionTarget/RailVehicleNumber'):
-            # iterate through driver consist instructions and update changed vehicle numbers in the consist
-            for crv in cons_rvs.findall('e'):
-                for rvp in rv_pairs:
-                    if crv.text == rvp[0]:
-                        crv.text = rvp[1]
     # All necessary elements processed, now return the new xml scenario to be written
     return parser_tree
 
-tree = parse_xml('scenario.xml')
-print(report)
 
 def convert_vlist_to_html_table(html_file_path):
     htmhead = '''<html>
@@ -188,7 +169,7 @@ if __name__ == "__main__":
             sg.Popup('About RSSwapTool',
                      'Tool for swapping rolling stock in Train Simulator (Dovetail Games) scenarios',
                      'Issued under the GNU General Public License - see https://www.gnu.org/licenses/',
-                     'Version 0.1a',
+                     'Version 0.2a',
                      'Copyright 2021 JR McKenzie', 'https://github.com/jrmckenzie/RSSwapTool')
         elif event == 'Settings':
             # The settings button has been pressed, so allow the user to change the RailWorks folder setting
@@ -227,15 +208,23 @@ if __name__ == "__main__":
                 if str(scenarioPath.suffix) == '.bin':
                     # This is a bin file so we need to run serz.exe command to convert it to a readable .xml
                     # intermediate file
-                    inFile = scenarioPath.parent / Path(str(scenarioPath.stem) + '.xml')
+                    inFile = scenarioPath.parent / Path(str(scenarioPath.stem) + '-railvehicle_examination_report.xml')
                     p1 = subprocess.Popen([str(cmd), str(scenarioPath), '/xml:' + str(inFile)], stdout=subprocess.PIPE)
                     p1.wait()
                     serz_output = 'serz.exe ' + p1.communicate()[0].decode('ascii')
                     # Now the intermediate .xml has been created by serz.exe, read it in to this script and do the
                     # processing
-                tree = parse_xml(inFile)
-                html_report_file = scenarioPath.parent / Path(str(scenarioPath.stem) + '-railvehicle_report.html')
+                    tree = parse_xml(inFile)
+                    inFile.unlink()
+                else:
+                    tree = parse_xml(inFile)
+                html_report_file = scenarioPath.parent / Path(str(scenarioPath.stem) +
+                                                              '-railvehicle_examination_report.html')
                 convert_vlist_to_html_table(html_report_file)
                 html_report_status_text = 'Report listing all rail vehicles located in ' + str(html_report_file)
-                sg.popup(html_report_status_text)
+                browser = sg.popup_yes_no(html_report_status_text,
+                                          'Do you want to open the report in your web browser now?')
+                if browser == 'Yes':
+                    webbrowser.open(html_report_file)
+
 
