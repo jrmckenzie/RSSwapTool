@@ -24,6 +24,7 @@ import sys
 import subprocess
 import configparser
 import PySimpleGUI as sg
+import webbrowser
 from pathlib import Path
 from data_file import haa_e_wagons, haa_l_wagons, hto_e_wagons, hto_l_wagons, htv_e_wagons, htv_l_wagons, \
     vda_e_wagons, vda_l_wagons, HTO_141_numbers, HTO_143_numbers, HTO_146_numbers, HTO_rebodied_numbers, \
@@ -1677,6 +1678,7 @@ if __name__ == "__main__":
             sg.Popup('About RSSwapTool',
                      'Tool for swapping rolling stock in Train Simulator (Dovetail Games) scenarios',
                      'Issued under the GNU General Public License - see https://www.gnu.org/licenses/',
+                     'Version 0.2a',
                      'Copyright 2021 JR McKenzie', 'https://github.com/jrmckenzie/RSSwapTool')
         elif event == 'Settings':
             if not config.has_section('defaults'):
@@ -1819,23 +1821,24 @@ if __name__ == "__main__":
                 xmlFile = scenarioPath.parent / Path(str(scenarioPath.stem) + '.xml')
                 xmlFile.touch()
                 xmlFile.write_text(xmlString)
+                output_message = 'Scenario converted and saved to ' + str(xmlFile)
                 html_report_status_text = ''
-                if config.getboolean('defaults', 'save_report'):
-                    html_report_file = scenarioPath.parent / Path(str(scenarioPath.stem) + '-railvehicle_report.html')
-                    convert_vlist_to_html_table(html_report_file)
-                    html_report_status_text = 'Report listing all rail vehicles located in ' + str(html_report_file)
                 if str(scenarioPath.suffix) == '.bin':
                     # Run the serz.exe command again to generate the output scenario .bin file
                     binFile = scenarioPath.parent / Path(str(scenarioPath.stem) + '.bin')
                     p2 = subprocess.Popen([str(cmd), str(xmlFile), '/bin:' + str(binFile)], stdout=subprocess.PIPE)
                     p2.wait()
                     inFile.unlink()
-                    serz_output = serz_output + '\nserz.exe ' + p2.communicate()[0].decode('ascii')
-                    # Tell the user the scenario has been converted
-                    sg.popup(serz_output,
-                             'Original scenario backup located in ' + str(outPathStem) + str(scenarioPath.suffix),
-                             html_report_status_text)
+                    output_message = serz_output + '\nserz.exe ' + p2.communicate()[0].decode('ascii')
+                output_message = output_message + '\nOriginal scenario backup located in ' + str(outPathStem) + \
+                                 str(scenarioPath.suffix)
+                if config.getboolean('defaults', 'save_report'):
+                    html_report_file = scenarioPath.parent / Path(str(scenarioPath.stem) + '-railvehicle_report.html')
+                    convert_vlist_to_html_table(html_report_file)
+                    html_report_status_text = 'Report listing all rail vehicles located in ' + str(html_report_file)
+                    browser = sg.popup_yes_no(output_message, html_report_status_text,
+                                              'Do you want to open the report in your web browser now?')
+                    if browser == 'Yes':
+                        webbrowser.open(html_report_file)
                 else:
-                    sg.popup('Scenario converted and saved to ' + str(
-                        xmlFile), 'Original scenario backup located in ' + str(outPathStem) + str(
-                        scenarioPath.suffix), html_report_status_text)
+                    sg.popup(output_message)
