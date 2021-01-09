@@ -12,3 +12,7 @@ User,RSDL,UKWagons01,railvehicles\freight\pca\default\pca01.xml,keithmross,WCML2
 User,RSDL,UKWagons01,railvehicles\freight\pca\variant1\pca02.xml,keithmross,WCML2,RailVehicles\Freight\PCA\Variant1\PCA02.xml,WCML2 PCA 02 Dirty,
 User,RSDL,UKWagons01,railvehicles\freight\pca\variant2\pca03.xml,keithmross,WCML2,RailVehicles\Freight\PCA\Variant2\PCA03.xml,WCML2 PCA 03 Rusty,
 User,Kuju,RailSimulator,RailVehicles\Freight\StandardVan\bauxite dirt\Wagon\standard_van.xml,Kuju,RailSimulator,RailVehicles\Freight\StandardVan\Standard_Van_Bauxite_06\Wagon\standard_van.xml,FP StanVan Bxite 6 (BY),
+User,keithmross,WCML2,RailVehicles\Mk3Coaches\Mk3aFO\mk3a_tfo.xml,keithmross,WCML2,RailVehicles\Mk3Coaches\Mk3aFO_AP\mk3a_tfo.xml,WCML2 Mk3a BR Blue TFO AP,
+User,keithmross,WCML2,RailVehicles\Mk3Coaches\Mk3aRSM\mk3a_RFB.xml,keithmross,WCML2,RailVehicles\Mk3Coaches\Mk3aRSM_AP\mk3a_RFB.xml,WCML2 Mk3a BR Blue RSM AP,
+User,keithmross,WCML2,RailVehicles\Mk3Coaches\Mk3aRFB\mk3a_RFB.xml,keithmross,WCML2,RailVehicles\Mk3Coaches\Mk3aRSM_AP\mk3a_RFB.xml,WCML2 Mk3a BR Blue RSM AP,
+User,keithmross,WCML2,RailVehicles\Mk3Coaches\Mk3aSO\mk3a_tso.xml,keithmross,WCML2,RailVehicles\Mk3Coaches\Mk3aSO_AP\mk3a_tso.xml,WCML2 Mk3a BR Blue TSO AP,
