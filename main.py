@@ -259,23 +259,34 @@ def dcsv_get_num(this_dcsv, this_rv, this_re):
     s = set(rv_list)
     root = dcsv_tree.getroot()
     for vnum in root.findall("./CSVItem/cCSVItem/Name"):
+        # Iterate through the list of TOPS numbers until we find a number we haven't previously used which is an exact
+        # match or the closest match for the number we're looking for
         nm = re.search(this_re, vnum.text)
         if nm:
             curr_nm = nm.group(1) + nm.group(2)
             dcsv_nm = int(nm.group(1))
             if curr_nm in s:
+                # This number is already in use in another swapped loco - move on and try the next one
                 continue
             if ithis_rv > dcsv_nm:
+                # This number is still less than the number we're looking for - but remember how close it is and try the
+                # next one to see if it is a match or is even further away than this number.
                 diff = ithis_rv - dcsv_nm
             elif ithis_rv == dcsv_nm:
+                # A matching number is available and has been found - use it.
                 return curr_nm
             elif ithis_rv < dcsv_nm:
-                if diff != 0:
-                    if dcsv_nm - ithis_rv > diff:
-                        return last_nm
+                # We have overshot the number we are looking for - but if this number is even further from the number
+                # we're looking for than the last one we looked at, use the last one.
+                if dcsv_nm - ithis_rv > diff:
+                    return last_nm
                 else:
+                    # We've checked and even though we have overshot the number we are looking for, this number is
+                    # closer to the number we're looking for than the last one we looked at - so use it.
                     return curr_nm
             last_nm = curr_nm
+    # We didn't find a number to use. We must have reached the end of the available numbers so we will have to use the
+    # last available number we found.
     return last_nm
 
 
@@ -285,21 +296,38 @@ def csv_get_blue47num(front, this_rv):
     diff = 0
     s = set(rv_list)
     for loco in vp_blue_47_db[front]:
+        # Iterate through the list of TOPS numbers until we find a number we haven't previously used which is an exact
+        # match or the closest match for the number we're looking for, within the same subclass
         curr_nm = loco[0]
         dcsv_nm = int(loco[2])
         if curr_nm in s:
+            # This number is already in use in another swapped loco - move on and try the next one
             continue
         if ithis_rv > dcsv_nm:
+            # This number is still less than the number we're looking for - but remember how close it is and try the
+            # next one to see if it is a match or is even further away than this number.
             diff = ithis_rv - dcsv_nm
         elif ithis_rv == dcsv_nm:
+            # A matching number is available and has been found - use it.
             return loco
         elif ithis_rv < dcsv_nm:
-            if diff != 0:
-                if dcsv_nm - ithis_rv > diff:
-                    return last_loco
+            # We have overshot the number we are looking for - but if this number is even further from the number we're
+            # looking for than the last one we looked at, use the last one.
+            # Also, check to see if we have crossed the boundary into another subclass and if we have, remember the last
+            # available number we found (from the previous subclass) and use that instead.
+            if (dcsv_nm - ithis_rv > diff) or \
+                    (ithis_rv < 47301 and dcsv_nm >= 47301) or \
+                    (ithis_rv < 47401 and dcsv_nm >= 47401) or \
+                    (ithis_rv < 47701 and dcsv_nm >= 47701):
+                return last_loco
             else:
+                # We've checked and this number is within the same subclass and even though we have overshot the number
+                # we are looking for, this number is closer to the number we're looking for than the last one we
+                # looked at - so use it.
                 return loco
         last_loco = loco
+    # We didn't find a number to use. We must have reached the end of the available numbers so we will have to use the
+    # last available number we found.
     return last_loco
 
 
@@ -325,23 +353,34 @@ def dcsv_gethstloco(this_dcsv, this_rv):
     s = set(rv_list)
     root = dcsv_tree.getroot()
     for vnum in root.findall("./CSVItem/cCSVItem/Name"):
+        # Iterate through the list of TOPS numbers until we find a number we haven't previously used which is an exact
+        # match or the closest match for the number we're looking for
         nm = re.search('(.?)(43[0-9]{3})(.*)', vnum.text)
         if nm:
             curr_nm = nm.group(1) + nm.group(2) + nm.group(3)
             dcsv_nm = int(nm.group(2))
             if curr_nm in s:
+                # This number is already in use in another swapped power car - move on and try the next one
                 continue
             if ithis_rv > dcsv_nm:
+                # This number is still less than the number we're looking for - but remember how close it is and try the
+                # next one to see if it is a match or is even further away than this number.
                 diff = ithis_rv - dcsv_nm
             elif ithis_rv == dcsv_nm:
+                # A matching number is available and has been found - use it.
                 return curr_nm
             elif ithis_rv < dcsv_nm:
-                if diff != 0:
-                    if dcsv_nm - ithis_rv > diff:
-                        return last_nm
+                # We have overshot the number we are looking for - but if this number is even further from the number
+                # we're looking for than the last one we looked at, use the last one.
+                if dcsv_nm - ithis_rv > diff:
+                    return last_nm
                 else:
+                    # We've checked and even though we have overshot the number we are looking for, this number is
+                    # closer to the number we're looking for than the last one we looked at - so use it.
                     return curr_nm
             last_nm = curr_nm
+    # We didn't find a number to use. We must have reached the end of the available numbers so we will have to use the
+    # last available number we found.
     return last_nm
 
 
@@ -1116,10 +1155,10 @@ def c40_replace(provider, product, blueprint, name, number):
 
 
 def c47_replace(provider, product, blueprint, name, number):
-    if 'Kuju' in provider.text:
-        if 'RailSimulator' in product.text:
-            for i in range(0, len(vehicle_db['Class47BRBlue'])):
-                this_vehicle = vehicle_db['Class47BRBlue'][i]
+    for i in range(0, len(vehicle_db['Class47BRBlue'])):
+        this_vehicle = vehicle_db['Class47BRBlue'][i]
+        if this_vehicle[0] in provider.text:
+            if this_vehicle[1] in product.text:
                 bp = re.search(this_vehicle[2], blueprint.text, flags=re.IGNORECASE)
                 if bp:
                     rv_orig = number.text
@@ -1563,26 +1602,65 @@ def vehicle_replacer(provider, product, blueprint, name, number, loaded):
 def fix_short_tags(xml_string):
     # This clumsy fix is necessary because sometimes TS requires short xml empty tags and sometimes long ones.
     # The following substitutions should take care of the important exceptions to the long tag default.
-    xml_string = re.sub(r'(<cEngineSimContainer.d:id="[0-9]{10}")></cEngineSimContainer>', r'\1/>', xml_string,
+    xml_string = re.sub(r'(<cEngineSimContainer.d:id="[\-0-9]*")></cEngineSimContainer>', r'\1/>', xml_string,
                         flags=re.IGNORECASE)
     xml_string = re.sub(r'(<RailVehicleNumber)></RailVehicleNumber>', r'\1/>', xml_string, flags=re.IGNORECASE)
     xml_string = re.sub(r'(<Other)></Other>', r'\1/>', xml_string, flags=re.IGNORECASE)
     xml_string = re.sub(r'(<DeltaTarget)></DeltaTarget>', r'\1/>', xml_string, flags=re.IGNORECASE)
     xml_string = re.sub(r'(<d:nil)></d:nil>', r'\1/>', xml_string, flags=re.IGNORECASE)
     xml_string = re.sub(r'(<DriverInstruction)></DriverInstruction>', r'\1/>', xml_string, flags=re.IGNORECASE)
+    xml_string = re.sub(r'(<InitialLevel)></InitialLevel>', r'\1/>', xml_string, flags=re.IGNORECASE)
+    xml_string = re.sub(r'(<StaticChildrenMatrix)></StaticChildrenMatrix>', r'\1/>', xml_string, flags=re.IGNORECASE)
+    xml_string = re.sub(r'(<RailVehicles)></RailVehicles>', r'\1/>', xml_string, flags=re.IGNORECASE)
     return xml_string
 
 
 def convert_vlist_to_html_table(html_file_path):
-    htm = "<table border=\"1\" class=\"dataframe\">\n  <thead>\n    <tr style=\"text-align: right;\">\n" \
-          "      <th>Provider</th>\n      <th>Product</th>\n      <th>Blueprint</th>\n      <th>Name</th>\n" \
-          "      <th>Number</th>\n      <th>Loaded</th>\n    </tr>\n  </thead>\n  <tbody>\n"
+    htmhead = '''<html>
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<title>Scenario rail vehicle and asset report</title>
+<link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
+<style>
+body,.dataframe {
+    font-family: 'Roboto';font-size: 10pt;
+}
+h1 {
+    font-family: 'Roboto';font-size: 24pt;
+    font-style: bold;
+}
+h2 {
+    font-family: 'Roboto';font-size: 18pt;
+    font-style: bold;
+}
+h3,thead {
+    font-family: 'Roboto';font-size: 14pt;
+    font-style: bold;
+    border-style: none none solid none;
+    border-width: 1px;
+}
+</style>\n</head>\n<body>\n'''
+    htmrv = "<h1>Rail vehicle list</h1>\n<table border=\"1\" class=\"dataframe\">\n  <thead>\n" \
+            "    <tr style=\"text-align: right;\">\n      <th>Provider</th>\n      <th>Product</th>\n" \
+            "      <th>Blueprint</th>\n      <th>Name</th>\n      <th>Number</th>\n      <th>Loaded</th>\n    </tr>\n" \
+            "  </thead>\n  <tbody>\n"
+    unique_assets = []
     for row in vehicle_list:
         col_htm = ""
+        if row[0:2] not in unique_assets:
+            unique_assets.append(row[0:2])
         for col in row:
             col_htm = col_htm + "      <td>" + col + "</td>\n"
-        htm = htm + "    <tr>\n" + col_htm + "    </tr>\n"
-    htm = htm + "  </tbody>\n</table>\n" + str(len(vehicle_list)) + ' rail vehicles in total in this scenario.'
+        htmrv = htmrv + "    <tr>\n" + col_htm + "    </tr>\n"
+    htmrv = htmrv + "  </tbody>\n</table>\n<h3>" + str(len(vehicle_list)) + ' vehicles in total in this scenario.</h3>'
+    htmas = "\n<h1>List of rail vehicle assets used</h1>\n<table border=\"1\" class=\"dataframe\">\n  <thead>\n" \
+            "    <tr style=\"text-align: right;\">\n      <th>Provider</th>\n      <th>Product</th>\n    </tr>\n" \
+            "  </thead>\n  <tbody>\n"
+    unique_assets.sort(key=lambda x: (x[0], x[1]))
+    for asset in unique_assets:
+        htmas = htmas + "    <tr>\n      <td>" + asset[0] + "</td>\n      <td>" + asset[1] + "</td>\n    </tr>\n"
+    htmas = htmas + "  </tbody>\n</table>\n"
+    htm = htmhead + htmas + htmrv + "</body>\n</html>\n"
     html_file_path.touch()
     html_file_path.write_text(htm)
     return True
@@ -1750,7 +1828,6 @@ if __name__ == "__main__":
                     binFile = scenarioPath.parent / Path(str(scenarioPath.stem) + '.bin')
                     p2 = subprocess.Popen([str(cmd), str(xmlFile), '/bin:' + str(binFile)], stdout=subprocess.PIPE)
                     p2.wait()
-                    inFile.unlink()
                     serz_output = serz_output + '\nserz.exe ' + p2.communicate()[0].decode('ascii')
                     # Tell the user the scenario has been converted
                     sg.popup(serz_output,
