@@ -98,9 +98,9 @@ if not config.has_section('defaults'):
     config.set('defaults', 'replace_c68', 'True')
     config.set('defaults', 'replace_c86', 'True')
     config.set('defaults', 'replace_hst', 'True')
-    config.set('defaults', 'replace_c91', 'True')
-    config.set('defaults', 'replace_c101', 'True')
-    config.set('defaults', 'replace_c158', 'True')
+    config.set('defaults', 'replace_c91', 'False')
+    config.set('defaults', 'replace_c101', 'False')
+    config.set('defaults', 'replace_c158', 'False')
     config.set('defaults', 'save_report', 'False')
     config.set('defaults', 'c56_rf', c56_opts[0])
     config.set('defaults', 'c86_hc', c86_opts[0])
@@ -1468,7 +1468,7 @@ def c158_replace(provider, product, blueprint, name, number):
                                 destination = c158_livman_rr[nm.group(1)]
                             rv_num = '15' + nm.group(2) + destination
                         if provider.text == 'RSC' and product.text == 'SettleCarlisle':
-                            # Northern liveried stock, destination blank
+                            # Destination blank - Settle-Carlisle units don't support destination displays
                             rv_num = '158' + rv_orig[2:5] + 'a'
                     # Swap vehicle and set number / destination (where possible)
                     provider.text = this_vehicle[3]
@@ -1504,7 +1504,8 @@ def parse_xml(xml_file):
         sg.popup('Scenario file ' + str(Path(xml_file)) + ' not found.', 'Please try again.', title='Error')
         return False
     except ET.ParseError:
-        sg.popup('Scenario file ' + str(Path(xml_file)) + ' could not be processed due to an XML parse error.', 'Please try again.', title='Error')
+        sg.popup('Scenario file ' + str(Path(xml_file)) + ' could not be processed due to an XML parse error.',
+                 'Please try again.', title='Error')
         return False
     ET.register_namespace("d", "http://www.kuju.com/TnT/2003/Delta")
     root = parser_tree.getroot()
@@ -1828,6 +1829,7 @@ if __name__ == "__main__":
                     binFile = scenarioPath.parent / Path(str(scenarioPath.stem) + '.bin')
                     p2 = subprocess.Popen([str(cmd), str(xmlFile), '/bin:' + str(binFile)], stdout=subprocess.PIPE)
                     p2.wait()
+                    inFile.unlink()
                     serz_output = serz_output + '\nserz.exe ' + p2.communicate()[0].decode('ascii')
                     # Tell the user the scenario has been converted
                     sg.popup(serz_output,
