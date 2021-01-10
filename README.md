@@ -55,14 +55,29 @@ The following substitutions are available:
 * Replace HST sets - Tick to enable replacing of HST sets with AP enhanced versions (Valenta, MTU, VP185)
 * Replace Class 91 EC sets - Tick to enable replacing of Class 91 East Coast sets with AP enhanced versions
 * Replace Class 101 sets - Tick to enable replacing of retired RSC Class101Pack with RSC BritishRailClass101 sets - note there is no BR White livery available, these will be replaced with BR Blue
+* Replace Class 156 sets - Tick to enable replacing of Oovee Class 156s with AP Class 156
 * Replace Class 158 sets - Tick to enable replacing of North Wales Coast / Settle Carlisle / Fife Circle Class 158s with AP enhanced versions (Cummins, Perkins)
 
-There is an option to add your own substitutions ("Replace User-configured stock"). You can do this be configuring the file User.csv in the "tables" folder. A few lines are already entered to give you an idea of the format. (You can open the file in a spreadsheet package or upload and edit it in google sheets). Note that there will be no changes made to rail vehicle numbers for anything included in the User.csv file). If you tick the "Replace User-configured stock" box then any substitutions configured in the User.csv file will be processed. If you've got anything wrong the program may crash, but you can safely delete the User.csv file and start again if so. The built-in substitutions are provided by the file Replacements.csv in the "tables" folder, should you wish to add or remove items you may do so. 
+Note that in some cases the replacement loco, coach or wagon might come in a variety of different weathering options. The application will choose a random weathering. The HAA, HTO, HTV and VDA wagon replacements will also be slightly randomised to give a bit of variety - not too many clean new ones though!
+
+There is an option to add your own substitutions ("Replace User-configured stock"). You can do this be configuring the file User.csv in the "tables" folder. A few lines are already entered to give you an idea of the format. (You can open the file in a spreadsheet package or upload and edit it in google sheets). Note that there will be no changes made to rail vehicle numbers for anything included in the User.csv file). If you tick the "Replace User-configured stock" box then any substitutions configured in the User.csv file will be processed. If you've got anything wrong the program may crash, but you can safely delete the User.csv file and start again if so. The built-in substitutions are provided by the file Replacements.csv in the "tables" folder, should you wish to add or remove items you may do so at your own risk. 
 
 Note that one of the options is to replace IHH stock. This option is incomplete. None of the old "Iron Horse House" (IHH) stock is available to buy anymore but some scenarios still include it. RSSwapTool will try to replace IHH Class 20, 25, 40, 45 and 47, plus BG and GUV coaches and a 20 ton BR brake van. This will require the DTG BR Blue Pack 01, Vulcan Productions BR Blue reskins for Class 20, 25, 45 and 47. For the time being this option is limited to these IHH items and it may not function very well as the author of RSSwapTool does not own any of the IHH stock to verify.
 
 The "Replace Class 47s" option will replace BR Blue Class 47s with the Vulcan Productions BR Blue Class 47 Pack versions, either with marker lights in a yellow panel or with the domino (whichever was found on the locomotive being replaced). The Class 47s in this pack do not have the orange cant rail or high intensity headlamps which the locomotives being replaced have, so you may only want to select this option if your scenario is from an era where this substitution would be appropriate. Whether the substituted locomotive is of the subclass 47/0, 47/3, 47/4 or 47/7 (and whether it has ETH connections etc on the front) depends on the TOPS number of the locomotive being replaced. Whether or not the locomotive has a grey roof or not also depends on the TOPS number - if the locomotive number in question originally had a grey roof then the swapped-in loco should have a grey roof. Note that only the Brush-manufactured locomotives are provided in the VP pack; this program will give the substituted locomotive the number of the Brush manufactured locomotive closest to the number of the locomotive being replaced, but within the same subclass.
 
-For various reasons the scenario may need manual editing in Scenario Editor to work properly after the stock is swapped. For example, slightly different physics may change the timing and position of AI at critical points and new signalling bugs may manifest themselves.
-
 There is also a "Settings" button you can press to update some settings (e.g. location of RailWorks folder, substitution behaviour with Class 56 and 86, saving of a report listing all rail vehicles in the scenario and their key details).
+
+Remember that for various reasons the scenario may need manual editing in Scenario Editor to work properly after the stock is swapped. For example, slightly different physics may change the timing and position of AI at critical points and new signalling issues may manifest themselves. Even loading the scenario into Scenario Editor, making a non-material change (like flipping the orientation of a static wagon in a siding or making a slight change to a vehicle number) may help with some issues as it forces Train Simulator to write out the scenario the way it likes (with its own particular quirks to its xml format) and re-create the ScenarioProperies.xml file.
+
+It is intended that more will be added to this documentation in due course.
+
+Copyright © 2021 JR McKenzie
+
+This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+The latest version of the source code is available from https://github.com/jrmckenzie/RSSwapTool. 
