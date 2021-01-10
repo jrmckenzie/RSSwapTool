@@ -103,6 +103,7 @@ if not config.has_section('defaults'):
     config.set('defaults', 'replace_hst', 'True')
     config.set('defaults', 'replace_c91', 'False')
     config.set('defaults', 'replace_c101', 'False')
+    config.set('defaults', 'replace_c156', 'False')
     config.set('defaults', 'replace_c158', 'False')
     config.set('defaults', 'save_report', 'False')
     config.set('defaults', 'c56_rf', c56_opts[0])
@@ -224,6 +225,9 @@ right_column = [
                  enable_events=True,
                  tooltip='Tick to enable replacing of retired RSC Class101Pack with RSC BritishRailClass101 sets',
                  key='Replace_C101')],
+    [sg.Checkbox('Replace Class 156 sets', default=config.getboolean('defaults', 'replace_c156'),
+                 enable_events=True,
+                 tooltip='Tick to enable replacing of Oovee Class 156s with AP Class 156', key='Replace_C156')],
     [sg.Checkbox('Replace Class 158 sets', default=config.getboolean('defaults', 'replace_c158'),
                  enable_events=True,
                  tooltip='Tick to enable replacing of North Wales Coast / Settle Carlisle / Fife Circle Class 158s '
@@ -1429,6 +1433,31 @@ def c101_replace(provider, product, blueprint, name):
     return False
 
 
+def c156_replace(provider, product, blueprint, name, number):
+    if 'Oovee' in provider.text:
+        if 'BRClass156Pack01' in product.text:
+            for i in range(0, len(vehicle_db['DMU156_set'])):
+                this_vehicle = vehicle_db['DMU156_set'][i]
+                bp = re.search(this_vehicle[2], blueprint.text, flags=re.IGNORECASE)
+                if bp:
+                    rv_orig = number.text
+                    nm = re.search('(156[0-9]{3})', number.text)
+                    if nm:
+                        number.text = nm.group(1) + 'a' + this_vehicle[7]
+                    else:
+                        # Unit number of the Oovee 156 is not in standard 156xxx format - can't replace the vehicle
+                        return False
+                    # Swap vehicle and set number / destination (where possible)
+                    provider.text = this_vehicle[3]
+                    product.text = this_vehicle[4]
+                    blueprint.text = this_vehicle[5]
+                    name.text = this_vehicle[6]
+                    rv_list.append(number.text)
+                    rv_pairs.append([rv_orig, number.text])
+                    return True
+    return False
+
+
 def c158_replace(provider, product, blueprint, name, number):
     for i in range(0, len(vehicle_db['DMU158_set'])):
         this_vehicle = vehicle_db['DMU158_set'][i]
@@ -1578,6 +1607,8 @@ def vehicle_replacer(provider, product, blueprint, name, number, loaded):
         return True
     if values['Replace_C101'] and c101_replace(provider, product, blueprint, name):
         return True
+    if values['Replace_C156'] and c156_replace(provider, product, blueprint, name, number):
+        return True
     if values['Replace_C158'] and c158_replace(provider, product, blueprint, name, number):
         return True
     if values['Replace_C31'] and c31_replace(provider, product, blueprint, name, number):
@@ -1680,7 +1711,7 @@ if __name__ == "__main__":
             sg.Popup('About RSSwapTool',
                      'Tool for swapping rolling stock in Train Simulator (Dovetail Games) scenarios',
                      'Issued under the GNU General Public License - see https://www.gnu.org/licenses/',
-                     'Version 0.4a',
+                     'Version 0.5a',
                      'Copyright 2021 JR McKenzie', 'https://github.com/jrmckenzie/RSSwapTool')
         elif event == 'Settings':
             if not config.has_section('defaults'):
@@ -1708,6 +1739,7 @@ if __name__ == "__main__":
             config.set('defaults', 'replace_hst', str(values['Replace_HST']))
             config.set('defaults', 'replace_c91', str(values['Replace_C91']))
             config.set('defaults', 'replace_c101', str(values['Replace_C101']))
+            config.set('defaults', 'replace_c156', str(values['Replace_C156']))
             config.set('defaults', 'replace_c158', str(values['Replace_C158']))
             with open(Path('config.ini'), 'w') as configfile:
                 config.write(configfile)
@@ -1791,6 +1823,7 @@ if __name__ == "__main__":
             config.set('defaults', 'replace_hst', str(values['Replace_HST']))
             config.set('defaults', 'replace_c91', str(values['Replace_C91']))
             config.set('defaults', 'replace_c101', str(values['Replace_C101']))
+            config.set('defaults', 'replace_c156', str(values['Replace_C156']))
             config.set('defaults', 'replace_c158', str(values['Replace_C158']))
             with open(Path('config.ini'), 'w') as configfile:
                 config.write(configfile)
