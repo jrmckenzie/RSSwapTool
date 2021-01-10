@@ -57,13 +57,15 @@ else:
     while True:
         event, values = locwindow.read()
         if event == sg.WIN_CLOSED:
-            if len(values['RWloc']) > 1:
-                break
+            if values is not None:
+                if values['RWloc'] is not None and len(values['RWloc']) > 1:
+                    break
             else:
-                sg.Popup('Please browse for the path to your RailWorks folder and try again.')
-                continue
+                sg.Popup('You must specify the path to your RailWorks folder for this application to work. '
+                         'The application will now close.')
+                sys.exit()
         elif event == 'Submit':
-            if len(values['RWloc']) > 1:
+            if values['RWloc'] is not None and len(values['RWloc']) > 1:
                 railworks_path = values['RWloc']
             else:
                 sg.Popup('Please browse for the path to your RailWorks folder and try again.')
@@ -1678,7 +1680,7 @@ if __name__ == "__main__":
             sg.Popup('About RSSwapTool',
                      'Tool for swapping rolling stock in Train Simulator (Dovetail Games) scenarios',
                      'Issued under the GNU General Public License - see https://www.gnu.org/licenses/',
-                     'Version 0.2a',
+                     'Version 0.4a',
                      'Copyright 2021 JR McKenzie', 'https://github.com/jrmckenzie/RSSwapTool')
         elif event == 'Settings':
             if not config.has_section('defaults'):
@@ -1741,7 +1743,7 @@ if __name__ == "__main__":
                                      ' in the scenario, in .html format, alongside the scenario output file.')],
                 [sg.Button('Save changes'), sg.Button('Cancel')]
             ]
-            locwindow = sg.Window('Configure path to RailWorks folder', loclayout)
+            locwindow = sg.Window('RSSwapTool - Settings', loclayout)
             while True:
                 levent, lvalues = locwindow.read()
                 if levent == 'Cancel' or sg.WIN_CLOSED:
@@ -1804,6 +1806,10 @@ if __name__ == "__main__":
                 if str(scenarioPath.suffix) == '.bin':
                     # This is a bin file so we need to run serz.exe command to convert it to a readable .xml
                     # intermediate file
+                    if not cmd.is_file():
+                        sg.popup('serz.exe could not be found in ' + str(railworks_path) + '. Is this definitely your '
+                                 'RailWorks folder?', 'This application will now exit.')
+                        sys.exit()
                     inFile = scenarioPath.parent / Path(str(scenarioPath.stem) + '.xml')
                     p1 = subprocess.Popen([str(cmd), str(scenarioPath), '/xml:' + str(inFile)], stdout=subprocess.PIPE)
                     p1.wait()
