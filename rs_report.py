@@ -97,7 +97,6 @@ h3,thead {
             "      <th>Loaded</th>\n    </tr>\n  </thead>\n  <tbody>\n"
     unique_assets = []
     last_cons = -1
-    rowspan = 1
     col_no = 0
     for row in vehicle_list:
         if row[1:3] not in unique_assets:
@@ -105,7 +104,6 @@ h3,thead {
         if int(row[0]) > last_cons:
             # start of a new consist - count how many vehicles are in this consist
             rowspan = (list(zip(*vehicle_list))[0]).count(row[0])
-            print('rowspan =', rowspan)
         else:
             rowspan = 0
         col_htm = ""
