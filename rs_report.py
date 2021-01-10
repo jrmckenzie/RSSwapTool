@@ -37,8 +37,14 @@ def parse_xml(xml_file):
     ET.register_namespace("d", "http://www.kuju.com/TnT/2003/Delta")
     root = parser_tree.getroot()
     # iterate through the consists
+    consist_nr = 0
     for citem in root.findall('./Record/cConsist'):
         # iterate through railvehicles list of the consist
+        service = citem.find('Driver/cDriver/ServiceName/Localisation-cUserLocalisedString/English')
+        if service is None:
+            service = 'Loose consist'
+        else:
+            service = service.text
         for rvehicles in citem.findall('RailVehicles'):
             # iterate through each railvehicle in the consist
             for coentity in rvehicles.findall('cOwnedEntity'):
@@ -52,7 +58,8 @@ def parse_xml(xml_file):
                 name = coentity.find('Name')
                 number = coentity.find('Component/*/UniqueNumber')
                 loaded = coentity.find('Component/cCargoComponent/IsPreLoaded')
-                vehicle_list.append([provider.text, product.text, blueprint.text, name.text, number.text, loaded.text])
+                vehicle_list.append([str(consist_nr), provider.text, product.text, blueprint.text, name.text, number.text, loaded.text, service])
+        consist_nr += 1
     # All necessary elements processed, now return the new xml scenario to be written
     return parser_tree
 
@@ -67,6 +74,8 @@ def convert_vlist_to_html_table(html_file_path):
 body,.dataframe {
     font-family: 'Roboto';font-size: 10pt;
 }
+tr.shaded_row {
+    background-color: #bbbbbb;
 h1 {
     font-family: 'Roboto';font-size: 24pt;
     font-style: bold;
@@ -83,17 +92,35 @@ h3,thead {
 }
 </style>\n</head>\n<body>\n'''
     htmrv = "<h1>Rail vehicle list</h1>\n<table border=\"1\" class=\"dataframe\">\n  <thead>\n" \
-            "    <tr style=\"text-align: right;\">\n      <th>Provider</th>\n      <th>Product</th>\n" \
-            "      <th>Blueprint</th>\n      <th>Name</th>\n      <th>Number</th>\n      <th>Loaded</th>\n    </tr>\n" \
-            "  </thead>\n  <tbody>\n"
+            "    <tr style=\"text-align: right;\">\n      <th>Consist</th>\n      <th>Provider</th>\n" \
+            "      <th>Product</th>\n      <th>Blueprint</th>\n      <th>Name</th>\n      <th>Number</th>\n" \
+            "      <th>Loaded</th>\n    </tr>\n  </thead>\n  <tbody>\n"
     unique_assets = []
+    last_cons = -1
+    rowspan = 1
+    col_no = 0
     for row in vehicle_list:
+        if row[1:3] not in unique_assets:
+            unique_assets.append(row[1:3])
+        if int(row[0]) > last_cons:
+            # start of a new consist - count how many vehicles are in this consist
+            rowspan = (list(zip(*vehicle_list))[0]).count(row[0])
+            print('rowspan =', rowspan)
+        else:
+            rowspan = 0
         col_htm = ""
-        if row[0:2] not in unique_assets:
-            unique_assets.append(row[0:2])
-        for col in row:
-            col_htm = col_htm + "      <td>" + col + "</td>\n"
-        htmrv = htmrv + "    <tr>\n" + col_htm + "    </tr>\n"
+        for col in row[0:7]:
+            col_no += 1
+            if rowspan > 0 and col_no == 1:
+                col_htm = col_htm + "      <td rowspan=" + str(rowspan) + "><i>" + row[7] + "</i></td>\n"
+            elif col_no > 1:
+                col_htm = col_htm + "      <td>" + col + "</td>\n"
+        col_no = 0
+        if (int(row[0]) % 2) == 0:
+            htmrv = htmrv + "    <tr>\n" + col_htm + "    </tr>\n"
+        else:
+            htmrv = htmrv + "    <tr class=\"shaded_row\">\n" + col_htm + "    </tr>\n"
+        last_cons = int(row[0])
     htmrv = htmrv + "  </tbody>\n</table>\n<h3>" + str(len(vehicle_list)) + ' vehicles in total in this scenario.</h3>'
     htmas = "\n<h1>List of rail vehicle assets used</h1>\n<table border=\"1\" class=\"dataframe\">\n  <thead>\n" \
             "    <tr style=\"text-align: right;\">\n      <th>Provider</th>\n      <th>Product</th>\n    </tr>\n" \
