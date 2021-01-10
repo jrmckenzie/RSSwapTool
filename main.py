@@ -51,7 +51,8 @@ if config.has_option('RailWorks', 'path'):
     railworks_path = config.get('RailWorks', 'path')
 else:
     loclayout = [[sg.T('')],
-                 [sg.Text('Please locate your RailWorks folder:'), sg.Input(key='-IN2-', change_submits=False, readonly=True),
+                 [sg.Text('Please locate your RailWorks folder:'), sg.Input(key='-IN2-', change_submits=False,
+                                                                            readonly=True),
                   sg.FolderBrowse(key='RWloc')], [sg.Button('Submit')]]
     locwindow = sg.Window('Configure path to RailWorks folder', loclayout, size=(640, 150))
     while True:
@@ -1541,11 +1542,17 @@ def parse_xml(xml_file):
         return False
     ET.register_namespace("d", "http://www.kuju.com/TnT/2003/Delta")
     root = parser_tree.getroot()
-    # iterate through the consists
+    # Iterate through the consists
+    consist_nr = 0
     for citem in root.findall('./Record/cConsist'):
-        # iterate through railvehicles list of the consist
+        service = citem.find('Driver/cDriver/ServiceName/Localisation-cUserLocalisedString/English')
+        if service is None:
+            service = 'Loose consist'
+        else:
+            service = service.text
+        # Iterate through RailVehicles list of the consist
         for rvehicles in citem.findall('RailVehicles'):
-            # iterate through each railvehicle in the consist
+            # Iterate through each RailVehicle in the consist
             for coentity in rvehicles.findall('cOwnedEntity'):
                 provider = coentity.find(
                     'BlueprintID/iBlueprintLibrary-cAbsoluteBlueprintID/BlueprintSetID/iBlueprintLibrary'
@@ -1558,9 +1565,12 @@ def parse_xml(xml_file):
                 number = coentity.find('Component/*/UniqueNumber')
                 loaded = coentity.find('Component/cCargoComponent/IsPreLoaded')
                 vehicle_replacer(provider, product, blueprint, name, number, loaded)
-                vehicle_list.append([provider.text, product.text, blueprint.text, name.text, number.text, loaded.text])
+                vehicle_list.append(
+                    [str(consist_nr), provider.text, product.text, blueprint.text, name.text, number.text, loaded.text,
+                     service])
+            consist_nr += 1
         for driver_inrvs in citem.findall('Driver/cDriver/InitialRV'):
-            # iterate through driver instructions and update changed vehicle numbers in the consist
+            # Iterate through driver instructions and update changed vehicle numbers in the consist
             for drv in driver_inrvs.findall('e'):
                 for rvp in rv_pairs:
                     if drv.text == rvp[0]:
@@ -1569,12 +1579,12 @@ def parse_xml(xml_file):
         for cons_rvs in citem.findall(
                 'Driver/cDriver/DriverInstructionContainer/cDriverInstructionContainer/DriverInstruction/'
                 'cConsistOperations/DeltaTarget/cDriverInstructionTarget/RailVehicleNumber'):
-            # iterate through driver consist instructions and update changed vehicle numbers in the consist
+            # Iterate through driver consist instructions and update changed vehicle numbers in the consist
             for crv in cons_rvs.findall('e'):
                 for rvp in rv_pairs:
                     if crv.text == rvp[0]:
                         crv.text = rvp[1]
-    # All necessary elements processed, now return the new xml scenario to be written
+    # All necessary elements processed, now return the new xml tree object of the scenario to be written
     return parser_tree
 
 
@@ -1660,6 +1670,8 @@ def convert_vlist_to_html_table(html_file_path):
 body,.dataframe {
     font-family: 'Roboto';font-size: 10pt;
 }
+tr.shaded_row {
+    background-color: #bbbbbb;
 h1 {
     font-family: 'Roboto';font-size: 24pt;
     font-style: bold;
@@ -1676,17 +1688,33 @@ h3,thead {
 }
 </style>\n</head>\n<body>\n'''
     htmrv = "<h1>Rail vehicle list</h1>\n<table border=\"1\" class=\"dataframe\">\n  <thead>\n" \
-            "    <tr style=\"text-align: right;\">\n      <th>Provider</th>\n      <th>Product</th>\n" \
-            "      <th>Blueprint</th>\n      <th>Name</th>\n      <th>Number</th>\n      <th>Loaded</th>\n    </tr>\n" \
-            "  </thead>\n  <tbody>\n"
+            "    <tr style=\"text-align: right;\">\n      <th>Consist</th>\n      <th>Provider</th>\n" \
+            "      <th>Product</th>\n      <th>Blueprint</th>\n      <th>Name</th>\n      <th>Number</th>\n" \
+            "      <th>Loaded</th>\n    </tr>\n  </thead>\n  <tbody>\n"
     unique_assets = []
+    last_cons = -1
+    col_no = 0
     for row in vehicle_list:
+        if row[1:3] not in unique_assets:
+            unique_assets.append(row[1:3])
+        if int(row[0]) > last_cons:
+            # start of a new consist - count how many vehicles are in this consist
+            rowspan = (list(zip(*vehicle_list))[0]).count(row[0])
+        else:
+            rowspan = 0
         col_htm = ""
-        if row[0:2] not in unique_assets:
-            unique_assets.append(row[0:2])
-        for col in row:
-            col_htm = col_htm + "      <td>" + col + "</td>\n"
-        htmrv = htmrv + "    <tr>\n" + col_htm + "    </tr>\n"
+        for col in row[0:7]:
+            col_no += 1
+            if rowspan > 0 and col_no == 1:
+                col_htm = col_htm + "      <td rowspan=" + str(rowspan) + "><i>" + row[7] + "</i></td>\n"
+            elif col_no > 1:
+                col_htm = col_htm + "      <td>" + col + "</td>\n"
+        col_no = 0
+        if (int(row[0]) % 2) == 0:
+            htmrv = htmrv + "    <tr>\n" + col_htm + "    </tr>\n"
+        else:
+            htmrv = htmrv + "    <tr class=\"shaded_row\">\n" + col_htm + "    </tr>\n"
+        last_cons = int(row[0])
     htmrv = htmrv + "  </tbody>\n</table>\n<h3>" + str(len(vehicle_list)) + ' vehicles in total in this scenario.</h3>'
     htmas = "\n<h1>List of rail vehicle assets used</h1>\n<table border=\"1\" class=\"dataframe\">\n  <thead>\n" \
             "    <tr style=\"text-align: right;\">\n      <th>Provider</th>\n      <th>Product</th>\n    </tr>\n" \
@@ -1711,7 +1739,7 @@ if __name__ == "__main__":
             sg.Popup('About RSSwapTool',
                      'Tool for swapping rolling stock in Train Simulator (Dovetail Games) scenarios',
                      'Issued under the GNU General Public License - see https://www.gnu.org/licenses/',
-                     'Version 0.5a',
+                     'Version 0.6a',
                      'Copyright 2021 JR McKenzie', 'https://github.com/jrmckenzie/RSSwapTool')
         elif event == 'Settings':
             if not config.has_section('defaults'):
@@ -1836,12 +1864,14 @@ if __name__ == "__main__":
                 inFile = scenarioPath
                 cmd = railworks_path / Path('serz.exe')
                 serz_output = ''
+                vehicle_list = []
                 if str(scenarioPath.suffix) == '.bin':
                     # This is a bin file so we need to run serz.exe command to convert it to a readable .xml
                     # intermediate file
                     if not cmd.is_file():
                         sg.popup('serz.exe could not be found in ' + str(railworks_path) + '. Is this definitely your '
-                                 'RailWorks folder?', 'This application will now exit.')
+                                                                                           'RailWorks folder?',
+                                 'This application will now exit.')
                         sys.exit()
                     inFile = scenarioPath.parent / Path(str(scenarioPath.stem) + '.xml')
                     p1 = subprocess.Popen([str(cmd), str(scenarioPath), '/xml:' + str(inFile)], stdout=subprocess.PIPE)
@@ -1869,8 +1899,8 @@ if __name__ == "__main__":
                     p2.wait()
                     inFile.unlink()
                     output_message = serz_output + '\nserz.exe ' + p2.communicate()[0].decode('ascii')
-                output_message = output_message + '\nOriginal scenario backup located in ' + str(outPathStem) + \
-                                 str(scenarioPath.suffix)
+                output_message = output_message + \
+                    '\nOriginal scenario backup located in ' + str(outPathStem) + str(scenarioPath.suffix)
                 if config.getboolean('defaults', 'save_report'):
                     html_report_file = scenarioPath.parent / Path(str(scenarioPath.stem) + '-railvehicle_report.html')
                     convert_vlist_to_html_table(html_report_file)

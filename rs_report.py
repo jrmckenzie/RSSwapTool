@@ -23,9 +23,8 @@ import PySimpleGUI as sg
 import webbrowser
 from pathlib import Path
 
-report = []
-rv_pairs = []
 vehicle_list = []
+
 
 def parse_xml(xml_file):
     try:
@@ -36,17 +35,18 @@ def parse_xml(xml_file):
         sys.exit('Scenario xml file ' + str(Path(xml_file)) + ' could not be parsed. Please try again.\n' + str(e))
     ET.register_namespace("d", "http://www.kuju.com/TnT/2003/Delta")
     root = parser_tree.getroot()
-    # iterate through the consists
+    # Iterate through the consists
     consist_nr = 0
     for citem in root.findall('./Record/cConsist'):
-        # iterate through railvehicles list of the consist
+        # Find the service name of the consist, if there is one, otherwise call it a loose consist.
         service = citem.find('Driver/cDriver/ServiceName/Localisation-cUserLocalisedString/English')
         if service is None:
             service = 'Loose consist'
         else:
             service = service.text
+        # Iterate through RailVehicles list of the consist
         for rvehicles in citem.findall('RailVehicles'):
-            # iterate through each railvehicle in the consist
+            # Iterate through each RailVehicle in the consist
             for coentity in rvehicles.findall('cOwnedEntity'):
                 provider = coentity.find(
                     'BlueprintID/iBlueprintLibrary-cAbsoluteBlueprintID/BlueprintSetID/iBlueprintLibrary'
@@ -58,7 +58,9 @@ def parse_xml(xml_file):
                 name = coentity.find('Name')
                 number = coentity.find('Component/*/UniqueNumber')
                 loaded = coentity.find('Component/cCargoComponent/IsPreLoaded')
-                vehicle_list.append([str(consist_nr), provider.text, product.text, blueprint.text, name.text, number.text, loaded.text, service])
+                vehicle_list.append(
+                    [str(consist_nr), provider.text, product.text, blueprint.text, name.text, number.text, loaded.text,
+                     service])
         consist_nr += 1
     # All necessary elements processed, now return the new xml scenario to be written
     return parser_tree
@@ -142,7 +144,8 @@ if config.has_option('RailWorks', 'path'):
     railworks_path = config.get('RailWorks', 'path')
 else:
     loclayout = [[sg.T('')],
-                 [sg.Text('Please locate your RailWorks folder:'), sg.Input(key='-IN2-', change_submits=False, readonly=True),
+                 [sg.Text('Please locate your RailWorks folder:'), sg.Input(key='-IN2-',
+                                                                            change_submits=False, readonly=True),
                   sg.FolderBrowse(key='RWloc')], [sg.Button('Submit')]]
     locwindow = sg.Window('Configure path to RailWorks folder', loclayout, size=(640, 150))
     while True:
@@ -197,7 +200,7 @@ if __name__ == "__main__":
                      'Tool for listing rolling stock in Train Simulator (Dovetail Games) scenarios, bundled with '
                      'RSSwapTool to provide a standalone tool to examine scenarios and list rolling stock.',
                      'Issued under the GNU General Public License - see https://www.gnu.org/licenses/',
-                     'Version 0.5a',
+                     'Version 0.6a',
                      'Copyright 2021 JR McKenzie', 'https://github.com/jrmckenzie/RSSwapTool')
         elif event == 'Settings':
             # The settings button has been pressed, so allow the user to change the RailWorks folder setting
@@ -233,6 +236,7 @@ if __name__ == "__main__":
                 inFile = scenarioPath
                 cmd = railworks_path / Path('serz.exe')
                 serz_output = ''
+                vehicle_list = []
                 if str(scenarioPath.suffix) == '.bin':
                     # This is a bin file so we need to run serz.exe command to convert it to a readable .xml
                     # intermediate file
@@ -258,5 +262,3 @@ if __name__ == "__main__":
                                           'Do you want to open the report in your web browser now?')
                 if browser == 'Yes':
                     webbrowser.open(html_report_file)
-
-
