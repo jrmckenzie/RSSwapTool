@@ -123,11 +123,13 @@ else:
     while True:
         event, values = locwindow.read()
         if event == sg.WIN_CLOSED:
-            if len(values['RWloc']) > 1:
-                break
+            if values is not None:
+                if values['RWloc'] is not None and len(values['RWloc']) > 1:
+                    break
             else:
-                sg.Popup('Please browse for the path to your RailWorks folder and try again.')
-                continue
+                sg.Popup('You must specify the path to your RailWorks folder for this application to work. '
+                         'The application will now close.')
+                sys.exit()
         elif event == 'Submit':
             if len(values['RWloc']) > 1:
                 railworks_path = values['RWloc']
@@ -145,7 +147,7 @@ else:
 
 # Set the layout of the GUI
 main_column = [
-    [sg.Text('RSSwapTool', font='Helvetica 16')],
+    [sg.Text('RSReportTool', font='Helvetica 16')],
     [sg.Text('Rolling stock report generator for existing scenarios.')],
     [sg.FileBrowse('Select scenario file to examine', key='Scenario_xml', tooltip='Locate the scenario .bin or .xml '
                                                                                   'file you wish to examine')],
@@ -160,16 +162,17 @@ layout = [
 ]
 
 if __name__ == "__main__":
-    window = sg.Window('RSSwapTool - Rolling stock swap tool', layout)
+    window = sg.Window('RSReportTool - Rolling stock report tool', layout)
     while True:
         event, values = window.read()
         if event == 'Exit' or event == sg.WIN_CLOSED:
             break
         elif event == 'About':
-            sg.Popup('About RSSwapTool',
-                     'Tool for swapping rolling stock in Train Simulator (Dovetail Games) scenarios',
+            sg.Popup('About RSReportTool',
+                     'Tool for listing rolling stock in Train Simulator (Dovetail Games) scenarios, bundled with '
+                     'RSSwapTool to provide a standalone tool to examine scenarios and list rolling stock.',
                      'Issued under the GNU General Public License - see https://www.gnu.org/licenses/',
-                     'Version 0.2a',
+                     'Version 0.4a',
                      'Copyright 2021 JR McKenzie', 'https://github.com/jrmckenzie/RSSwapTool')
         elif event == 'Settings':
             # The settings button has been pressed, so allow the user to change the RailWorks folder setting
@@ -208,6 +211,10 @@ if __name__ == "__main__":
                 if str(scenarioPath.suffix) == '.bin':
                     # This is a bin file so we need to run serz.exe command to convert it to a readable .xml
                     # intermediate file
+                    if not cmd.is_file():
+                        sg.popup('serz.exe could not be found in ' + str(railworks_path) + '. Is this definitely your '
+                                 'RailWorks folder?', 'This application will now exit.')
+                        sys.exit()
                     inFile = scenarioPath.parent / Path(str(scenarioPath.stem) + '-railvehicle_examination_report.xml')
                     p1 = subprocess.Popen([str(cmd), str(scenarioPath), '/xml:' + str(inFile)], stdout=subprocess.PIPE)
                     p1.wait()
