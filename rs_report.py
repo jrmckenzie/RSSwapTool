@@ -25,19 +25,93 @@ from pathlib import Path
 
 vehicle_list = []
 
+# Initialise the script, set the look and feel and get the configuration
+railworks_path = ''
+sg.LOOK_AND_FEEL_TABLE['Railish'] = {'BACKGROUND': '#00384F', 'TEXT': '#FFFFFF', 'INPUT': '#FFFFFF',
+                                     'TEXT_INPUT': '#000000', 'SCROLL': '#99CC99', 'BUTTON': ('#FFFFFF', '#002A3C'),
+                                     'PROGRESS': ('#31636d', '#002A3C'), 'BORDER': 2, 'SLIDER_DEPTH': 0,
+                                     'PROGRESS_DEPTH': 2, }
+sg.theme('Railish')
+
+# Set the layout of the GUI
+layout = [
+    [sg.Text('RSReportTool', font='Helvetica 16')],
+    [sg.Text('Rolling stock report generator for existing scenarios.')],
+    [sg.FileBrowse('Select scenario file to examine', key='Scenario_xml', tooltip='Locate the scenario .bin or .xml '
+                                                                                  'file you wish to examine')],
+    [sg.Button('Examine!'), sg.Button('Settings'), sg.Button('About'), sg.Button('Exit')],
+    [sg.Text('© 2021 JR McKenzie', font='Helvetica 7')],
+]
+
+# Set the layout of the progress bar window
+progress_layout = [
+    [sg.Text('Processing consists')],
+    [sg.ProgressBar(1, orientation='h', key='progress', size=(25, 15))]
+]
+
+# Read configuration and find location of RailWorks folder, or ask user to set it
+config = configparser.ConfigParser()
+config.read('config.ini')
+if config.has_option('RailWorks', 'path'):
+    railworks_path = config.get('RailWorks', 'path')
+else:
+    loclayout = [[sg.T('')],
+                 [sg.Text('Please locate your RailWorks folder:'), sg.Input(key='-IN2-',
+                                                                            change_submits=False, readonly=True),
+                  sg.FolderBrowse(key='RWloc')], [sg.Button('Submit')]]
+    locwindow = sg.Window('Configure path to RailWorks folder', loclayout, size=(640, 150))
+    while True:
+        event, values = locwindow.read()
+        if event == sg.WIN_CLOSED:
+            if values is not None:
+                if values['RWloc'] is not None and len(values['RWloc']) > 1:
+                    break
+            else:
+                sg.Popup('You must specify the path to your RailWorks folder for this application to work. '
+                         'The application will now close.')
+                sys.exit()
+        elif event == 'Submit':
+            if len(values['RWloc']) > 1:
+                railworks_path = values['RWloc']
+            else:
+                sg.Popup('Please browse for the path to your RailWorks folder and try again.')
+                continue
+            if not config.has_section('RailWorks'):
+                config.add_section('RailWorks')
+            config.set('RailWorks', 'path', values['RWloc'])
+            with open(Path('config.ini'), 'w') as iconfigfile:
+                config.write(iconfigfile)
+                iconfigfile.close()
+            break
+    locwindow.close()
+
 
 def parse_xml(xml_file):
+    # Check we can open the file, parse it and find some rail vehicle consists in it before proceeding
     try:
         parser_tree = ET.parse(xml_file)
-    except FileNotFoundError as f:
-        sys.exit('Scenario xml file not found. Please try again.\n' + str(f))
-    except ET.ParseError as e:
-        sys.exit('Scenario xml file ' + str(Path(xml_file)) + ' could not be parsed. Please try again.\n' + str(e))
+    except FileNotFoundError:
+        sg.popup('Scenario file ' + str(Path(xml_file)) + ' not found.', 'Please try again.', title='Error')
+        return False
+    except ET.ParseError:
+        sg.popup('The file you requested (' + str(Path(xml_file)) + ') could not be processed due to an XML parse '
+            'error. Is it definitely a scenario file?', 'Please try again with another Scenario.bin or Scenario.xml '
+            'file.', title='Error')
+        return False
     ET.register_namespace("d", "http://www.kuju.com/TnT/2003/Delta")
     root = parser_tree.getroot()
-    # Iterate through the consists
+    consists = root.findall('./Record/cConsist')
+    if len(consists) == 0:
+        sg.popup('The file you requested (' + str(Path(xml_file)) + ') does not appear to contain any rail vehicle '
+            'consists. Is it definitely a scenario file?', 'Please try again with another Scenario.bin or Scenario.xml '
+            'file.', title='Error')
+        return False
+    # Iterate through the consists - pop up a progress bar window
+    progress_win = sg.Window('Processing...', progress_layout, disable_close=True).Finalize()
+    progress_bar = progress_win.FindElement('progress')
     consist_nr = 0
-    for citem in root.findall('./Record/cConsist'):
+    for citem in consists:
+        progress_bar.UpdateBar(consist_nr, len(consists))
         # Find the service name of the consist, if there is one, otherwise call it a loose consist.
         service = citem.find('Driver/cDriver/ServiceName/Localisation-cUserLocalisedString/English')
         if service is None:
@@ -62,7 +136,9 @@ def parse_xml(xml_file):
                     [str(consist_nr), provider.text, product.text, blueprint.text, name.text, number.text, loaded.text,
                      service])
         consist_nr += 1
-    # All necessary elements processed, now return the new xml scenario to be written
+        progress_bar.UpdateBar(consist_nr, len(consists))
+    # All necessary elements processed, now close progress bar window and return the new xml tree object
+    progress_win.close()
     return parser_tree
 
 
@@ -135,60 +211,6 @@ h3,thead {
     return True
 
 
-railworks_path = ''
-config = configparser.ConfigParser()
-config.read('config.ini')
-
-# Read configuration and find location of RailWorks folder, or ask user to set it
-if config.has_option('RailWorks', 'path'):
-    railworks_path = config.get('RailWorks', 'path')
-else:
-    loclayout = [[sg.T('')],
-                 [sg.Text('Please locate your RailWorks folder:'), sg.Input(key='-IN2-',
-                                                                            change_submits=False, readonly=True),
-                  sg.FolderBrowse(key='RWloc')], [sg.Button('Submit')]]
-    locwindow = sg.Window('Configure path to RailWorks folder', loclayout, size=(640, 150))
-    while True:
-        event, values = locwindow.read()
-        if event == sg.WIN_CLOSED:
-            if values is not None:
-                if values['RWloc'] is not None and len(values['RWloc']) > 1:
-                    break
-            else:
-                sg.Popup('You must specify the path to your RailWorks folder for this application to work. '
-                         'The application will now close.')
-                sys.exit()
-        elif event == 'Submit':
-            if len(values['RWloc']) > 1:
-                railworks_path = values['RWloc']
-            else:
-                sg.Popup('Please browse for the path to your RailWorks folder and try again.')
-                continue
-            if not config.has_section('RailWorks'):
-                config.add_section('RailWorks')
-            config.set('RailWorks', 'path', values['RWloc'])
-            with open(Path('config.ini'), 'w') as iconfigfile:
-                config.write(iconfigfile)
-                iconfigfile.close()
-            break
-    locwindow.close()
-
-# Set the layout of the GUI
-main_column = [
-    [sg.Text('RSReportTool', font='Helvetica 16')],
-    [sg.Text('Rolling stock report generator for existing scenarios.')],
-    [sg.FileBrowse('Select scenario file to examine', key='Scenario_xml', tooltip='Locate the scenario .bin or .xml '
-                                                                                  'file you wish to examine')],
-    [sg.Button('Examine!'), sg.Button('Settings'), sg.Button('About'), sg.Button('Exit')],
-    [sg.Text('© 2021 JR McKenzie', font='Helvetica 7')],
-]
-
-layout = [
-    [
-        sg.Column(main_column),
-    ]
-]
-
 if __name__ == "__main__":
     window = sg.Window('RSReportTool - Rolling stock report tool', layout)
     while True:
@@ -200,7 +222,7 @@ if __name__ == "__main__":
                      'Tool for listing rolling stock in Train Simulator (Dovetail Games) scenarios, bundled with '
                      'RSSwapTool to provide a standalone tool to examine scenarios and list rolling stock.',
                      'Issued under the GNU General Public License - see https://www.gnu.org/licenses/',
-                     'Version 0.6a',
+                     'Version 0.7a',
                      'Copyright 2021 JR McKenzie', 'https://github.com/jrmckenzie/RSSwapTool')
         elif event == 'Settings':
             # The settings button has been pressed, so allow the user to change the RailWorks folder setting
@@ -252,8 +274,12 @@ if __name__ == "__main__":
                     # processing
                     tree = parse_xml(inFile)
                     inFile.unlink()
+                    if tree is False:
+                        continue
                 else:
                     tree = parse_xml(inFile)
+                    if tree is False:
+                        continue
                 html_report_file = scenarioPath.parent / Path(str(scenarioPath.stem) +
                                                               '-railvehicle_examination_report.html')
                 convert_vlist_to_html_table(html_report_file)

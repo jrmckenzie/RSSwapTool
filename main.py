@@ -43,6 +43,15 @@ railworks_path = ''
 # sg.theme('Default1')
 c56_opts = ['Use nearest numbered AP enhanced loco', 'Retain original loco if no matching AP plaque / sector available']
 c86_opts = ['Use VP headcode blinds', 'Use AP plated box with markers', 'Do not swap this loco']
+sg.LOOK_AND_FEEL_TABLE['Railish'] = {'BACKGROUND': '#00384F',
+                                        'TEXT': '#FFFFFF',
+                                        'INPUT': '#FFFFFF',
+                                        'TEXT_INPUT': '#000000',
+                                        'SCROLL': '#99CC99',
+                                        'BUTTON': ('#FFFFFF', '#002A3C'),
+                                        'PROGRESS': ('#31636d', '#002A3C'),
+                                        'BORDER': 2, 'SLIDER_DEPTH': 0, 'PROGRESS_DEPTH': 2, }
+sg.theme('Railish')
 config = configparser.ConfigParser()
 config.read('config.ini')
 
@@ -153,7 +162,7 @@ vp_blue_47_db = import_data_from_csv('tables/Class47BRBlue_numbers.csv')
 
 # Set the layout of the GUI
 left_column = [
-    [sg.Text('RSSwapTool', font='Helvetica 16')],
+    [sg.Text('RSSwapTool\n', font='Helvetica 16')],
     [sg.FileBrowse('Select scenario file to process', key='Scenario_xml', tooltip='Locate the scenario .bin or .xml '
                                                                                   'file you wish to process')],
     [sg.Text('Tick the boxes below to choose the\nsubstitutions you would like to make.')],
@@ -237,6 +246,7 @@ right_column = [
     [sg.Button('Replace!'), sg.Button('Settings'), sg.Button('About'), sg.Button('Exit')],
 ]
 
+# Set the layout of the application window
 layout = [
     [
         sg.Column(left_column),
@@ -245,6 +255,11 @@ layout = [
     ]
 ]
 
+# Set the layout of the progress bar window
+progress_layout = [
+    [sg.Text('Processing consists')],
+    [sg.ProgressBar(1, orientation='h', key='progress', size=(25, 15))]
+]
 
 def dcsv_get_num(this_dcsv, this_rv, this_re):
     # Try to retrieve the closest match for the loco number from the AP vehicle number database
@@ -1531,20 +1546,30 @@ def user_replace(provider, product, blueprint, name):
 
 
 def parse_xml(xml_file):
+    # Check we can open the file, parse it and find some rail vehicle consists in it before proceeding
     try:
         parser_tree = ET.parse(xml_file)
     except FileNotFoundError:
         sg.popup('Scenario file ' + str(Path(xml_file)) + ' not found.', 'Please try again.', title='Error')
         return False
     except ET.ParseError:
-        sg.popup('Scenario file ' + str(Path(xml_file)) + ' could not be processed due to an XML parse error.',
-                 'Please try again.', title='Error')
+        sg.popup('The file you requested (' + str(Path(xml_file)) + ') could not be processed due to an XML parse '
+            'error. Is it definitely a scenario file?', 'Please try again with another Scenario.bin or Scenario.xml '
+            'file.', title='Error')
         return False
     ET.register_namespace("d", "http://www.kuju.com/TnT/2003/Delta")
     root = parser_tree.getroot()
-    # Iterate through the consists
+    consists = root.findall('./Record/cConsist')
+    if len(consists) == 0:
+        sg.popup('The file you requested (' + str(Path(xml_file)) + ') does not appear to contain any rail vehicle '
+            'consists. Is it definitely a scenario file?', 'Please try again with another Scenario.bin or Scenario.xml '
+            'file.', title='Error')
+        return False
+    # Iterate through the consists - pop up a progress bar window
+    progress_win = sg.Window('Processing...', progress_layout, disable_close=True).Finalize()
+    progress_bar = progress_win.FindElement('progress')
     consist_nr = 0
-    for citem in root.findall('./Record/cConsist'):
+    for citem in consists:
         service = citem.find('Driver/cDriver/ServiceName/Localisation-cUserLocalisedString/English')
         if service is None:
             service = 'Loose consist'
@@ -1569,6 +1594,7 @@ def parse_xml(xml_file):
                     [str(consist_nr), provider.text, product.text, blueprint.text, name.text, number.text, loaded.text,
                      service])
             consist_nr += 1
+            progress_bar.UpdateBar(consist_nr, len(consists))
         for driver_inrvs in citem.findall('Driver/cDriver/InitialRV'):
             # Iterate through driver instructions and update changed vehicle numbers in the consist
             for drv in driver_inrvs.findall('e'):
@@ -1576,6 +1602,8 @@ def parse_xml(xml_file):
                     if drv.text == rvp[0]:
                         drv.text = rvp[1]
     for citem in root.findall('./Record/cConsist'):
+        # Now that the consist rail vehicles are all processed, update the corresponding numbers in any consist
+        # operation instructions i.e. for coupling or uncoupling
         for cons_rvs in citem.findall(
                 'Driver/cDriver/DriverInstructionContainer/cDriverInstructionContainer/DriverInstruction/'
                 'cConsistOperations/DeltaTarget/cDriverInstructionTarget/RailVehicleNumber'):
@@ -1584,7 +1612,8 @@ def parse_xml(xml_file):
                 for rvp in rv_pairs:
                     if crv.text == rvp[0]:
                         crv.text = rvp[1]
-    # All necessary elements processed, now return the new xml tree object of the scenario to be written
+    # All necessary elements processed, now close progress bar window and return the new xml tree object
+    progress_win.close()
     return parser_tree
 
 
@@ -1739,7 +1768,7 @@ if __name__ == "__main__":
             sg.Popup('About RSSwapTool',
                      'Tool for swapping rolling stock in Train Simulator (Dovetail Games) scenarios',
                      'Issued under the GNU General Public License - see https://www.gnu.org/licenses/',
-                     'Version 0.6a',
+                     'Version 0.7a',
                      'Copyright 2021 JR McKenzie', 'https://github.com/jrmckenzie/RSSwapTool')
         elif event == 'Settings':
             if not config.has_section('defaults'):
@@ -1880,6 +1909,8 @@ if __name__ == "__main__":
                     # Now the intermediate .xml has been created by serz.exe, read it in to this script and do the
                     # processing
                 tree = parse_xml(inFile)
+                if tree is False:
+                    continue
                 # Back up the original scenario file, fix some peculiarities of the train simulator .xml,
                 # write the final xml out to another temporary file so that serz.exe can convert it back to
                 # a .bin file in place of the original.
