@@ -43,12 +43,6 @@ layout = [
     [sg.Text('© 2021 JR McKenzie', font='Helvetica 7')],
 ]
 
-# Set the layout of the progress bar window
-progress_layout = [
-    [sg.Text('Processing consists')],
-    [sg.ProgressBar(1, orientation='h', key='progress', size=(25, 15))]
-]
-
 # Read configuration and find location of RailWorks folder, or ask user to set it
 config = configparser.ConfigParser()
 config.read('config.ini')
@@ -107,11 +101,14 @@ def parse_xml(xml_file):
             'file.', title='Error')
         return False
     # Iterate through the consists - pop up a progress bar window
+    progress_layout = [
+        [sg.Text('Processing consists')],
+        [sg.ProgressBar(1, orientation='h', key='progress', size=(25, 15))]
+    ]
     progress_win = sg.Window('Processing...', progress_layout, disable_close=True).Finalize()
     progress_bar = progress_win.FindElement('progress')
     consist_nr = 0
     for citem in consists:
-        progress_bar.UpdateBar(consist_nr, len(consists))
         # Find the service name of the consist, if there is one, otherwise call it a loose consist.
         service = citem.find('Driver/cDriver/ServiceName/Localisation-cUserLocalisedString/English')
         if service is None:
@@ -153,7 +150,12 @@ body,.dataframe {
     font-family: 'Roboto';font-size: 10pt;
 }
 tr.shaded_row {
-    background-color: #bbbbbb;
+    background-color: #cccccc;
+}
+td.missing {
+    color: #bb2222;
+    font-style: italic;
+}
 h1 {
     font-family: 'Roboto';font-size: 24pt;
     font-style: bold;
@@ -169,10 +171,10 @@ h3,thead {
     border-width: 1px;
 }
 </style>\n</head>\n<body>\n'''
-    htmrv = "<h1>Rail vehicle list</h1>\n<table border=\"1\" class=\"dataframe\">\n  <thead>\n" \
-            "    <tr style=\"text-align: right;\">\n      <th>Consist</th>\n      <th>Provider</th>\n" \
-            "      <th>Product</th>\n      <th>Blueprint</th>\n      <th>Name</th>\n      <th>Number</th>\n" \
-            "      <th>Loaded</th>\n    </tr>\n  </thead>\n  <tbody>\n"
+    htmrv = '<h1>Rail vehicle list</h1>\n<table border=\'1\' class=\'dataframe\'>\n  <thead>\n' \
+            '    <tr style=\'text-align: right;\'>\n      <th>Consist</th>\n      <th>Provider</th>\n' \
+            '      <th>Product</th>\n      <th>Blueprint</th>\n      <th>Name</th>\n      <th>Number</th>\n' \
+            '      <th>Loaded</th>\n    </tr>\n  </thead>\n  <tbody>\n'
     unique_assets = []
     last_cons = -1
     col_no = 0
@@ -184,28 +186,33 @@ h3,thead {
             rowspan = (list(zip(*vehicle_list))[0]).count(row[0])
         else:
             rowspan = 0
-        col_htm = ""
+        col_htm = ''
+        row[3] = row[3].replace('.xml', '.bin')
+        if Path(railworks_path, 'Assets', row[1], row[2], row[3]).is_file():
+            tdstyle = ''
+        else:
+            tdstyle = ' class="missing"'
         for col in row[0:7]:
             col_no += 1
             if rowspan > 0 and col_no == 1:
-                col_htm = col_htm + "      <td rowspan=" + str(rowspan) + "><i>" + row[7] + "</i></td>\n"
+                col_htm = col_htm + '      <td rowspan=' + str(rowspan) + '><i>' + row[7] + '</i></td>\n'
             elif col_no > 1:
-                col_htm = col_htm + "      <td>" + col + "</td>\n"
+                col_htm = col_htm + '      <td' + tdstyle + '>' + col + '</td>\n'
         col_no = 0
         if (int(row[0]) % 2) == 0:
-            htmrv = htmrv + "    <tr>\n" + col_htm + "    </tr>\n"
+            htmrv = htmrv + '    <tr>\n' + col_htm + '    </tr>\n'
         else:
-            htmrv = htmrv + "    <tr class=\"shaded_row\">\n" + col_htm + "    </tr>\n"
+            htmrv = htmrv + '    <tr class=\'shaded_row\'>\n' + col_htm + '    </tr>\n'
         last_cons = int(row[0])
-    htmrv = htmrv + "  </tbody>\n</table>\n<h3>" + str(len(vehicle_list)) + ' vehicles in total in this scenario.</h3>'
-    htmas = "\n<h1>List of rail vehicle assets used</h1>\n<table border=\"1\" class=\"dataframe\">\n  <thead>\n" \
-            "    <tr style=\"text-align: right;\">\n      <th>Provider</th>\n      <th>Product</th>\n    </tr>\n" \
-            "  </thead>\n  <tbody>\n"
+    htmrv = htmrv + '  </tbody>\n</table>\n<h3>' + str(len(vehicle_list)) + ' vehicles in total in this scenario.</h3>'
+    htmas = '\n<h1>List of rail vehicle assets used</h1>\n<table border=\"1\" class=\"dataframe\">\n  <thead>\n' \
+            '    <tr style=\"text-align: right;\">\n      <th>Provider</th>\n      <th>Product</th>\n    </tr>\n' \
+            '  </thead>\n  <tbody>\n'
     unique_assets.sort(key=lambda x: (x[0], x[1]))
     for asset in unique_assets:
-        htmas = htmas + "    <tr>\n      <td>" + asset[0] + "</td>\n      <td>" + asset[1] + "</td>\n    </tr>\n"
-    htmas = htmas + "  </tbody>\n</table>\n"
-    htm = htmhead + htmas + htmrv + "</body>\n</html>\n"
+        htmas = htmas + '    <tr>\n      <td>' + asset[0] + '</td>\n      <td>' + asset[1] + '</td>\n    </tr>\n'
+    htmas = htmas + '  </tbody>\n</table>\n'
+    htm = htmhead + htmas + htmrv + '</body>\n</html>\n'
     html_file_path.touch()
     html_file_path.write_text(htm)
     return True

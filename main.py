@@ -40,17 +40,16 @@ vehicle_db = {}
 user_db = {}
 vp_blue_47_db = {}
 railworks_path = ''
-# sg.theme('Default1')
 c56_opts = ['Use nearest numbered AP enhanced loco', 'Retain original loco if no matching AP plaque / sector available']
 c86_opts = ['Use VP headcode blinds', 'Use AP plated box with markers', 'Do not swap this loco']
 sg.LOOK_AND_FEEL_TABLE['Railish'] = {'BACKGROUND': '#00384F',
-                                        'TEXT': '#FFFFFF',
-                                        'INPUT': '#FFFFFF',
-                                        'TEXT_INPUT': '#000000',
-                                        'SCROLL': '#99CC99',
-                                        'BUTTON': ('#FFFFFF', '#002A3C'),
-                                        'PROGRESS': ('#31636d', '#002A3C'),
-                                        'BORDER': 2, 'SLIDER_DEPTH': 0, 'PROGRESS_DEPTH': 2, }
+                                     'TEXT': '#FFFFFF',
+                                     'INPUT': '#FFFFFF',
+                                     'TEXT_INPUT': '#000000',
+                                     'SCROLL': '#99CC99',
+                                     'BUTTON': ('#FFFFFF', '#002A3C'),
+                                     'PROGRESS': ('#31636d', '#002A3C'),
+                                     'BORDER': 2, 'SLIDER_DEPTH': 0, 'PROGRESS_DEPTH': 2, }
 sg.theme('Railish')
 config = configparser.ConfigParser()
 config.read('config.ini')
@@ -255,11 +254,6 @@ layout = [
     ]
 ]
 
-# Set the layout of the progress bar window
-progress_layout = [
-    [sg.Text('Processing consists')],
-    [sg.ProgressBar(1, orientation='h', key='progress', size=(25, 15))]
-]
 
 def dcsv_get_num(this_dcsv, this_rv, this_re):
     # Try to retrieve the closest match for the loco number from the AP vehicle number database
@@ -1503,7 +1497,7 @@ def c158_replace(provider, product, blueprint, name, number):
                             if (provider.text == 'DTG' and product.text == 'Class158Pack01' and bool(
                                     re.search('Default', blueprint.text, flags=re.IGNORECASE))) or (
                                     provider.text == 'DTG' and product.text == 'NorthWalesCoast' and bool(
-                                    re.search('Default', blueprint.text, flags=re.IGNORECASE))):
+                                re.search('Default', blueprint.text, flags=re.IGNORECASE))):
                                 # Arriva Trains Wales liveried stock
                                 destination = c158_nwc[nm.group(1)]
                             elif provider.text == 'DTG' and product.text == 'FifeCircle' and bool(
@@ -1554,18 +1548,24 @@ def parse_xml(xml_file):
         return False
     except ET.ParseError:
         sg.popup('The file you requested (' + str(Path(xml_file)) + ') could not be processed due to an XML parse '
-            'error. Is it definitely a scenario file?', 'Please try again with another Scenario.bin or Scenario.xml '
-            'file.', title='Error')
+                                                                    'error. Is it definitely a scenario file?',
+                 'Please try again with another Scenario.bin or Scenario.xml '
+                 'file.', title='Error')
         return False
     ET.register_namespace("d", "http://www.kuju.com/TnT/2003/Delta")
     root = parser_tree.getroot()
     consists = root.findall('./Record/cConsist')
     if len(consists) == 0:
         sg.popup('The file you requested (' + str(Path(xml_file)) + ') does not appear to contain any rail vehicle '
-            'consists. Is it definitely a scenario file?', 'Please try again with another Scenario.bin or Scenario.xml '
-            'file.', title='Error')
+                                                                    'consists. Is it definitely a scenario file?',
+                 'Please try again with another Scenario.bin or Scenario.xml '
+                 'file.', title='Error')
         return False
     # Iterate through the consists - pop up a progress bar window
+    progress_layout = [
+        [sg.Text('Processing consists')],
+        [sg.ProgressBar(1, orientation='h', key='progress', size=(25, 15))]
+    ]
     progress_win = sg.Window('Processing...', progress_layout, disable_close=True).Finalize()
     progress_bar = progress_win.FindElement('progress')
     consist_nr = 0
@@ -1700,7 +1700,12 @@ body,.dataframe {
     font-family: 'Roboto';font-size: 10pt;
 }
 tr.shaded_row {
-    background-color: #bbbbbb;
+    background-color: #cccccc;
+}
+td.missing {
+    color: #bb2222;
+    font-style: italic;
+}
 h1 {
     font-family: 'Roboto';font-size: 24pt;
     font-style: bold;
@@ -1731,28 +1736,32 @@ h3,thead {
             rowspan = (list(zip(*vehicle_list))[0]).count(row[0])
         else:
             rowspan = 0
-        col_htm = ""
+        col_htm = ''
+        if Path(railworks_path, 'Assets', row[1], row[2], row[3].replace('xml', 'bin')).is_file():
+            tdstyle = ''
+        else:
+            tdstyle = ' class="missing"'
         for col in row[0:7]:
             col_no += 1
             if rowspan > 0 and col_no == 1:
-                col_htm = col_htm + "      <td rowspan=" + str(rowspan) + "><i>" + row[7] + "</i></td>\n"
+                col_htm = col_htm + '      <td rowspan=' + str(rowspan) + '><i>' + row[7] + '</i></td>\n'
             elif col_no > 1:
-                col_htm = col_htm + "      <td>" + col + "</td>\n"
+                col_htm = col_htm + '      <td' + tdstyle + '>' + col + '</td>\n'
         col_no = 0
         if (int(row[0]) % 2) == 0:
-            htmrv = htmrv + "    <tr>\n" + col_htm + "    </tr>\n"
+            htmrv = htmrv + '    <tr>\n' + col_htm + '    </tr>\n'
         else:
-            htmrv = htmrv + "    <tr class=\"shaded_row\">\n" + col_htm + "    </tr>\n"
+            htmrv = htmrv + '    <tr class=\"shaded_row\">\n' + col_htm + '    </tr>\n'
         last_cons = int(row[0])
-    htmrv = htmrv + "  </tbody>\n</table>\n<h3>" + str(len(vehicle_list)) + ' vehicles in total in this scenario.</h3>'
-    htmas = "\n<h1>List of rail vehicle assets used</h1>\n<table border=\"1\" class=\"dataframe\">\n  <thead>\n" \
-            "    <tr style=\"text-align: right;\">\n      <th>Provider</th>\n      <th>Product</th>\n    </tr>\n" \
-            "  </thead>\n  <tbody>\n"
+    htmrv = htmrv + '  </tbody>\n</table>\n<h3>' + str(len(vehicle_list)) + ' vehicles in total in this scenario.</h3>'
+    htmas = '\n<h1>List of rail vehicle assets used</h1>\n<table border=\"1\" class=\"dataframe\">\n  <thead>\n' \
+            '    <tr style=\"text-align: right;\">\n      <th>Provider</th>\n      <th>Product</th>\n    </tr>\n' \
+            '  </thead>\n  <tbody>\n'
     unique_assets.sort(key=lambda x: (x[0], x[1]))
     for asset in unique_assets:
-        htmas = htmas + "    <tr>\n      <td>" + asset[0] + "</td>\n      <td>" + asset[1] + "</td>\n    </tr>\n"
-    htmas = htmas + "  </tbody>\n</table>\n"
-    htm = htmhead + htmas + htmrv + "</body>\n</html>\n"
+        htmas = htmas + '    <tr>\n      <td>' + asset[0] + '</td>\n      <td>' + asset[1] + '</td>\n    </tr>\n'
+    htmas = htmas + '  </tbody>\n</table>\n'
+    htm = htmhead + htmas + htmrv + '</body>\n</html>\n'
     html_file_path.touch()
     html_file_path.write_text(htm)
     return True
@@ -1931,7 +1940,7 @@ if __name__ == "__main__":
                     inFile.unlink()
                     output_message = serz_output + '\nserz.exe ' + p2.communicate()[0].decode('ascii')
                 output_message = output_message + \
-                    '\nOriginal scenario backup located in ' + str(outPathStem) + str(scenarioPath.suffix)
+                                 '\nOriginal scenario backup located in ' + str(outPathStem) + str(scenarioPath.suffix)
                 if config.getboolean('defaults', 'save_report'):
                     html_report_file = scenarioPath.parent / Path(str(scenarioPath.stem) + '-railvehicle_report.html')
                     convert_vlist_to_html_table(html_report_file)
