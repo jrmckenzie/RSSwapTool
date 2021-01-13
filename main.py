@@ -1787,7 +1787,8 @@ h3,thead {
         else:
             rowspan = 0
         col_htm = ''
-        if Path(railworks_path, 'Assets', row[1], row[2], row[3].replace('xml', 'bin')).is_file():
+        row[3] = row[3].replace('.xml', '.bin')
+        if Path(railworks_path, 'Assets', row[1], row[2], row[3]).is_file():
             tdstyle = ''
         else:
             tdstyle = ' class="missing"'
@@ -1827,7 +1828,7 @@ if __name__ == "__main__":
             sg.Popup('About RSSwapTool',
                      'Tool for swapping rolling stock in Train Simulator (Dovetail Games) scenarios',
                      'Issued under the GNU General Public License - see https://www.gnu.org/licenses/',
-                     'Version 0.7a',
+                     'Version 0.8a',
                      'Copyright 2021 JR McKenzie', 'https://github.com/jrmckenzie/RSSwapTool')
         elif event == 'Settings':
             if not config.has_section('defaults'):
