@@ -828,6 +828,10 @@ def ihh_replace(provider, product, blueprint, name, number):
         return True
     if bool(ihh_c25_replace(provider, product, blueprint, name, number)):
         return True
+    if bool(ihh_c26_replace(provider, product, blueprint, name, number)):
+        return True
+    if bool(ihh_c27_replace(provider, product, blueprint, name, number)):
+        return True
     if bool(ihh_c40_replace(provider, product, blueprint, name, number)):
         return True
     if bool(ihh_c45_replace(provider, product, blueprint, name, number)):
@@ -926,6 +930,52 @@ def ihh_c25_replace(provider, product, blueprint, name, number):
                         elif this_vehicle[3] == 'RSderek':
                             headcode = '@##@'
                         rv_num = rv_num + headcode
+                    provider.text = this_vehicle[3]
+                    product.text = this_vehicle[4]
+                    blueprint.text = this_vehicle[5]
+                    name.text = this_vehicle[6]
+                    number.text = rv_num
+                    rv_list.append(number.text)
+                    rv_pairs.append([rv_orig, number.text])
+                    return True
+    return False
+
+
+def ihh_c26_replace(provider, product, blueprint, name, number):
+    if 'IHH' in provider.text:
+        if 'Class_26' in product.text:
+            for i in range(0, len(vehicle_db['IHH_Class26'])):
+                this_vehicle = vehicle_db['IHH_Class26'][i]
+                bp = re.search(this_vehicle[2], blueprint.text, flags=re.IGNORECASE)
+                if bp:
+                    rv_num = '26024'
+                    rv_orig = number.text
+                    nm = re.search('^(26[0-9]{3}).*', number.text)
+                    if nm:
+                        rv_num = nm.group(1)
+                    provider.text = this_vehicle[3]
+                    product.text = this_vehicle[4]
+                    blueprint.text = this_vehicle[5]
+                    name.text = this_vehicle[6]
+                    number.text = rv_num
+                    rv_list.append(number.text)
+                    rv_pairs.append([rv_orig, number.text])
+                    return True
+    return False
+
+
+def ihh_c27_replace(provider, product, blueprint, name, number):
+    if 'IHH' in provider.text:
+        if 'Class_27' in product.text:
+            for i in range(0, len(vehicle_db['IHH_Class27'])):
+                this_vehicle = vehicle_db['IHH_Class27'][i]
+                bp = re.search(this_vehicle[2], blueprint.text, flags=re.IGNORECASE)
+                if bp:
+                    rv_num = '27024'
+                    rv_orig = number.text
+                    nm = re.search('^(27[0-9]{3}).*', number.text)
+                    if nm:
+                        rv_num = nm.group(1)
                     provider.text = this_vehicle[3]
                     product.text = this_vehicle[4]
                     blueprint.text = this_vehicle[5]
