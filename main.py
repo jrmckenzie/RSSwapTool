@@ -1186,7 +1186,13 @@ def c40_replace(provider, product, blueprint, name, number):
                             Path(railworks_path, 'Assets', this_vehicle[3], this_vehicle[4], this_vehicle[7]),
                             rv_dnum,
                             '([0-9]{4})(.*)')
-                        rv_num = '1' + ap_num[1:4] + headcode
+                        hy = re.search('halfyellow', blueprint.text, flags=re.IGNORECASE)
+                        if hy:
+                            # Number the loco as a Half Yellow front class 40
+                            rv_num = '1' + ap_num[1:4] + headcode
+                        else:
+                            # Number the loco as a Full Green front class 40
+                            rv_num = '0' + ap_num[1:4] + headcode
                     pretops_headcode = re.search('^([0-9][a-z][0-9]{2})([0-9]{3})$', number.text)
                     if pretops_headcode:
                         rv_dnum = '0' + pretops_headcode.group(2)
@@ -1195,7 +1201,13 @@ def c40_replace(provider, product, blueprint, name, number):
                             Path(railworks_path, 'Assets', this_vehicle[3], this_vehicle[4], this_vehicle[7]),
                             rv_dnum,
                             '([0-9]{4})(.*)')
-                        rv_num = '1' + ap_num[1:4] + headcode
+                        hy = re.search('halfyellow', blueprint.text, flags=re.IGNORECASE)
+                        if hy:
+                            # Number the loco as a Half Yellow front class 40
+                            rv_num = '1' + ap_num[1:4] + headcode
+                        else:
+                            # Number the loco as a Full Green front class 40
+                            rv_num = '0' + ap_num[1:4] + headcode
                     # Check if the loco has a tops number
                     tops_domino = re.search('^(40[0-9]{3})$', number.text)
                     if tops_domino:
