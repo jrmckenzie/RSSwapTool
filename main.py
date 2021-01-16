@@ -21,6 +21,7 @@ import csv
 import xml.etree.ElementTree as ET
 import time
 import sys
+import os
 import subprocess
 import configparser
 import PySimpleGUI as sg
@@ -52,8 +53,8 @@ sg.LOOK_AND_FEEL_TABLE['Railish'] = {'BACKGROUND': '#00384F',
                                      'BORDER': 2, 'SLIDER_DEPTH': 0, 'PROGRESS_DEPTH': 2, }
 sg.theme('Railish')
 config = configparser.ConfigParser()
-config.read('config.ini')
-
+path_to_config = Path(os.path.realpath(__file__)).parent / 'config.ini'
+config.read(path_to_config)
 # Read configuration and find location of RailWorks folder, or ask user to set it
 if config.has_option('RailWorks', 'path'):
     railworks_path = config.get('RailWorks', 'path')
@@ -82,7 +83,7 @@ else:
             if not config.has_section('RailWorks'):
                 config.add_section('RailWorks')
             config.set('RailWorks', 'path', values['RWloc'])
-            with open(Path('config.ini'), 'w') as iconfigfile:
+            with open(path_to_config, 'w') as iconfigfile:
                 config.write(iconfigfile)
                 iconfigfile.close()
             break
@@ -117,7 +118,7 @@ if not config.has_section('defaults'):
     config.set('defaults', 'save_report', 'False')
     config.set('defaults', 'c56_rf', c56_opts[0])
     config.set('defaults', 'c86_hc', c86_opts[0])
-    with open(Path('config.ini'), 'w') as iconfigfile:
+    with open(path_to_config, 'w') as iconfigfile:
         config.write(iconfigfile)
         iconfigfile.close()
 
@@ -1870,7 +1871,7 @@ if __name__ == "__main__":
             config.set('defaults', 'replace_c101', str(values['Replace_C101']))
             config.set('defaults', 'replace_c156', str(values['Replace_C156']))
             config.set('defaults', 'replace_c158', str(values['Replace_C158']))
-            with open(Path('config.ini'), 'w') as configfile:
+            with open(path_to_config, 'w') as configfile:
                 config.write(configfile)
                 configfile.close()
             c86_hc = config.get('defaults', 'c86_hc')
@@ -1919,7 +1920,7 @@ if __name__ == "__main__":
                     config.set('defaults', 'c86_hc', str(lvalues['c86_hc']))
                     config.set('defaults', 'c56_rf', str(lvalues['c56_rf']))
                     config.set('defaults', 'save_report', str(lvalues['save_report']))
-                    with open(Path('config.ini'), 'w') as configfile:
+                    with open(path_to_config, 'w') as configfile:
                         config.write(configfile)
                         configfile.close()
                     railworks_path = Path(railworks_path)
@@ -1954,7 +1955,7 @@ if __name__ == "__main__":
             config.set('defaults', 'replace_c101', str(values['Replace_C101']))
             config.set('defaults', 'replace_c156', str(values['Replace_C156']))
             config.set('defaults', 'replace_c158', str(values['Replace_C158']))
-            with open(Path('config.ini'), 'w') as configfile:
+            with open(path_to_config, 'w') as configfile:
                 config.write(configfile)
                 configfile.close()
             if len(values['Scenario_xml']) < 1:

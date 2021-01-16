@@ -17,6 +17,7 @@
 
 import xml.etree.ElementTree as ET
 import sys
+import os
 import subprocess
 import configparser
 import PySimpleGUI as sg
@@ -45,7 +46,8 @@ layout = [
 
 # Read configuration and find location of RailWorks folder, or ask user to set it
 config = configparser.ConfigParser()
-config.read('config.ini')
+path_to_config = Path(os.path.realpath(__file__)).parent / 'config.ini'
+config.read(path_to_config)
 if config.has_option('RailWorks', 'path'):
     railworks_path = config.get('RailWorks', 'path')
 else:
@@ -73,7 +75,7 @@ else:
             if not config.has_section('RailWorks'):
                 config.add_section('RailWorks')
             config.set('RailWorks', 'path', values['RWloc'])
-            with open(Path('config.ini'), 'w') as iconfigfile:
+            with open(path_to_config, 'w') as iconfigfile:
                 config.write(iconfigfile)
                 iconfigfile.close()
             break
@@ -250,7 +252,7 @@ if __name__ == "__main__":
                     if not config.has_section('RailWorks'):
                         config.add_section('RailWorks')
                     config.set('RailWorks', 'path', lvalues['RWloc'])
-                    with open(Path('config.ini'), 'w') as configfile:
+                    with open(path_to_config, 'w') as configfile:
                         config.write(configfile)
                         configfile.close()
                     railworks_path = Path(railworks_path)
