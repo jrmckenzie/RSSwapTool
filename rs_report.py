@@ -197,7 +197,7 @@ h3,thead {
         for col in row[0:7]:
             col_no += 1
             if rowspan > 0 and col_no == 1:
-                col_htm = col_htm + '      <td rowspan=' + str(rowspan) + '><i>' + row[7] + '</i></td>\n'
+                col_htm = col_htm + '      <td rowspan=' + str(rowspan) + '><i>' + str(row[7]) + '</i></td>\n'
             elif col_no > 1:
                 col_htm = col_htm + '      <td' + tdstyle + '>' + col + '</td>\n'
         col_no = 0

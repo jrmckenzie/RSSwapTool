@@ -30,7 +30,8 @@ from pathlib import Path
 from data_file import haa_e_wagons, haa_l_wagons, hto_e_wagons, hto_l_wagons, htv_e_wagons, htv_l_wagons, \
     vda_e_wagons, vda_l_wagons, HTO_141_numbers, HTO_143_numbers, HTO_146_numbers, HTO_rebodied_numbers, \
     HTV_146_numbers, HTV_rebodied_numbers, c158_s9bl_rr, c158_s9bl_nr, c158_s9bl_fgw, c158_s9bl_tpe, c158_s9bl_swt, \
-    c158_nwc, c158_dtg_fc, c158_livman_rr, ap40headcodes_69_77, ap40headcodes_62_69
+    c158_nwc, c158_dtg_fc, c158_livman_rr, ap40headcodes_69_77, ap40headcodes_62_69, rsc20headcodes_62_69, \
+    rsc20headcodes_69_77
 
 rv_list = []
 rv_pairs = []
@@ -831,8 +832,6 @@ def ihh_replace(provider, product, blueprint, name, number):
         return True
     if bool(ihh_c25_replace(provider, product, blueprint, name, number)):
         return True
-    if bool(ihh_c26_replace(provider, product, blueprint, name, number)):
-        return True
     if bool(ihh_c27_replace(provider, product, blueprint, name, number)):
         return True
     if bool(ihh_c40_replace(provider, product, blueprint, name, number)):
@@ -890,6 +889,31 @@ def ihh_bonus_replace(provider, product, blueprint, name, number):
     return False
 
 
+def ihh_c14_replace(provider, product, blueprint, name, number):
+    if 'IHH' in provider.text:
+        if 'Class_14' in product.text:
+            for i in range(0, len(vehicle_db['IHH_Class14'])):
+                this_vehicle = vehicle_db['IHH_Class14'][i]
+                bp = re.search(this_vehicle[2], blueprint.text, flags=re.IGNORECASE)
+                if bp:
+                    # Replace with a RSC Class 20 and format number accordingly
+                    rv_orig = number.text
+                    rv_num = str(random.randint(9500, 9555)) + str(random.randint(5, 8)) + 'K' \
+                        + str(random.randint(0, 9)) + str(random.randint(0, 9))
+                    nm = re.search('^D([0-9]{4})([0-9][a-zA-Z][0-9]{2})', number.text)
+                    if nm:
+                        rv_num = str((int(nm.group(1)) % 56) + 9500) + nm.group(2).upper()
+                    provider.text = this_vehicle[3]
+                    product.text = this_vehicle[4]
+                    blueprint.text = this_vehicle[5]
+                    name.text = this_vehicle[6]
+                    number.text = rv_num
+                    rv_list.append(number.text)
+                    rv_pairs.append([rv_orig, number.text])
+                    return True
+    return False
+
+
 def ihh_c17_replace(provider, product, blueprint, name, number):
     if 'IHH' in provider.text:
         if 'Class_17' in product.text:
@@ -897,13 +921,15 @@ def ihh_c17_replace(provider, product, blueprint, name, number):
                 this_vehicle = vehicle_db['IHH_Class17'][i]
                 bp = re.search(this_vehicle[2], blueprint.text, flags=re.IGNORECASE)
                 if bp:
-                    # Replace with a RSC Class 14 and format number accordingly
+                    # Replace with a RSC Class 20 and format number accordingly
                     rv_orig = number.text
                     rv_num = str(random.randint(9500, 9555)) + str(random.randint(5, 8)) + 'K' \
                         + str(random.randint(0, 9)) + str(random.randint(0, 9))
-                    nm = re.search('^D([0-9]{4})([0-9][a-zA-Z][0-9]{2})', number.text)
-                    if nm:
-                        rv_num = str((int(nm.group(1)) % 56) + 9500) + nm.group(2).upper()
+                    pretops_nm = re.search('^D([0-9]{4})([0-9])[a-zA-Z][0-9]{2}', number.text)
+                    if pretops_nm:
+                        # A pre-tops loco - only BR Green disc is available as standard DLC
+                        # Take a guess that the loco faces cab forwards and append 'F' (forward) not 'R' (rear)
+                        rv_num = rsc20headcodes_62_69[pretops_nm.group(2)] + 'F' + pretops_nm.group(1)
                     provider.text = this_vehicle[3]
                     product.text = this_vehicle[4]
                     blueprint.text = this_vehicle[5]
@@ -924,10 +950,10 @@ def ihh_c20_replace(provider, product, blueprint, name, number):
                 if bp:
                     rv_orig = number.text
                     rv_num = str(random.randint(20001, 20126))
-                    nm = re.search('^.20#([0-9]{3})', number.text)
-                    if nm:
-                        if int(nm.group(1)) < 127:
-                            rv_num = str(20000 + int(nm.group(1)))
+                    tops_nm = re.search('^.20#([0-9]{3})', number.text)
+                    if tops_nm:
+                        if int(tops_nm.group(1)) < 127:
+                            rv_num = str(20000 + int(tops_nm.group(1)))
                     provider.text = this_vehicle[3]
                     product.text = this_vehicle[4]
                     blueprint.text = this_vehicle[5]
@@ -969,32 +995,6 @@ def ihh_c25_replace(provider, product, blueprint, name, number):
     return False
 
 
-def ihh_c26_replace(provider, product, blueprint, name, number):
-    if 'IHH' in provider.text:
-        if 'Class_26' in product.text:
-            for i in range(0, len(vehicle_db['IHH_Class26'])):
-                this_vehicle = vehicle_db['IHH_Class26'][i]
-                bp = re.search(this_vehicle[2], blueprint.text, flags=re.IGNORECASE)
-                if bp:
-                    rv_num = '26024'
-                    rv_orig = number.text
-                    nm_tops = re.search('^(26[0-9]{3}).*', number.text)
-                    nm_pretops = re.search('^D([0-9]{4})([0-9][A-Z][0-9]{2})', number.text)
-                    if nm_tops:
-                        rv_num = nm_tops.group(1)
-                    if nm_pretops:
-                        rv_num = nm_pretops.group(1) + nm_pretops.group(2)
-                    provider.text = this_vehicle[3]
-                    product.text = this_vehicle[4]
-                    blueprint.text = this_vehicle[5]
-                    name.text = this_vehicle[6]
-                    number.text = rv_num
-                    rv_list.append(number.text)
-                    rv_pairs.append([rv_orig, number.text])
-                    return True
-    return False
-
-
 def ihh_c27_replace(provider, product, blueprint, name, number):
     if 'IHH' in provider.text:
         if 'Class_27' in product.text:
@@ -1004,7 +1004,7 @@ def ihh_c27_replace(provider, product, blueprint, name, number):
                 if bp:
                     rv_num = '27036'
                     rv_orig = number.text
-                    nm_tops = re.search('^(27[0-9]{3}).*', number.text)
+                    nm_tops = re.search('^(2[6-7][0-9]{3}).*', number.text)
                     nm_pretops = re.search('^D([0-9]{4})([0-9][A-Z][0-9]{2})', number.text)
                     if nm_tops:
                         rv_num = nm_tops.group(1)
@@ -1176,6 +1176,12 @@ def c37_replace(provider, product, blueprint, name, number):
                     pretops = re.search('D([0-9]{4})([0-9][a-zA-Z][0-9]{2})', number.text)
                     if pretops:
                         rv_dnum = pretops.group(1)
+                        if not 6700 <= int(rv_dnum) <= 6999:
+                            if not 6600 <= int(rv_dnum) <= 6608:
+                                # If the pre-tops number in the scenario is not valid invent a new one
+                                # find the remainder of the non-valid number divided by 300 and add 6700 - the result
+                                # is guaranteed to be in valid range 6700 - 6999
+                                rv_dnum = str(6700 + int(rv_dnum) % 300)
                         headcode = pretops.group(2)
                         rv_num = dcsv_get_num(
                             Path(railworks_path, 'Assets', this_vehicle[3], this_vehicle[4], this_vehicle[7]), rv_dnum,
@@ -1858,7 +1864,7 @@ h3,thead {
         for col in row[0:7]:
             col_no += 1
             if rowspan > 0 and col_no == 1:
-                col_htm = col_htm + '      <td rowspan=' + str(rowspan) + '><i>' + row[7] + '</i></td>\n'
+                col_htm = col_htm + '      <td rowspan=' + str(rowspan) + '><i>' + str(row[7]) + '</i></td>\n'
             elif col_no > 1:
                 col_htm = col_htm + '      <td' + tdstyle + '>' + col + '</td>\n'
         col_no = 0
