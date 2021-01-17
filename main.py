@@ -437,7 +437,7 @@ def get_coal21t_db(this_wagon):
 
 def dcsv_21t_hopper_number(this_rv, this_rv_list):
     # return a wagon number in Fastline format for the various 21t coal hoppers
-    rv_digits = int(re.sub('[^0-9]]', "", this_rv))
+    rv_digits = int(re.sub('[^0-9]', "", this_rv))
     for i in range(0, len(this_rv_list)):
         if 'B' + str(rv_digits) == this_rv_list[i]:
             return this_rv_list[i]
@@ -825,6 +825,8 @@ def coal21_t_htv_replace(provider, product, blueprint, name, number, loaded):
 def ihh_replace(provider, product, blueprint, name, number):
     if bool(ihh_bonus_replace(provider, product, blueprint, name, number)):
         return True
+    if bool(ihh_c17_replace(provider, product, blueprint, name, number)):
+        return True
     if bool(ihh_c20_replace(provider, product, blueprint, name, number)):
         return True
     if bool(ihh_c25_replace(provider, product, blueprint, name, number)):
@@ -882,6 +884,31 @@ def ihh_bonus_replace(provider, product, blueprint, name, number):
                     product.text = this_vehicle[4]
                     blueprint.text = this_vehicle[5]
                     name.text = this_vehicle[6]
+                    rv_list.append(number.text)
+                    rv_pairs.append([rv_orig, number.text])
+                    return True
+    return False
+
+
+def ihh_c17_replace(provider, product, blueprint, name, number):
+    if 'IHH' in provider.text:
+        if 'Class_17' in product.text:
+            for i in range(0, len(vehicle_db['IHH_Class17'])):
+                this_vehicle = vehicle_db['IHH_Class17'][i]
+                bp = re.search(this_vehicle[2], blueprint.text, flags=re.IGNORECASE)
+                if bp:
+                    # Replace with a RSC Class 14 and format number accordingly
+                    rv_orig = number.text
+                    rv_num = str(random.randint(9500, 9555)) + str(random.randint(5, 8)) + 'K' \
+                        + str(random.randint(0, 9)) + str(random.randint(0, 9))
+                    nm = re.search('^D([0-9]{4})([0-9][a-zA-Z][0-9]{2})', number.text)
+                    if nm:
+                        rv_num = str((int(nm.group(1)) % 56) + 9500) + nm.group(2).upper()
+                    provider.text = this_vehicle[3]
+                    product.text = this_vehicle[4]
+                    blueprint.text = this_vehicle[5]
+                    name.text = this_vehicle[6]
+                    number.text = rv_num
                     rv_list.append(number.text)
                     rv_pairs.append([rv_orig, number.text])
                     return True
@@ -951,9 +978,12 @@ def ihh_c26_replace(provider, product, blueprint, name, number):
                 if bp:
                     rv_num = '26024'
                     rv_orig = number.text
-                    nm = re.search('^(26[0-9]{3}).*', number.text)
-                    if nm:
-                        rv_num = nm.group(1)
+                    nm_tops = re.search('^(26[0-9]{3}).*', number.text)
+                    nm_pretops = re.search('^D([0-9]{4})([0-9][A-Z][0-9]{2})', number.text)
+                    if nm_tops:
+                        rv_num = nm_tops.group(1)
+                    if nm_pretops:
+                        rv_num = nm_pretops.group(1) + nm_pretops.group(2)
                     provider.text = this_vehicle[3]
                     product.text = this_vehicle[4]
                     blueprint.text = this_vehicle[5]
@@ -972,11 +1002,14 @@ def ihh_c27_replace(provider, product, blueprint, name, number):
                 this_vehicle = vehicle_db['IHH_Class27'][i]
                 bp = re.search(this_vehicle[2], blueprint.text, flags=re.IGNORECASE)
                 if bp:
-                    rv_num = '27024'
+                    rv_num = '27036'
                     rv_orig = number.text
-                    nm = re.search('^(27[0-9]{3}).*', number.text)
-                    if nm:
-                        rv_num = nm.group(1)
+                    nm_tops = re.search('^(27[0-9]{3}).*', number.text)
+                    nm_pretops = re.search('^D([0-9]{4})([0-9][A-Z][0-9]{2})', number.text)
+                    if nm_tops:
+                        rv_num = nm_tops.group(1)
+                    if nm_pretops:
+                        rv_num = nm_pretops.group(1) + nm_pretops.group(2)
                     provider.text = this_vehicle[3]
                     product.text = this_vehicle[4]
                     blueprint.text = this_vehicle[5]
@@ -1022,6 +1055,23 @@ def ihh_c40_replace(provider, product, blueprint, name, number):
                                 rv_num = '110' + ap_num[3:10] + hc_search.group(0)
                             else:
                                 rv_num = ap_num
+                    pretops_num = re.search('D([0-9]{3})([0-9][A-Z][0-9]{2})$', number.text, flags=re.IGNORECASE)
+                    pretops_disc = re.search('disc', this_vehicle[2], flags=re.IGNORECASE)
+                    if pretops_disc and pretops_num:
+                        rv_dnum = '0' + pretops_num.group(1)
+                        headcode = ap40headcodes_62_69[pretops_num.group(2)[0:1]]
+                        ap_num = dcsv_get_num(
+                            Path(railworks_path, 'Assets', this_vehicle[3], this_vehicle[4],
+                                 this_vehicle[7]),
+                            rv_dnum,
+                            '([0-9]{4})(.*)')
+                        hy = re.search('panel', this_vehicle[2], flags=re.IGNORECASE)
+                        if hy:
+                            # Number the loco as a Half Yellow front class 40
+                            rv_num = '1' + ap_num[1:4] + headcode
+                        else:
+                            # Number the loco as a Full Green front class 40
+                            rv_num = '0' + ap_num[1:4] + headcode
                     # Set AP Class 40 number
                     number.text = str(rv_num)
                     rv_list.append(number.text)
@@ -1753,7 +1803,7 @@ def fix_short_tags(xml_string):
 
 
 def convert_vlist_to_html_table(html_file_path):
-    htmhead = '''<html>
+    htmhead = '''<html lang="en">
 <head>
 <meta http-equiv=Content-Type content="text/html; charset=windows-1252">
 <title>Scenario rail vehicle and asset report</title>

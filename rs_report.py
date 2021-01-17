@@ -142,7 +142,7 @@ def parse_xml(xml_file):
 
 
 def convert_vlist_to_html_table(html_file_path):
-    htmhead = '''<html>
+    htmhead = '''<html lang="en">
 <head>
 <meta http-equiv=Content-Type content="text/html; charset=windows-1252">
 <title>Scenario rail vehicle and asset report</title>

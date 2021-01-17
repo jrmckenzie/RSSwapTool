@@ -1010,6 +1010,7 @@ HST_set,Thomson,EandG,RailVehicles\Diesel\HST\EastCoast\Mk3TSO\mk3tso_ec_E.xml,K
 IHH_Bonus,IHH,Bonus Content,railvehicles\freight\20t br brake van\default\wagon\20t br brake van blueprint.xml,FastlineSimulation,CAO Brake Van,RailVehicles\Freight\CAO\CAO_BrakeVan_BW3.xml,CAO: Brake Van B - W.3,
 IHH_Bonus,IHH,Bonus Content,railvehicles\passenger\guv\default\guv_blue_blueprint.xml,DTG,BRBluePack02,RailVehicles\Passenger\GUV\Default\GUV_Blue_blueprint.xml,[BRB2] GUV Blue Express Parcels,
 IHH_Bonus,IHH,Bonus Content,railvehicles\diesel\brush type 4\engine\brush_4_bue.xml,Kuju,RailSimulator,RailVehicles\Diesel\Class47_rf2\BlueNoHL\Engine\47_NoETH_Dom\class47_br0_Dom.xml,(VP-47) Class 47/0 BR Blue DO,RailVehicles\Diesel\Class47_rf2\BlueNoHL\Numbers\class47_brush0_numbers.dcsv
+IHH_Class17,IHH,Class_17,RailVehicles\Diesel\Class_17\Default\Engine\class_17_Green_1.xml,RSC,Class14Pack01,RailVehicles\Class_14\Default\Engine\Class_14_Engine.xml,Class 14 Green,
 IHH_Class20,IHH,Class 20,railvehicles\diesel\class_20\blue disk\engine\class_20_blue_disk.xml,DTG,Class20Pack02,RailVehicles\Diesel\Class_20_VP\Blue Disk\Engine\Class_20_green_disk.xml,[VP] Class 20 BR Blue Disk,
 IHH_Class20,IHH,Class 20,RailVehicles\Diesel\Class_20\Default\Engine\Class_20_blue_headcode.xml,DTG,Class20Pack02,RailVehicles\Diesel\Class_20_VP\Default\Engine\Class_20_blue_domino.xml,[VP] Class 20 BR Blue Domino,
 IHH_Class25,IHH,Class_25-3,railvehicles\diesel\class_25-3\default\engine\class_25_late_blue.xml,DTG,BRBluePack01,RailVehicles\Diesel\Class25\Engine\Class25.xml,[BRB] Class 25 BR Blue,RailVehicles\Diesel\Class25\Engine\Textures\Numbers\Class25Numbers.dcsv
@@ -1018,10 +1019,12 @@ IHH_Class26,IHH,Class_26,RailVehicles\Diesel\Class_26\Default\Engine\class_26_Bl
 IHH_Class26,IHH,Class_26,RailVehicles\Diesel\Class_26\Default\Engine\class_26_Blue_2.xml,RSC,Class27Pack01,RailVehicles\Diesel\Class_27\BR_Blue_2_AP\Engine\class_27.xml,Class 27 BR Blue 2 AP,
 IHH_Class27,IHH,Class_27,RailVehicles\Diesel\Class_27\Default\Engine\class_27_Blue_1.xml,RSC,Class27Pack01,RailVehicles\Diesel\Class_27\BR_Blue_3_AP\Engine\class_27.xml,Class 27 BR Blue 3 AP,
 IHH_Class27,IHH,Class_27,RailVehicles\Diesel\Class_27\Default\Engine\class_27_Blue_2.xml,RSC,Class27Pack01,RailVehicles\Diesel\Class_27\BR_Blue_1_AP\Engine\class_27.xml,Class 27 BR Blue 1 AP,
+IHH_Class27,IHH,Class_27,RailVehicles\Diesel\Class_27\Default\Engine\class_27_Green_5.xml,RSC,Class27Pack01,RailVehicles\Diesel\Class_27\Default\Engine\class_27_Green.xml,Class 27 BR Green,
 IHH_Class40,IHH,Class_40,railvehicles\class_40\default\engine\class_40_disc_blue_engine blueprint.xml,RailRight,Class40Blue,RailVehicles\Class40Disc\Dual\Engine\Class40BRblue.xml,Class 40 Blue Disc Dual,AutoNumber\NumbersDisc.dcsv
 IHH_Class40,IHH,Class_40,railvehicles\class_40\default\engine\class_40_late_blue_engine blueprint.xml,RailRight,Class40Blue,RailVehicles\Class40Disc\Dual\Engine\Class40BRblue.xml,Class 40 Blue Disc Dual,AutoNumber\NumbersDisc.dcsv
 IHH_Class40,IHH,Class_40,railvehicles\class_40\default\engine\class_40_split_blue_engine blueprint.xml,RailRight,Class40Blue,RailVehicles\Class40Split\Dual\Engine\Class40BRblue.xml,Class 40 Blue Split Dual,AutoNumber\NumbersSplit.dcsv
 IHH_Class40,IHH,Class_40,railvehicles\class_40\default\engine\class_40_engine blue 1blueprint.xml,RailRight,Class40Blue,RailVehicles\Class40Centre\Dual\Engine\Class40BRblue.xml,Class 40 Blue Centre Dual,AutoNumber\NumbersCentre.dcsv
+IHH_Class40,IHH,Class_40,RailVehicles\Class_40\Default\Engine\Class_40_disc_panel_engine blueprint - PR.xml,RailRight,Class40Green,RailVehicles\Class40Disc\Vac\Engine\Class40BRgreen.xml,Class 40 Green Disc Vac,AutoNumber\NumbersDisc.dcsv
 IHH_Class45,IHH,Class_45 Peak,railvehicles\class_45\blue split box\engine\class_45_split_blue_engine blueprint.xml,DTG,Class_45Pack01,RailVehicles\Class_45\Default\Engine\Class_45_engine blueprint_VP.xml,[VP] Class 45 Peak BR Blue AP,RailVehicles\Class_45\Default\Engine\Class_45_numbers.dcsv
 IHH_Class45,IHH,Class_45 Peak,railvehicles\class_45\default\engine\class_45_engine blueprint.xml,DTG,Class_45Pack01,RailVehicles\Class_45\Default\Engine\Class_45_engine blueprint_VP.xml,[VP] Class 45 Peak BR Blue AP,RailVehicles\Class_45\Default\Engine\Class_45_numbers.dcsv
 IHH_Class45,IHH,Class_45 Peak,railvehicles\class_45\blue late\engine\class_45_late_blue_engine blueprint.xml,DTG,Class_45Pack01,RailVehicles\Class_45\Default\Engine\Class_45_engine blueprint_VP.xml,[VP] Class 45 Peak BR Blue AP,RailVehicles\Class_45\Default\Engine\Class_45_numbers.dcsv
@@ -1662,6 +1665,7 @@ HTV,RSC,Woodhead,RailVehicles\Freight\21T Hopper W03_F\21THopper.xml,,,,,
 HTV,RSC,Woodhead,RailVehicles\Freight\21T Hopper W04_F\21THopper_rear.xml,,,,,
 HTV,RSC,Woodhead,RailVehicles\Freight\21T Hopper W04_F\21THopper.xml,,,,,
 HTV,RSC,WSDiesels,RailVehicles\Freight\21T Hopper_Fitted\21THopper.xml,,,,,
+HTV,IHH,Bonus Content,RailVehicles\Freight\21t_Hopper\Default\Wagon\21t_Hopper.xml,,,,,
 DMU158_set,DTG,Class158Pack01,RailVehicles\Diesel\Class158\Default\DMSL\Class158_dmcl_nd.xml,RSC,Class159Pack01,RailVehicles\Diesel\Class159\ATW_AP\DMSL\Class158_DMSLB.xml,Class 158P DMSLB ATW AP,RailVehicles\Diesel\Class159\AP\Numbers\dmslb.dcsv
 DMU158_set,DTG,Class158Pack01,RailVehicles\Diesel\Class158\Default\DMSL\Class158_dmcl.xml,RSC,Class159Pack01,RailVehicles\Diesel\Class159\ATW_AP\DMSL\Class158_DMSLB.xml,Class 158P DMSLB ATW AP,RailVehicles\Diesel\Class159\AP\Numbers\dmslb.dcsv
 DMU158_set,DTG,Class158Pack01,RailVehicles\Diesel\Class158\Default\DMSL\Class158_dmsl_nd.xml,RSC,Class159Pack01,RailVehicles\Diesel\Class159\ATW_AP\DMSL\Class158_DMSLA.xml,Class 158P DMSLA ATW AP,RailVehicles\Diesel\Class159\ATW_AP\DMSL\numbers_dmsla.dcsv
