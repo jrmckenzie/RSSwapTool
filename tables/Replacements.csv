@@ -1666,10 +1666,61 @@ HTV,RSC,Woodhead,RailVehicles\Freight\21T Hopper W04_F\21THopper_rear.xml,,,,,
 HTV,RSC,Woodhead,RailVehicles\Freight\21T Hopper W04_F\21THopper.xml,,,,,
 HTV,RSC,WSDiesels,RailVehicles\Freight\21T Hopper_Fitted\21THopper.xml,,,,,
 HTV,IHH,Bonus Content,RailVehicles\Freight\21t_Hopper\Default\Wagon\21t_Hopper.xml,,,,,
+DMU150_set,Thomson_Oovee,Class150Pack01,RailVehicles\Class150\Livery_AR\Class150_DMSL.xml,AP,Class150Pack01,RailVehicles\Class150\AR_AP\Class150_DMSL.xml,AP Class 150/2 DMSL AR,
+DMU150_set,Thomson_Oovee,Class150Pack01,RailVehicles\Class150\Livery_AR\Class150_DMS.xml,AP,Class150Pack01,RailVehicles\Class150\AR_AP\Class150_DMS.xml,AP Class 150/2 DMS AR,
+DMU150_set,Thomson_Oovee,Class150Pack01,RailVehicles\Class150\Livery_ARR\Class150_DMSL.xml,AP,Class150Pack01,RailVehicles\Class150\ATW_AP\Class150_DMSL.xml,AP Class 150/2 DMSL ATW,
+DMU150_set,Thomson_Oovee,Class150Pack01,RailVehicles\Class150\Livery_ARR\Class150_DMS.xml,AP,Class150Pack01,RailVehicles\Class150\ATW_AP\Class150_DMS.xml,AP Class 150/2 DMS ATW,
+DMU150_set,Thomson_Oovee,Class150Pack01,RailVehicles\Class150\Livery_FGW\Class150_DMSL.xml,AP,Class150Pack01,RailVehicles\Class150\FGW_AP\Class150_DMSL.xml,AP Class 150/2 DMSL FGW,
+DMU150_set,Thomson_Oovee,Class150Pack01,RailVehicles\Class150\Livery_FGW\Class150_DMS.xml,AP,Class150Pack01,RailVehicles\Class150\FGW_AP\Class150_DMS.xml,AP Class 150/2 DMS FGW,
+DMU150_set,Thomson_Oovee,Class150Pack01,RailVehicles\Class150\Livery_LM\Class150_DMSL.xml,AP,Class150Pack01,RailVehicles\Class150\Ex-CT_AP\Class150_DMSL.xml,AP Class 150/2 DMSL Ex-CT,
+DMU150_set,Thomson_Oovee,Class150Pack01,RailVehicles\Class150\Livery_LM\Class150_DMS.xml,AP,Class150Pack01,RailVehicles\Class150\Ex-CT_AP\Class150_DMS.xml,AP Class 150/2 DMS Ex-CT,
+DMU150_set,Thomson_Oovee,Class150Pack01,RailVehicles\Class150\Livery_NR\Class150_DMSL.xml,AP,Class150Pack01,RailVehicles\Class150\NR_AP\Class150_DMSL.xml,AP Class 150/2 DMSL NR,
+DMU150_set,Thomson_Oovee,Class150Pack01,RailVehicles\Class150\Livery_NR\Class150_DMS.xml,AP,Class150Pack01,RailVehicles\Class150\NR_AP\Class150_DMS.xml,AP Class 150/2 DMS NR,
+DMU150_set,Thomson_Oovee,Class150Pack01,RailVehicles\Class150\Default\Class150_DMSL.xml,AP,Class150Pack01,RailVehicles\Class150\RR_AP\Class150_DMSL.xml,AP Class 150/2 DMSL RR,
+DMU150_set,Thomson_Oovee,Class150Pack01,RailVehicles\Class150\Default\Class150_DMS.xml,AP,Class150Pack01,RailVehicles\Class150\RR_AP\Class150_DMS.xml,AP Class 150/2 DMS RR,
+DMU150_set,Thomson_Oovee,Class150Pack01,RailVehicles\Class150\Livery_SR\Class150_DMSL.xml,AP,Class150Pack01,RailVehicles\Class150\SR_AP\Class150_DMSL.xml,AP Class 150/2 DMSL SR,
+DMU150_set,Thomson_Oovee,Class150Pack01,RailVehicles\Class150\Livery_SR\Class150_DMS.xml,AP,Class150Pack01,RailVehicles\Class150\SR_AP\Class150_DMS.xml,AP Class 150/2 DMS SR,
+DMU150_set,Thomson_Oovee,Class150Pack01,RailVehicles\Class150\Sprinter_CF\Class150_DMSL.xml,AP,Class150Pack01,RailVehicles\Class150\RR_Sprinter_AP\Class150_DMSL.xml,AP Class 150/2 DMSL RR,
+DMU150_set,Thomson_Oovee,Class150Pack01,RailVehicles\Class150\Sprinter_CF\Class150_DMS.xml,AP,Class150Pack01,RailVehicles\Class150\RR_Sprinter_AP\Class150_DMS.xml,AP Class 150/2 DMS RR,
+DMU150_set,Thomson_Oovee,Class150Pack01,RailVehicles\Class150\Sprinter_CF\Class150_DMSL_nd.xml,AP,Class150Pack01,RailVehicles\Class150\RR_Sprinter_AP\Class150_DMSL.xml,AP Class 150/2 DMSL RR,
+DMU150_set,Thomson_Oovee,Class150Pack01,RailVehicles\Class150\Sprinter_CF\Class150_DMS_nd.xml,AP,Class150Pack01,RailVehicles\Class150\RR_Sprinter_AP\Class150_DMS.xml,AP Class 150/2 DMS RR,
+DMU150_set,Thomson_Oovee,Class150Pack01,RailVehicles\Class150\Sprinter_HA\Class150_DMSL.xml,AP,Class150Pack01,RailVehicles\Class150\RR_Sprinter_AP\Class150_DMSL.xml,AP Class 150/2 DMSL RR,
+DMU150_set,Thomson_Oovee,Class150Pack01,RailVehicles\Class150\Sprinter_HA\Class150_DMS.xml,AP,Class150Pack01,RailVehicles\Class150\RR_Sprinter_AP\Class150_DMS.xml,AP Class 150/2 DMS RR,
+DMU150_set,Thomson_Oovee,Class150Pack01,RailVehicles\Class150\Sprinter_HA\Class150_DMSL_nd.xml,AP,Class150Pack01,RailVehicles\Class150\RR_Sprinter_AP\Class150_DMSL.xml,AP Class 150/2 DMSL RR,
+DMU150_set,Thomson_Oovee,Class150Pack01,RailVehicles\Class150\Sprinter_HA\Class150_DMS_nd.xml,AP,Class150Pack01,RailVehicles\Class150\RR_Sprinter_AP\Class150_DMS.xml,AP Class 150/2 DMS RR,
+DMU150_set,Thomson_Oovee,Class150Pack01,RailVehicles\Class150\Sprinter_NH\Class150_DMSL.xml,AP,Class150Pack01,RailVehicles\Class150\RR_Sprinter_AP\Class150_DMSL.xml,AP Class 150/2 DMSL RR,
+DMU150_set,Thomson_Oovee,Class150Pack01,RailVehicles\Class150\Sprinter_NH\Class150_DMS.xml,AP,Class150Pack01,RailVehicles\Class150\RR_Sprinter_AP\Class150_DMS.xml,AP Class 150/2 DMS RR,
+DMU150_set,Thomson_Oovee,Class150Pack01,RailVehicles\Class150\Sprinter_NH\Class150_DMSL_nd.xml,AP,Class150Pack01,RailVehicles\Class150\RR_Sprinter_AP\Class150_DMSL.xml,AP Class 150/2 DMSL RR,
+DMU150_set,Thomson_Oovee,Class150Pack01,RailVehicles\Class150\Sprinter_NH\Class150_DMS_nd.xml,AP,Class150Pack01,RailVehicles\Class150\RR_Sprinter_AP\Class150_DMS.xml,AP Class 150/2 DMS RR,
+DMU150_set,Thomson_Oovee,Class150Pack01,RailVehicles\Class150\Sprinter_NL\Class150_DMSL.xml,AP,Class150Pack01,RailVehicles\Class150\RR_Sprinter_AP\Class150_DMSL.xml,AP Class 150/2 DMSL RR,
+DMU150_set,Thomson_Oovee,Class150Pack01,RailVehicles\Class150\Sprinter_NL\Class150_DMS.xml,AP,Class150Pack01,RailVehicles\Class150\RR_Sprinter_AP\Class150_DMS.xml,AP Class 150/2 DMS RR,
+DMU150_set,Thomson_Oovee,Class150Pack01,RailVehicles\Class150\Sprinter_NL\Class150_DMSL_nd.xml,AP,Class150Pack01,RailVehicles\Class150\RR_Sprinter_AP\Class150_DMSL.xml,AP Class 150/2 DMSL RR,
+DMU150_set,Thomson_Oovee,Class150Pack01,RailVehicles\Class150\Sprinter_NL\Class150_DMS_nd.xml,AP,Class150Pack01,RailVehicles\Class150\RR_Sprinter_AP\Class150_DMS.xml,AP Class 150/2 DMS RR,
+DMU150_set,Thomson_Oovee,Class150Pack01,RailVehicles\Class150\FGW2\Class150_DMSL.xml,AP,Class150Pack01,RailVehicles\Class150\FGW_B_AP\Class150_DMSL.xml,AP Class 150/2 DMSL FGW (B),
+DMU150_set,Thomson_Oovee,Class150Pack01,RailVehicles\Class150\FGW2\Class150_DMS.xml,AP,Class150Pack01,RailVehicles\Class150\FGW_B_AP\Class150_DMS.xml,AP Class 150/2 DMS FGW (B),
+DMU150_set,Thomson_Oovee,Class150Pack01,RailVehicles\Class150\FGW2\Class150_DMSL_nd.xml,AP,Class150Pack01,RailVehicles\Class150\FGW_B_AP\Class150_DMSL.xml,AP Class 150/2 DMSL FGW (B),
+DMU150_set,Thomson_Oovee,Class150Pack01,RailVehicles\Class150\FGW2\Class150_DMS_nd.xml,AP,Class150Pack01,RailVehicles\Class150\FGW_B_AP\Class150_DMS.xml,AP Class 150/2 DMS FGW (B),
+DMU150_set,Thomson_Oovee,Class150Pack01,RailVehicles\Class150\GMPTE\Class150_DMSL.xml,AP,Class150Pack01,RailVehicles\Class150\RR_GMPTE_AP\Class150_DMSL.xml,AP Class 150/2 DMSL RR (GMPTE),
+DMU150_set,Thomson_Oovee,Class150Pack01,RailVehicles\Class150\GMPTE\Class150_DMS.xml,AP,Class150Pack01,RailVehicles\Class150\RR_GMPTE_AP\Class150_DMS.xml,AP Class 150/2 DMS RR (GMPTE),
+DMU150_set,Thomson_Oovee,Class150Pack01,RailVehicles\Class150\GMPTE\Class150_DMSL_nd.xml,AP,Class150Pack01,RailVehicles\Class150\RR_GMPTE_AP\Class150_DMSL.xml,AP Class 150/2 DMSL RR (GMPTE),
+DMU150_set,Thomson_Oovee,Class150Pack01,RailVehicles\Class150\GMPTE\Class150_DMS_nd.xml,AP,Class150Pack01,RailVehicles\Class150\RR_GMPTE_AP\Class150_DMS.xml,AP Class 150/2 DMS RR (GMPTE),
+DMU150_set,Thomson_Oovee,Class150Pack01,RailVehicles\Class150\Merseyrail\Class150_DMSL.xml,AP,Class150Pack01,RailVehicles\Class150\RR_MR_AP\Class150_DMSL.xml,AP Class 150/2 DMSL RR (MR),
+DMU150_set,Thomson_Oovee,Class150Pack01,RailVehicles\Class150\Merseyrail\Class150_DMS.xml,AP,Class150Pack01,RailVehicles\Class150\RR_MR_AP\Class150_DMS.xml,AP Class 150/2 DMS RR (MR),
+DMU150_set,Thomson_Oovee,Class150Pack01,RailVehicles\Class150\Merseyrail\Class150_DMSL_nd.xml,AP,Class150Pack01,RailVehicles\Class150\RR_MR_AP\Class150_DMSL.xml,AP Class 150/2 DMSL RR (MR),
+DMU150_set,Thomson_Oovee,Class150Pack01,RailVehicles\Class150\Merseyrail\Class150_DMS_nd.xml,AP,Class150Pack01,RailVehicles\Class150\RR_MR_AP\Class150_DMS.xml,AP Class 150/2 DMS RR (MR),
+DMU150_set,Thomson_Oovee,Class150Pack01,RailVehicles\Class150\NNW\Class150_DMSL.xml,AP,Class150Pack01,RailVehicles\Class150\NNW_AP\Class150_DMSL.xml,AP Class 150/2 DMSL NNW,
+DMU150_set,Thomson_Oovee,Class150Pack01,RailVehicles\Class150\NNW\Class150_DMS.xml,AP,Class150Pack01,RailVehicles\Class150\NNW_AP\Class150_DMS.xml,AP Class 150/2 DMS NNW,
+DMU150_set,Thomson_Oovee,Class150Pack01,RailVehicles\Class150\NNW\Class150_DMSL_nd.xml,AP,Class150Pack01,RailVehicles\Class150\NNW_AP\Class150_DMSL.xml,AP Class 150/2 DMSL NNW,
+DMU150_set,Thomson_Oovee,Class150Pack01,RailVehicles\Class150\NNW\Class150_DMS_nd.xml,AP,Class150Pack01,RailVehicles\Class150\NNW_AP\Class150_DMS.xml,AP Class 150/2 DMS NNW,
 DMU158_set,DTG,Class158Pack01,RailVehicles\Diesel\Class158\Default\DMSL\Class158_dmcl_nd.xml,RSC,Class159Pack01,RailVehicles\Diesel\Class159\ATW_AP\DMSL\Class158_DMSLB.xml,Class 158P DMSLB ATW AP,RailVehicles\Diesel\Class159\AP\Numbers\dmslb.dcsv
 DMU158_set,DTG,Class158Pack01,RailVehicles\Diesel\Class158\Default\DMSL\Class158_dmcl.xml,RSC,Class159Pack01,RailVehicles\Diesel\Class159\ATW_AP\DMSL\Class158_DMSLB.xml,Class 158P DMSLB ATW AP,RailVehicles\Diesel\Class159\AP\Numbers\dmslb.dcsv
 DMU158_set,DTG,Class158Pack01,RailVehicles\Diesel\Class158\Default\DMSL\Class158_dmsl_nd.xml,RSC,Class159Pack01,RailVehicles\Diesel\Class159\ATW_AP\DMSL\Class158_DMSLA.xml,Class 158P DMSLA ATW AP,RailVehicles\Diesel\Class159\ATW_AP\DMSL\numbers_dmsla.dcsv
 DMU158_set,DTG,Class158Pack01,RailVehicles\Diesel\Class158\Default\DMSL\Class158_dmsl.xml,RSC,Class159Pack01,RailVehicles\Diesel\Class159\ATW_AP\DMSL\Class158_DMSLA.xml,Class 158P DMSLA ATW AP,RailVehicles\Diesel\Class159\ATW_AP\DMSL\numbers_dmsla.dcsv
+DMU158_set,DTG,Class158Pack01,RailVehicles\Diesel\Class158\FGW_rf\DMSL\Class158_dmcl_nd.xml,RSC,Class159Pack01,RailVehicles\Diesel\Class159\FGW_AP\DMSL\Class158C_DMSLB.xml,Class 158C DMSLB FGW AP,RailVehicles\Diesel\Class159\AP\Numbers\dmslb.dcsv
+DMU158_set,DTG,Class158Pack01,RailVehicles\Diesel\Class158\FGW_rf\DMSL\Class158_dmcl.xml,RSC,Class159Pack01,RailVehicles\Diesel\Class159\FGW_AP\DMSL\Class158C_DMSLB.xml,Class 158C DMSLB FGW AP,RailVehicles\Diesel\Class159\AP\Numbers\dmslb.dcsv
+DMU158_set,DTG,Class158Pack01,RailVehicles\Diesel\Class158\FGW_rf\DMSL\Class158_dmsl_nd.xml,RSC,Class159Pack01,RailVehicles\Diesel\Class159\FGW_AP\DMSL\Class158C_DMSLA.xml,Class 158C DMSLA FGW AP,RailVehicles\Diesel\Class159\FGW_AP\DMSL\numbersc_dmsla.dcsv
+DMU158_set,DTG,Class158Pack01,RailVehicles\Diesel\Class158\FGW_rf\DMSL\Class158_dmsl.xml,RSC,Class159Pack01,RailVehicles\Diesel\Class159\FGW_AP\DMSL\Class158C_DMSLA.xml,Class 158C DMSLA FGW AP,RailVehicles\Diesel\Class159\FGW_AP\DMSL\numbersc_dmsla.dcsv
+DMU158_set,DTG,Class158Pack01,RailVehicles\Diesel\Class158\FGW_rf\DMSL\Class158_dmsl_b_centre.xml,RSC,Class159Pack01,RailVehicles\Diesel\Class159\FGW_AP\DMSL\Class158C_DMSLB.xml,Class 158C DMSLB FGW AP,RailVehicles\Diesel\Class159\AP\Numbers\dmslb.dcsv
 DMU158_set,DTG,FifeCircle,RailVehicles\Diesel\Class158\Default\DMSL\Class158_dmsl_nd.xml,RSC,Class159Pack01,RailVehicles\Diesel\Class159\SR_Salt_AP\DMSL\Class158C_DMSLA.xml,Class 158C DMSLA SR Salt AP,RailVehicles\Diesel\Class159\SR_Salt_AP\DMSL\numbersc_dmsla.dcsv
 DMU158_set,DTG,FifeCircle,RailVehicles\Diesel\Class158\Default\DMSL\Class158_dmsl.xml,RSC,Class159Pack01,RailVehicles\Diesel\Class159\SR_Salt_AP\DMSL\Class158C_DMSLA.xml,Class 158C DMSLA SR Salt AP,RailVehicles\Diesel\Class159\SR_Salt_AP\DMSL\numbersc_dmsla.dcsv
 DMU158_set,DTG,FifeCircle,RailVehicles\Diesel\Class158\Default\DMSL\Class158_dmcl_nd.xml,RSC,Class159Pack01,RailVehicles\Diesel\Class159\SR_Salt_AP\DMSL\Class158C_DMSLB.xml,Class 158C DMCL SR Salt AP,RailVehicles\Diesel\Class159\AP\Numbers\dmslb.dcsv

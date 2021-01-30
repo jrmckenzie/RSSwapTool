@@ -114,6 +114,7 @@ if not config.has_section('defaults'):
     config.set('defaults', 'replace_hst', 'True')
     config.set('defaults', 'replace_c91', 'False')
     config.set('defaults', 'replace_c101', 'False')
+    config.set('defaults', 'replace_c150', 'False')
     config.set('defaults', 'replace_c156', 'False')
     config.set('defaults', 'replace_c158', 'False')
     config.set('defaults', 'save_report', 'False')
@@ -124,9 +125,20 @@ if not config.has_section('defaults'):
         iconfigfile.close()
 
 
+def get_my_config_boolean(section, configvalue):
+    if config.has_option(section, configvalue):
+        return config.getboolean(section, configvalue)
+    else:
+        config.set(section, configvalue, 'False')
+        with open(path_to_config, 'w') as iconfigfile:
+            config.write(iconfigfile)
+            iconfigfile.close()
+        return config.getboolean(section, configvalue)
+
+
 def import_data_from_csv(csv_filename):
     try:
-        with open(Path(csv_filename), 'r') as csv_file:
+        with open((Path(os.path.realpath(__file__)).parent / csv_filename), 'r') as csv_file:
             reader = csv.reader(csv_file)
             seen = ''
             for row in reader:
@@ -152,7 +164,7 @@ def import_data_from_csv(csv_filename):
 
 
 # Read in the csv database of vehicles, substitutes and swap datal, store in VehicleDB dictionary
-user_db_path = Path('tables/User.csv')
+user_db_path = Path(os.path.realpath(__file__)).parent / 'tables/User.csv'
 if not user_db_path.is_file():
     head = 'Label,Provider,Product,Blueprint,ReplaceProvider,ReplaceProduct,ReplaceBlueprint,ReplaceName,NumbersDcsv\n'
     user_db_path.touch()
@@ -167,35 +179,35 @@ left_column = [
     [sg.FileBrowse('Select scenario file to process', key='Scenario_xml', tooltip='Locate the scenario .bin or .xml '
                                                                                   'file you wish to process')],
     [sg.Text('Tick the boxes below to choose the\nsubstitutions you would like to make.')],
-    [sg.Checkbox('Replace Mk1 coaches', default=config.getboolean('defaults', 'replace_mk1'), enable_events=True,
+    [sg.Checkbox('Replace Mk1 coaches', default=get_my_config_boolean('defaults', 'replace_mk1'), enable_events=True,
                  tooltip='Tick to enable replacing of Mk1 coaches with AP Mk1 Coach Pack Vol. 1',
                  key='Replace_Mk1')],
-    [sg.Checkbox('Replace Mk2A-C coaches', default=config.getboolean('defaults', 'replace_mk2ac'),
+    [sg.Checkbox('Replace Mk2A-C coaches', default=get_my_config_boolean('defaults', 'replace_mk2ac'),
                  enable_events=True,
                  tooltip='Tick to enable replacing of Mk2a coaches with AP Mk2A-C Pack', key='Replace_Mk2ac')],
-    [sg.Checkbox('Replace Mk2D-F coaches', default=config.getboolean('defaults', 'replace_mk2df'),
+    [sg.Checkbox('Replace Mk2D-F coaches', default=get_my_config_boolean('defaults', 'replace_mk2df'),
                  enable_events=True,
                  tooltip='Tick to enable replacing of Mk2e coaches with AP Mk2D-F Pack', key='Replace_Mk2df')],
-    [sg.Checkbox('Replace FSA/FTA wagons', default=config.getboolean('defaults', 'replace_fsa'), enable_events=True,
+    [sg.Checkbox('Replace FSA/FTA wagons', default=get_my_config_boolean('defaults', 'replace_fsa'), enable_events=True,
                  tooltip='Tick to enable replacing of FSA wagons with AP FSA/FTA Wagon Pack', key='Replace_FSA')],
-    [sg.Checkbox('Replace HAA wagons', default=config.getboolean('defaults', 'replace_haa'), enable_events=True,
+    [sg.Checkbox('Replace HAA wagons', default=get_my_config_boolean('defaults', 'replace_haa'), enable_events=True,
                  tooltip='Tick to enable replacing of HAA wagons with AP MGR Wagon Pack', key='Replace_HAA')],
-    [sg.Checkbox('Replace unfitted 21t coal wagons', default=config.getboolean('defaults', 'replace_hto'),
+    [sg.Checkbox('Replace unfitted 21t coal wagons', default=get_my_config_boolean('defaults', 'replace_hto'),
                  enable_events=True,
                  tooltip='Tick to enable replacing of unfitted 21t coal wagons with Fastline Simulation HTO wagons',
                  key='Replace_HTO')],
-    [sg.Checkbox('Replace fitted 21t coal wagons', default=config.getboolean('defaults', 'replace_htv'),
+    [sg.Checkbox('Replace fitted 21t coal wagons', default=get_my_config_boolean('defaults', 'replace_htv'),
                  enable_events=True,
                  tooltip='Tick to enable replacing of fitted 21t coal wagons with Fastline Simulation HTV wagons',
                  key='Replace_HTV')],
-    [sg.Checkbox('Replace VDA wagons', default=config.getboolean('defaults', 'replace_vda'), enable_events=True,
+    [sg.Checkbox('Replace VDA wagons', default=get_my_config_boolean('defaults', 'replace_vda'), enable_events=True,
                  tooltip='Tick to enable replacing of VDA wagons with Fastline Simulation VDA pack',
                  key='Replace_VDA')],
-    [sg.Checkbox('Replace IHH stock', default=config.getboolean('defaults', 'replace_ihh'), enable_events=True,
+    [sg.Checkbox('Replace IHH stock', default=get_my_config_boolean('defaults', 'replace_ihh'), enable_events=True,
                  tooltip='Tick to enable replacing of old Iron Horse House (IHH) stock, if your scenario contains any'
                          ' (if in doubt, leave this unticked)',
                  key='Replace_IHH')],
-    [sg.Checkbox('Replace User-configured stock', default=config.getboolean('defaults', 'replace_user'),
+    [sg.Checkbox('Replace User-configured stock', default=get_my_config_boolean('defaults', 'replace_user'),
                  enable_events=True,
                  tooltip='Tick to enable replacing of user-configured stock, contained in file User.csv '
                          '(leave this unticked unless you have added your own substitutions to User.csv).',
@@ -203,43 +215,46 @@ left_column = [
     [sg.Text('© 2021 JR McKenzie', font='Helvetica 7')],
 ]
 right_column = [
-    [sg.Checkbox('Replace Class 31s', default=config.getboolean('defaults', 'replace_c31'), enable_events=True,
+    [sg.Checkbox('Replace Class 31s', default=get_my_config_boolean('defaults', 'replace_c31'), enable_events=True,
                  tooltip='Replace Class 31s with AP enhancement pack equivalent', key='Replace_C31')],
-    [sg.Checkbox('Replace Class 37s', default=config.getboolean('defaults', 'replace_c37'), enable_events=True,
+    [sg.Checkbox('Replace Class 37s', default=get_my_config_boolean('defaults', 'replace_c37'), enable_events=True,
                  tooltip='Replace Class 37s with AP equivalent', key='Replace_C37')],
-    [sg.Checkbox('Replace Class 40s', default=config.getboolean('defaults', 'replace_c40'), enable_events=True,
+    [sg.Checkbox('Replace Class 40s', default=get_my_config_boolean('defaults', 'replace_c40'), enable_events=True,
                  tooltip='Replace DT Class 40s with AP/RailRight equivalent', key='Replace_C40')],
-    [sg.Checkbox('Replace Class 47s', default=config.getboolean('defaults', 'replace_c47'), enable_events=True,
+    [sg.Checkbox('Replace Class 47s', default=get_my_config_boolean('defaults', 'replace_c47'), enable_events=True,
                  tooltip='Replace BR Blue Class 47s with Vulcan Productions BR Blue Class 47 Pack versions',
                  key='Replace_C47')],
-    [sg.Checkbox('Replace Class 50s', default=config.getboolean('defaults', 'replace_c50'), enable_events=True,
+    [sg.Checkbox('Replace Class 50s', default=get_my_config_boolean('defaults', 'replace_c50'), enable_events=True,
                  tooltip='Replace MeshTools Class 50s with AP equivalent', key='Replace_C50')],
-    [sg.Checkbox('Replace Class 56s', default=config.getboolean('defaults', 'replace_c56'), enable_events=True,
+    [sg.Checkbox('Replace Class 56s', default=get_my_config_boolean('defaults', 'replace_c56'), enable_events=True,
                  tooltip='Replace RSC Class 56 Railfreight Sectors with AP enhancement pack equivalent',
                  key='Replace_C56')],
-    [sg.Checkbox('Replace Class 66s', default=config.getboolean('defaults', 'replace_c66'), enable_events=True,
+    [sg.Checkbox('Replace Class 66s', default=get_my_config_boolean('defaults', 'replace_c66'), enable_events=True,
                  tooltip='Replace Class 66s with AP enhancement pack equivalent', key='Replace_C66')],
-    [sg.Checkbox('Replace Class 67s', default=config.getboolean('defaults', 'replace_c67'), enable_events=True,
+    [sg.Checkbox('Replace Class 67s', default=get_my_config_boolean('defaults', 'replace_c67'), enable_events=True,
                  tooltip='Replace Class 67s with AP enhancement pack equivalent', key='Replace_C67')],
-    [sg.Checkbox('Replace Class 68s', default=config.getboolean('defaults', 'replace_c68'), enable_events=True,
+    [sg.Checkbox('Replace Class 68s', default=get_my_config_boolean('defaults', 'replace_c68'), enable_events=True,
                  tooltip='Replace Class 68s with AP enhancement pack equivalent', key='Replace_C68')],
-    [sg.Checkbox('Replace Class 86s', default=config.getboolean('defaults', 'replace_c86'), enable_events=True,
+    [sg.Checkbox('Replace Class 86s', default=get_my_config_boolean('defaults', 'replace_c86'), enable_events=True,
                  tooltip='Replace Class 86s with AP enhancement pack equivalent', key='Replace_C86')],
-    [sg.Checkbox('Replace HST sets', default=config.getboolean('defaults', 'replace_hst'), enable_events=True,
+    [sg.Checkbox('Replace HST sets', default=get_my_config_boolean('defaults', 'replace_hst'), enable_events=True,
                  tooltip='Tick to enable replacing of HST sets with AP enhanced versions (Valenta, MTU, VP185)',
                  key='Replace_HST')],
-    [sg.Checkbox('Replace Class 91 EC sets', default=config.getboolean('defaults', 'replace_c91'),
+    [sg.Checkbox('Replace Class 91 EC sets', default=get_my_config_boolean('defaults', 'replace_c91'),
                  enable_events=True,
                  tooltip='Tick to enable replacing of Class 91 East Coast sets with AP enhanced versions',
                  key='Replace_C91')],
-    [sg.Checkbox('Replace Class 101 sets', default=config.getboolean('defaults', 'replace_c101'),
+    [sg.Checkbox('Replace Class 101 sets', default=get_my_config_boolean('defaults', 'replace_c101'),
                  enable_events=True,
                  tooltip='Tick to enable replacing of retired RSC Class101Pack with RSC BritishRailClass101 sets',
                  key='Replace_C101')],
-    [sg.Checkbox('Replace Class 156 sets', default=config.getboolean('defaults', 'replace_c156'),
+    [sg.Checkbox('Replace Class 150/2 sets', default=get_my_config_boolean('defaults', 'replace_c150'),
+                 enable_events=True,
+                 tooltip='Tick to enable replacing Thomson-Oovee Class 150s with AP Class 150/2', key='Replace_C150')],
+    [sg.Checkbox('Replace Class 156 sets', default=get_my_config_boolean('defaults', 'replace_c156'),
                  enable_events=True,
                  tooltip='Tick to enable replacing of Oovee Class 156s with AP Class 156', key='Replace_C156')],
-    [sg.Checkbox('Replace Class 158 sets', default=config.getboolean('defaults', 'replace_c158'),
+    [sg.Checkbox('Replace Class 158 sets', default=get_my_config_boolean('defaults', 'replace_c158'),
                  enable_events=True,
                  tooltip='Tick to enable replacing of North Wales Coast / Settle Carlisle / Fife Circle Class 158s '
                          'with AP enhanced versions (Cummins, Perkins)',
@@ -1562,6 +1577,31 @@ def c101_replace(provider, product, blueprint, name):
     return False
 
 
+def c150_replace(provider, product, blueprint, name, number):
+    if 'Thomson_Oovee' in provider.text:
+        if 'Class150Pack01' in product.text:
+            for i in range(0, len(vehicle_db['DMU150_set'])):
+                this_vehicle = vehicle_db['DMU150_set'][i]
+                bp = re.search(this_vehicle[2], blueprint.text, flags=re.IGNORECASE)
+                if bp:
+                    rv_orig = number.text
+                    nm = re.search('5[2,7]([0-9]{3})[0-9]*', number.text)
+                    if nm:
+                        number.text = '150' + nm.group(1) + 'a'
+                    else:
+                        # Unit number of the Oovee 150 is not in standard format - can't replace the vehicle
+                        return False
+                    # Swap vehicle and set number / destination (where possible)
+                    provider.text = this_vehicle[3]
+                    product.text = this_vehicle[4]
+                    blueprint.text = this_vehicle[5]
+                    name.text = this_vehicle[6]
+                    rv_list.append(number.text)
+                    rv_pairs.append([rv_orig, number.text])
+                    return True
+    return False
+
+
 def c156_replace(provider, product, blueprint, name, number):
     if 'Oovee' in provider.text:
         if 'BRClass156Pack01' in product.text:
@@ -1765,6 +1805,8 @@ def vehicle_replacer(provider, product, blueprint, name, number, loaded):
         return True
     if values['Replace_C101'] and c101_replace(provider, product, blueprint, name):
         return True
+    if values['Replace_C150'] and c150_replace(provider, product, blueprint, name, number):
+        return True
     if values['Replace_C156'] and c156_replace(provider, product, blueprint, name, number):
         return True
     if values['Replace_C158'] and c158_replace(provider, product, blueprint, name, number):
@@ -1925,6 +1967,7 @@ if __name__ == "__main__":
             config.set('defaults', 'replace_hst', str(values['Replace_HST']))
             config.set('defaults', 'replace_c91', str(values['Replace_C91']))
             config.set('defaults', 'replace_c101', str(values['Replace_C101']))
+            config.set('defaults', 'replace_c150', str(values['Replace_C150']))
             config.set('defaults', 'replace_c156', str(values['Replace_C156']))
             config.set('defaults', 'replace_c158', str(values['Replace_C158']))
             with open(path_to_config, 'w') as configfile:
@@ -1956,7 +1999,7 @@ if __name__ == "__main__":
                 [sg.Combo(c56_opts, auto_size_text=True, default_value=c56_rf, key='c56_rf', readonly=True)],
                 [sg.HSeparator(color='#aaaaaa')],
                 [sg.Checkbox('Save a list of all vehicles in the scenario (useful for debugging)', key='save_report',
-                             default=config.getboolean('defaults', 'save_report'), enable_events=True,
+                             default=get_my_config_boolean('defaults', 'save_report'), enable_events=True,
                              tooltip='This option will save a report listing all the rail vehicles (and their numbers)'
                                      ' in the scenario, in .html format, alongside the scenario output file.')],
                 [sg.Button('Save changes'), sg.Button('Cancel')]
@@ -2009,6 +2052,7 @@ if __name__ == "__main__":
             config.set('defaults', 'replace_hst', str(values['Replace_HST']))
             config.set('defaults', 'replace_c91', str(values['Replace_C91']))
             config.set('defaults', 'replace_c101', str(values['Replace_C101']))
+            config.set('defaults', 'replace_c150', str(values['Replace_C150']))
             config.set('defaults', 'replace_c156', str(values['Replace_C156']))
             config.set('defaults', 'replace_c158', str(values['Replace_C158']))
             with open(path_to_config, 'w') as configfile:
@@ -2061,7 +2105,7 @@ if __name__ == "__main__":
                     output_message = serz_output + '\nserz.exe ' + p2.communicate()[0].decode('ascii')
                 output_message = output_message + \
                                  '\nOriginal scenario backup located in ' + str(outPathStem) + str(scenarioPath.suffix)
-                if config.getboolean('defaults', 'save_report'):
+                if get_my_config_boolean('defaults', 'save_report'):
                     html_report_file = scenarioPath.parent / Path(str(scenarioPath.stem) + '-railvehicle_report.html')
                     convert_vlist_to_html_table(html_report_file)
                     html_report_status_text = 'Report listing all rail vehicles located in ' + str(html_report_file)
