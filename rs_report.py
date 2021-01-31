@@ -117,6 +117,14 @@ def parse_xml(xml_file):
             service = 'Loose consist'
         else:
             service = service.text
+        # Find if this consist is driven by the player
+        playerdriver = citem.find('Driver/cDriver/PlayerDriver')
+        if playerdriver is None:
+            playerdriven = False
+        elif playerdriver.text == '1':
+            playerdriven = True
+        else:
+            playerdriven = False
         # Iterate through RailVehicles list of the consist
         for rvehicles in citem.findall('RailVehicles'):
             # Iterate through each RailVehicle in the consist
@@ -133,7 +141,7 @@ def parse_xml(xml_file):
                 loaded = coentity.find('Component/cCargoComponent/IsPreLoaded')
                 vehicle_list.append(
                     [str(consist_nr), provider.text, product.text, blueprint.text, name.text, number.text, loaded.text,
-                     service])
+                     service, playerdriven])
         consist_nr += 1
         progress_bar.UpdateBar(consist_nr, len(consists))
     # All necessary elements processed, now close progress bar window and return the new xml tree object
@@ -194,10 +202,14 @@ h3,thead {
             tdstyle = ''
         else:
             tdstyle = ' class="missing"'
+        cname = '<i>' + str(row[7]) + '</i>'
+        if row[8] is True:
+            # Consist is driven by the player - make the name bold and append (Player driven)
+            cname = '<b>' + cname + '</b> (Player driven)'
         for col in row[0:7]:
             col_no += 1
             if rowspan > 0 and col_no == 1:
-                col_htm = col_htm + '      <td rowspan=' + str(rowspan) + '><i>' + str(row[7]) + '</i></td>\n'
+                col_htm = col_htm + '      <td rowspan=' + str(rowspan) + '>' + cname + '</td>\n'
             elif col_no > 1:
                 col_htm = col_htm + '      <td' + tdstyle + '>' + col + '</td>\n'
         col_no = 0
@@ -231,7 +243,7 @@ if __name__ == "__main__":
                      'Tool for listing rolling stock in Train Simulator (Dovetail Games) scenarios, bundled with '
                      'RSSwapTool to provide a standalone tool to examine scenarios and list rolling stock.',
                      'Issued under the GNU General Public License - see https://www.gnu.org/licenses/',
-                     'Version 0.9a',
+                     'Version 0.10a',
                      'Copyright 2021 JR McKenzie', 'https://github.com/jrmckenzie/RSSwapTool')
         elif event == 'Settings':
             # The settings button has been pressed, so allow the user to change the RailWorks folder setting

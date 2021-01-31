@@ -40,6 +40,35 @@ haa_e_wagons = [[r'RailVehicles\Freight\HAA\EWS\HAA.xml', 'AP HAA Red Empty'],
                 [r'RailVehicles\Freight\HAA\EWS2\HMA.xml', 'AP HMA Red Empty W1']]
 
 ##################################################################################
+# List of AP HHA Loaded Wagons to randomise and replace.
+# Edit or append new wagons to suit the scenario. To double the probability of any
+# particular wagon appearing, enter it twice.
+hha_l_wagons = [[r'RailVehicles\Freight\FL_HHA01\FL_HHA_LD.xml', 'AP HHA Hopper 01 Loaded'],
+                [r'RailVehicles\Freight\FL_HHA02\FL_HHA_LD.xml', 'AP HHA Hopper 02 Loaded'],
+                [r'RailVehicles\Freight\FL_HHA03\FL_HHA_LD.xml', 'AP HHA Hopper 03 Loaded'],
+                [r'RailVehicles\Freight\FL_HHA04\FL_HHA_LD.xml', 'AP HHA Hopper 04 Loaded'],
+                [r'RailVehicles\Freight\FL_HHA05\FL_HHA_LD.xml', 'AP HHA Hopper 05 Loaded'],
+                [r'RailVehicles\Freight\FL_HHA02\FL_HHA_LD.xml', 'AP HHA Hopper 02 Loaded'],
+                [r'RailVehicles\Freight\FL_HHA03\FL_HHA_LD.xml', 'AP HHA Hopper 03 Loaded'],
+                [r'RailVehicles\Freight\FL_HHA04\FL_HHA_LD.xml', 'AP HHA Hopper 04 Loaded'],
+                [r'RailVehicles\Freight\FL_HHA05\FL_HHA_LD.xml', 'AP HHA Hopper 05 Loaded']]
+
+##################################################################################
+# List of AP HHA Empty Wagons to randomise and replace.
+# Edit or append new wagons to suit the scenario. To double the probability of any
+# particular wagon appearing, enter it twice.
+# In the default configuration below, there is a 1 in 9 chance of a clean wagon
+hha_e_wagons = [[r'RailVehicles\Freight\FL_HHA01\FL_HHA.xml', 'AP HHA Hopper 01 Empty'],
+                [r'RailVehicles\Freight\FL_HHA02\FL_HHA.xml', 'AP HHA Hopper 02 Empty'],
+                [r'RailVehicles\Freight\FL_HHA03\FL_HHA.xml', 'AP HHA Hopper 03 Empty'],
+                [r'RailVehicles\Freight\FL_HHA04\FL_HHA.xml', 'AP HHA Hopper 04 Empty'],
+                [r'RailVehicles\Freight\FL_HHA05\FL_HHA.xml', 'AP HHA Hopper 05 Empty'],
+                [r'RailVehicles\Freight\FL_HHA02\FL_HHA.xml', 'AP HHA Hopper 02 Empty'],
+                [r'RailVehicles\Freight\FL_HHA03\FL_HHA.xml', 'AP HHA Hopper 03 Empty'],
+                [r'RailVehicles\Freight\FL_HHA04\FL_HHA.xml', 'AP HHA Hopper 04 Empty'],
+                [r'RailVehicles\Freight\FL_HHA05\FL_HHA.xml', 'AP HHA Hopper 05 Empty']]
+
+##################################################################################
 # Array of Fastline VDA Empty Wagons to randomise and replace JL WHL VDAs.
 # Edit or append new wagons to suit the scenario. To increase the probability of any
 # particular wagon appearing, enter it more than once. In the following list, one in

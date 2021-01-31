@@ -27,11 +27,11 @@ import configparser
 import PySimpleGUI as sg
 import webbrowser
 from pathlib import Path
-from data_file import haa_e_wagons, haa_l_wagons, hto_e_wagons, hto_l_wagons, htv_e_wagons, htv_l_wagons, \
-    vda_e_wagons, vda_l_wagons, HTO_141_numbers, HTO_143_numbers, HTO_146_numbers, HTO_rebodied_numbers, \
-    HTV_146_numbers, HTV_rebodied_numbers, c158_s9bl_rr, c158_s9bl_nr, c158_s9bl_fgw, c158_s9bl_tpe, c158_s9bl_swt, \
-    c158_nwc, c158_dtg_fc, c158_livman_rr, ap40headcodes_69_77, ap40headcodes_62_69, rsc20headcodes_62_69, \
-    rsc20headcodes_69_77
+from data_file import haa_e_wagons, haa_l_wagons, hha_e_wagons, hha_l_wagons, hto_e_wagons, hto_l_wagons, \
+    htv_e_wagons, htv_l_wagons, vda_e_wagons, vda_l_wagons, HTO_141_numbers, HTO_143_numbers, HTO_146_numbers, \
+    HTO_rebodied_numbers, HTV_146_numbers, HTV_rebodied_numbers, c158_s9bl_rr, c158_s9bl_nr, c158_s9bl_fgw, \
+    c158_s9bl_tpe, c158_s9bl_swt, c158_nwc, c158_dtg_fc, c158_livman_rr, ap40headcodes_69_77, ap40headcodes_62_69, \
+    rsc20headcodes_62_69, rsc20headcodes_69_77
 
 rv_list = []
 rv_pairs = []
@@ -96,6 +96,7 @@ if not config.has_section('defaults'):
     config.set('defaults', 'replace_mk2df', 'True')
     config.set('defaults', 'replace_fsa', 'True')
     config.set('defaults', 'replace_haa', 'True')
+    config.set('defaults', 'replace_hha', 'True')
     config.set('defaults', 'replace_hto', 'True')
     config.set('defaults', 'replace_htv', 'True')
     config.set('defaults', 'replace_vda', 'True')
@@ -130,9 +131,9 @@ def get_my_config_boolean(section, configvalue):
         return config.getboolean(section, configvalue)
     else:
         config.set(section, configvalue, 'False')
-        with open(path_to_config, 'w') as iconfigfile:
-            config.write(iconfigfile)
-            iconfigfile.close()
+        with open(path_to_config, 'w') as myconfigfile:
+            config.write(myconfigfile)
+            myconfigfile.close()
         return config.getboolean(section, configvalue)
 
 
@@ -192,6 +193,8 @@ left_column = [
                  tooltip='Tick to enable replacing of FSA wagons with AP FSA/FTA Wagon Pack', key='Replace_FSA')],
     [sg.Checkbox('Replace HAA wagons', default=get_my_config_boolean('defaults', 'replace_haa'), enable_events=True,
                  tooltip='Tick to enable replacing of HAA wagons with AP MGR Wagon Pack', key='Replace_HAA')],
+    [sg.Checkbox('Replace HHA wagons', default=get_my_config_boolean('defaults', 'replace_hha'), enable_events=True,
+                 tooltip='Tick to enable replacing of HHA wagons with AP HHA Wagon Pack', key='Replace_HHA')],
     [sg.Checkbox('Replace unfitted 21t coal wagons', default=get_my_config_boolean('defaults', 'replace_hto'),
                  enable_events=True,
                  tooltip='Tick to enable replacing of unfitted 21t coal wagons with Fastline Simulation HTO wagons',
@@ -525,6 +528,34 @@ def haa_replace(provider, product, blueprint, name, number, loaded):
                         # Select at random one of the wagons in the list of HAA empty wagons to swap in
                         blueprint.text = haa_e_wagons[idx][0]
                         name.text = haa_e_wagons[idx][1]
+                    # Now extract the vehicle number
+                    rv_list.append(number.text)
+                    return True
+    return False
+
+
+def hha_replace(provider, product, blueprint, name, number, loaded):
+    # Replace HHA wagons
+    for i in range(0, len(vehicle_db['HHA'])):
+        this_vehicle = vehicle_db['HHA'][i]
+        if this_vehicle[0] in provider.text:
+            if this_vehicle[1] in product.text:
+                bp = re.search(this_vehicle[2], blueprint.text, flags=re.IGNORECASE)
+                if bp:
+                    provider.text = 'AP'
+                    product.text = 'HHAWagonPack01'
+                    # Replace a loaded wagon
+                    if 'eTrue' in loaded.text:
+                        idx = random.randrange(0, len(hha_l_wagons))
+                        # Select at random one of the wagons in the list of HHA loaded wagons to swap in
+                        blueprint.text = hha_l_wagons[idx][0]
+                        name.text = hha_l_wagons[idx][1]
+                    # Replace an empty wagon
+                    if 'eFalse' in loaded.text:
+                        idx = random.randrange(0, len(hha_e_wagons))
+                        # Select at random one of the wagons in the list of HHA empty wagons to swap in
+                        blueprint.text = hha_e_wagons[idx][0]
+                        name.text = hha_e_wagons[idx][1]
                     # Now extract the vehicle number
                     rv_list.append(number.text)
                     return True
@@ -1734,6 +1765,14 @@ def parse_xml(xml_file):
             service = 'Loose consist'
         else:
             service = service.text
+        # Find if this consist is driven by the player
+        playerdriver = citem.find('Driver/cDriver/PlayerDriver')
+        if playerdriver is None:
+            playerdriven = False
+        elif playerdriver.text == '1':
+            playerdriven = True
+        else:
+            playerdriven = False
         # Iterate through RailVehicles list of the consist
         for rvehicles in citem.findall('RailVehicles'):
             # Iterate through each RailVehicle in the consist
@@ -1751,7 +1790,7 @@ def parse_xml(xml_file):
                 vehicle_replacer(provider, product, blueprint, name, number, loaded)
                 vehicle_list.append(
                     [str(consist_nr), provider.text, product.text, blueprint.text, name.text, number.text, loaded.text,
-                     service])
+                     service, playerdriven])
             consist_nr += 1
             progress_bar.UpdateBar(consist_nr, len(consists))
         for driver_inrvs in citem.findall('Driver/cDriver/InitialRV'):
@@ -1788,6 +1827,8 @@ def vehicle_replacer(provider, product, blueprint, name, number, loaded):
     if values['Replace_FSA'] and fsafta_replace(provider, product, blueprint, name, number, loaded):
         return True
     if values['Replace_HAA'] and haa_replace(provider, product, blueprint, name, number, loaded):
+        return True
+    if values['Replace_HHA'] and hha_replace(provider, product, blueprint, name, number, loaded):
         return True
     if values['Replace_HTO'] and coal21_t_hto_replace(provider, product, blueprint, name, number, loaded):
         return True
@@ -1903,10 +1944,14 @@ h3,thead {
             tdstyle = ''
         else:
             tdstyle = ' class="missing"'
+        cname = '<i>' + str(row[7]) + '</i>'
+        if row[8] is True:
+            # Consist is driven by the player - make the name bold and append (Player driven)
+            cname = '<b>' + cname + '</b> (Player driven)'
         for col in row[0:7]:
             col_no += 1
             if rowspan > 0 and col_no == 1:
-                col_htm = col_htm + '      <td rowspan=' + str(rowspan) + '><i>' + str(row[7]) + '</i></td>\n'
+                col_htm = col_htm + '      <td rowspan=' + str(rowspan) + '>' + cname + '</td>\n'
             elif col_no > 1:
                 col_htm = col_htm + '      <td' + tdstyle + '>' + col + '</td>\n'
         col_no = 0
@@ -1939,7 +1984,7 @@ if __name__ == "__main__":
             sg.Popup('About RSSwapTool',
                      'Tool for swapping rolling stock in Train Simulator (Dovetail Games) scenarios',
                      'Issued under the GNU General Public License - see https://www.gnu.org/licenses/',
-                     'Version 0.9a',
+                     'Version 0.10a',
                      'Copyright 2021 JR McKenzie', 'https://github.com/jrmckenzie/RSSwapTool')
         elif event == 'Settings':
             if not config.has_section('defaults'):
@@ -1949,6 +1994,7 @@ if __name__ == "__main__":
             config.set('defaults', 'replace_mk2df', str(values['Replace_Mk2df']))
             config.set('defaults', 'replace_fsa', str(values['Replace_FSA']))
             config.set('defaults', 'replace_haa', str(values['Replace_HAA']))
+            config.set('defaults', 'replace_hha', str(values['Replace_HHA']))
             config.set('defaults', 'replace_hto', str(values['Replace_HTO']))
             config.set('defaults', 'replace_htv', str(values['Replace_HTV']))
             config.set('defaults', 'replace_vda', str(values['Replace_VDA']))
@@ -2034,6 +2080,7 @@ if __name__ == "__main__":
             config.set('defaults', 'replace_mk2df', str(values['Replace_Mk2df']))
             config.set('defaults', 'replace_fsa', str(values['Replace_FSA']))
             config.set('defaults', 'replace_haa', str(values['Replace_HAA']))
+            config.set('defaults', 'replace_hha', str(values['Replace_HHA']))
             config.set('defaults', 'replace_hto', str(values['Replace_HTO']))
             config.set('defaults', 'replace_htv', str(values['Replace_HTV']))
             config.set('defaults', 'replace_vda', str(values['Replace_VDA']))
