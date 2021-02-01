@@ -1878,7 +1878,7 @@ def vehicle_replacer(provider, product, blueprint, name, number, loaded):
 def fix_short_tags(xml_string):
     # This clumsy fix is necessary because sometimes TS requires short xml empty tags and sometimes long ones.
     # The following substitutions should take care of the important exceptions to the long tag default.
-    xml_string = re.sub(r'(<cEngineSimContainer.d:id="[\-0-9]*")></cEngineSimContainer>', r'\1/>', xml_string,
+    xml_string = re.sub(r'(<cEngineSimContainer[^>]*)></cEngineSimContainer>', r'\1/>', xml_string,
                         flags=re.IGNORECASE)
     xml_string = re.sub(r'(<RailVehicleNumber)></RailVehicleNumber>', r'\1/>', xml_string, flags=re.IGNORECASE)
     xml_string = re.sub(r'(<Other)></Other>', r'\1/>', xml_string, flags=re.IGNORECASE)
