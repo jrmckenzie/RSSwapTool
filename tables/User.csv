@@ -43,3 +43,8 @@ User,DTG,Class67Pack03,RailVehicles\Freight\JNA\MXA Wagon.xml,BMG,WelshMarchesLi
 User,DTG,BristolCardiff,RailVehicles\Freight\KTA\default\KTA_40ft_EcoMove.xml,BMG,WelshMarchesLine,RailVehicles\Freight\KTA\default\KTA_40ft_EcoMove.xml,[WML] KTA 40ft EcoMove,
 User,DTG,BristolCardiff,RailVehicles\Freight\KTA\default\KTA_40ft_QDWorldwide.xml,BMG,WelshMarchesLine,RailVehicles\Freight\KTA\default\KTA_40ft_QDWorldwide.xml,[WML] KTA 40ft QDWorldwide,
 User,DTG,BristolCardiff,RailVehicles\Freight\KTA\default\KTA_40ft_Wave.xml,BMG,WelshMarchesLine,RailVehicles\Freight\KTA\default\KTA_40ft_Wave.xml,[WML] KTA 40ft Wave,
+User,Kuju,RailSimulator,RailVehicles\Freight\LMSBrakeVan\BR 1\Wagon\brakevan.xml,Kuju,RailSimulator,RailVehicles\Freight\LMSBrakeVan\Default\Wagon\brakevan.xml,Van LMS Brake,
+User,Kuju,RailSimulator,RailVehicles\Freight\LMSBrakeVan\BR 2\Wagon\brakevan.xml,Kuju,RailSimulator,RailVehicles\Freight\LMSBrakeVan\Default\Wagon\brakevan.xml,Van LMS Brake,
+User,Kuju,RailSimulator,RailVehicles\Freight\LMSBrakeVan\BR 3\Wagon\brakevan.xml,Kuju,RailSimulator,RailVehicles\Freight\LMSBrakeVan\Default\Wagon\brakevan.xml,Van LMS Brake,
+User,Kuju,RailSimulator,RailVehicles\Freight\LMSBrakeVan\BR 4\Wagon\brakevan.xml,Kuju,RailSimulator,RailVehicles\Freight\LMSBrakeVan\Default\Wagon\brakevan.xml,Van LMS Brake,
+User,Kuju,RailSimulator,RailVehicles\Freight\LMSBrakeVan\BR 5\Wagon\brakevan.xml,Kuju,RailSimulator,RailVehicles\Freight\LMSBrakeVan\Default\Wagon\brakevan.xml,Van LMS Brake,
