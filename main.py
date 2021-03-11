@@ -1902,6 +1902,43 @@ def c365_replace(provider, product, blueprint, name, number):
     return False
 
 
+def c375_replace(provider, product, blueprint, name, number):
+    for i in range(0, len(vehicle_db['EMU375_set'])):
+        this_vehicle = vehicle_db['EMU375_set'][i]
+        if this_vehicle[0] in provider.text:
+            if this_vehicle[1] in product.text:
+                bp = re.search(this_vehicle[2], blueprint.text, flags=re.IGNORECASE)
+                if bp:
+                    rv_orig = rv_num = number.text
+                    destination = 'a'
+                    nm = re.search('([0-9]{6})......([a-zA-Z]?)', number.text)
+                    # Check if this is an RSC ECMLS 365 format number
+                    if nm:
+                        if bool(re.search(r'\\Default\\', blueprint.text,
+                                          flags=re.IGNORECASE)):
+                            # This is for the ECMLS 365 NSE livery
+                            destination = get_destination(c365_ecmls_nse, nm.group(2), 'a')
+                        rv_num = number.text[0:6] + destination
+                    nm = re.search('([a-zA-Z]?)........([0-9]{3})', number.text)
+                    # Check if this is an RSC Class365Pack02 format number
+                    if nm:
+                        if bool(re.search(r'\\CXSE_AP\\', blueprint.text,
+                                          flags=re.IGNORECASE)):
+                            # This is for the ECMLS 365 NSE livery
+                            destination = get_destination(c365_apcxse, nm.group(1), 'a')
+                        rv_num = '365' + nm.group(2) + destination
+                    # Swap vehicle and set number / destination (where possible)
+                    provider.text = this_vehicle[3]
+                    product.text = this_vehicle[4]
+                    blueprint.text = this_vehicle[5]
+                    name.text = this_vehicle[6]
+                    number.text = str(rv_num)
+                    rv_list.append(number.text)
+                    rv_pairs.append([rv_orig, number.text])
+                    return True
+    return False
+
+
 def c450_replace(provider, product, blueprint, name, number):
     for i in range(0, len(vehicle_db['EMU450_set'])):
         this_vehicle = vehicle_db['EMU450_set'][i]
