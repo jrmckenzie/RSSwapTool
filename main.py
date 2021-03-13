@@ -1903,8 +1903,8 @@ def c365_replace(provider, product, blueprint, name, number):
 
 
 def c375_replace(provider, product, blueprint, name, number):
-    for i in range(0, len(vehicle_db['EMU375_set'])):
-        this_vehicle = vehicle_db['EMU375_set'][i]
+    for i in range(0, len(vehicle_db['EMU375-7_set'])):
+        this_vehicle = vehicle_db['EMU375-7_set'][i]
         if this_vehicle[0] in provider.text:
             if this_vehicle[1] in product.text:
                 bp = re.search(this_vehicle[2], blueprint.text, flags=re.IGNORECASE)
