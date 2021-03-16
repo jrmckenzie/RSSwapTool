@@ -1,6 +1,6 @@
 #     RSSwapTool - A script to swap in up to date or enhanced rolling stock
 #     for older versions of stock in Train Simulator scenarios.
-#     Copyright (C) 2021 James McKenzie jrmckenzie @ gmail . com
+#     Copyright (C) 2021 James McKenzie jrmknz@yahoo.co.uk
 #
 #     This program is free software: you can redistribute it and/or modify
 #     it under the terms of the GNU General Public License as published by
@@ -33,7 +33,7 @@ from data_file import haa_e_wagons, haa_l_wagons, hha_e_wagons, hha_l_wagons, ht
     c158_s9bl_tpe, c158_s9bl_swt, c158_nwc, c158_dtg_fc, c158_livman_rr, ap40headcodes_69_77, ap40headcodes_62_69, \
     rsc20headcodes_62_69, rsc20headcodes_69_77, c168_chiltern, c170_ex_ar_aga_ap, c170_lm, c170_ct_xc, c170_ar23, \
     c170_scotrail, c170_ftpe, c170_ga_hull, c170_mml, c171_southern, c350_lb_ftpe, c365_ecmls_nse, c365_apcxse, \
-    c450_gu_swt, c465_se
+    c450_gu_swt, c465_se, c375_dtg_pack, c377_lb_se, c377_lg_sn, c377_fcc
 
 rv_list = []
 rv_pairs = []
@@ -121,8 +121,10 @@ if not config.has_section('defaults'):
     config.set('defaults', 'replace_c156', 'False')
     config.set('defaults', 'replace_c158', 'False')
     config.set('defaults', 'replace_c170', 'False')
+    config.set('defaults', 'replace_c175', 'False')
     config.set('defaults', 'replace_c350', 'False')
     config.set('defaults', 'replace_c365', 'False')
+    config.set('defaults', 'replace_c375', 'False')
     config.set('defaults', 'replace_c450', 'False')
     config.set('defaults', 'replace_c465', 'False')
     config.set('defaults', 'save_report', 'False')
@@ -273,16 +275,16 @@ right_column = [
     [sg.Checkbox('Replace Class 156 sets', default=get_my_config_boolean('defaults', 'replace_c156'),
                  enable_events=True,
                  tooltip='Tick to enable replacing of Oovee Class 156s with AP Class 156', key='Replace_C156')],
-    [sg.Checkbox('Replace Class 158 sets', default=get_my_config_boolean('defaults', 'replace_c158'),
+    [sg.Checkbox('Replace Class 158, 159 sets', default=get_my_config_boolean('defaults', 'replace_c158'),
                  enable_events=True,
                  tooltip='Tick to enable replacing of North Wales Coast / Settle Carlisle / Fife Circle Class 158s '
                          'with AP enhanced versions (Cummins, Perkins)',
                  key='Replace_C158')],
-    [sg.Checkbox('Replace Class 170 sets', default=get_my_config_boolean('defaults', 'replace_c170'),
+    [sg.Checkbox('Replace Class 168, 170, 171 sets', default=get_my_config_boolean('defaults', 'replace_c170'),
                  enable_events=True,
                  tooltip='Tick to enable replacing of Class 168s / 170s with AP enhanced versions',
                  key='Replace_C170')],
-    [sg.Checkbox('Replace Class 175 sets', default=get_my_config_boolean('defaults', 'replace_c170'),
+    [sg.Checkbox('Replace Class 175 sets', default=get_my_config_boolean('defaults', 'replace_c175'),
                  enable_events=True,
                  tooltip='Tick to enable replacing of Class 175s with AP enhanced versions',
                  key='Replace_C175')],
@@ -294,6 +296,10 @@ right_column = [
                  enable_events=True,
                  tooltip='Tick to enable replacing of Class 365s with AP enhanced versions',
                  key='Replace_C365')],
+    [sg.Checkbox('Replace Class 375, 377 sets', default=get_my_config_boolean('defaults', 'replace_c375'),
+                 enable_events=True,
+                 tooltip='Tick to enable replacing of Class 365s with AP enhanced versions',
+                 key='Replace_C375')],
     [sg.Checkbox('Replace Class 450 sets', default=get_my_config_boolean('defaults', 'replace_c450'),
                  enable_events=True,
                  tooltip='Tick to enable replacing of Class 450s with AP enhanced versions',
@@ -1911,22 +1917,33 @@ def c375_replace(provider, product, blueprint, name, number):
                 if bp:
                     rv_orig = rv_num = number.text
                     destination = 'a'
-                    nm = re.search('([0-9]{6})......([a-zA-Z]?)', number.text)
-                    # Check if this is an RSC ECMLS 365 format number
+                    nm = re.search('([a-zA-Z]).....([0-9]{6})', number.text)
                     if nm:
-                        if bool(re.search(r'\\Default\\', blueprint.text,
+                        destination = get_destination(c375_dtg_pack, nm.group(1), 'a')
+                        if product.text == 'LondonGillingham':
+                            if bool(re.search(r'\\SN\\', blueprint.text,
                                           flags=re.IGNORECASE)):
-                            # This is for the ECMLS 365 NSE livery
-                            destination = get_destination(c365_ecmls_nse, nm.group(2), 'a')
-                        rv_num = number.text[0:6] + destination
-                    nm = re.search('([a-zA-Z]?)........([0-9]{3})', number.text)
-                    # Check if this is an RSC Class365Pack02 format number
-                    if nm:
-                        if bool(re.search(r'\\CXSE_AP\\', blueprint.text,
+                                # This is for the London-Gillingham Southern livery
+                                destination = get_destination(c377_lg_sn, nm.group(1), 'a')
+                        if product.text == 'PortsmouthDirect':
+                            if bool(re.search(r'\\SN\\', blueprint.text,
                                           flags=re.IGNORECASE)):
-                            # This is for the ECMLS 365 NSE livery
-                            destination = get_destination(c365_apcxse, nm.group(1), 'a')
-                        rv_num = '365' + nm.group(2) + destination
+                                # This is for the Portsmouth Direct Southern livery
+                                destination = get_destination(c377_lg_sn, nm.group(1), 'a')
+                        if product.text == 'BrightonMainLine':
+                            if bool(re.search(r'\\FCC', blueprint.text,
+                                          flags=re.IGNORECASE)):
+                                # This is for the Brighton Main Line FCC livery
+                                destination = get_destination(c377_fcc, nm.group(1), 'a')
+                            if bool(re.search(r'\\Southern', blueprint.text,
+                                          flags=re.IGNORECASE)):
+                                # This is for the Brighton Main Line Southern livery
+                                destination = get_destination(c377_lg_sn, nm.group(1), 'a')
+                            if bool(re.search(r'\\SE-White', blueprint.text,
+                                          flags=re.IGNORECASE)):
+                                # This is for the Brighton Main Line SE White livery
+                                destination = get_destination(c377_lb_se, nm.group(1), 'a')
+                        rv_num = number.text[6:12] + destination
                     # Swap vehicle and set number / destination (where possible)
                     provider.text = this_vehicle[3]
                     product.text = this_vehicle[4]
@@ -2157,6 +2174,8 @@ def vehicle_replacer(provider, product, blueprint, name, number, loaded):
         return True
     if values['Replace_C365'] and c365_replace(provider, product, blueprint, name, number):
         return True
+    if values['Replace_C375'] and c375_replace(provider, product, blueprint, name, number):
+        return True
     if values['Replace_C450'] and c450_replace(provider, product, blueprint, name, number):
         return True
     if values['Replace_C465'] and c465_replace(provider, product, blueprint, name, number):
@@ -2294,7 +2313,7 @@ if __name__ == "__main__":
                      'Tool for swapping rolling stock in Train Simulator (Dovetail Games) scenarios',
                      'Issued under the GNU General Public License - see https://www.gnu.org/licenses/',
                      'Version 0.10a',
-                     'Copyright 2021 JR McKenzie', 'https://github.com/jrmckenzie/RSSwapTool')
+                     'Copyright 2021 JR McKenzie (jrmknz@yahoo.co.uk)', 'https://github.com/jrmckenzie/RSSwapTool')
         elif event == 'Settings':
             if not config.has_section('defaults'):
                 config.add_section('defaults')
@@ -2326,8 +2345,10 @@ if __name__ == "__main__":
             config.set('defaults', 'replace_c156', str(values['Replace_C156']))
             config.set('defaults', 'replace_c158', str(values['Replace_C158']))
             config.set('defaults', 'replace_c170', str(values['Replace_C170']))
+            config.set('defaults', 'replace_c175', str(values['Replace_C175']))
             config.set('defaults', 'replace_c350', str(values['Replace_C350']))
             config.set('defaults', 'replace_c365', str(values['Replace_C365']))
+            config.set('defaults', 'replace_c375', str(values['Replace_C375']))
             config.set('defaults', 'replace_c450', str(values['Replace_C450']))
             config.set('defaults', 'replace_c465', str(values['Replace_C465']))
             with open(path_to_config, 'w') as configfile:
@@ -2417,8 +2438,10 @@ if __name__ == "__main__":
             config.set('defaults', 'replace_c156', str(values['Replace_C156']))
             config.set('defaults', 'replace_c158', str(values['Replace_C158']))
             config.set('defaults', 'replace_c170', str(values['Replace_C170']))
+            config.set('defaults', 'replace_c175', str(values['Replace_C175']))
             config.set('defaults', 'replace_c350', str(values['Replace_C350']))
             config.set('defaults', 'replace_c365', str(values['Replace_C365']))
+            config.set('defaults', 'replace_c375', str(values['Replace_C375']))
             config.set('defaults', 'replace_c450', str(values['Replace_C450']))
             config.set('defaults', 'replace_c465', str(values['Replace_C465']))
             with open(path_to_config, 'w') as configfile:
