@@ -1849,8 +1849,7 @@ def c350_replace(provider, product, blueprint, name, number):
                     destination = ''
                     nm = re.search('([0-9]{6}).....([a-zA-Z]?)', number.text)
                     if nm:
-                        if bool(re.search(r'\\FTPE\\', blueprint.text,
-                                          flags=re.IGNORECASE)):
+                        if bool(re.search(r'\\FTPE\\', blueprint.text, flags=re.IGNORECASE)):
                             destination = get_destination(c350_lb_ftpe, nm.group(2), '0')
                             if destination == '0':
                                 destination = ''
@@ -1883,16 +1882,14 @@ def c365_replace(provider, product, blueprint, name, number):
                     nm = re.search('([0-9]{6})......([a-zA-Z]?)', number.text)
                     # Check if this is an RSC ECMLS 365 format number
                     if nm:
-                        if bool(re.search(r'\\Default\\', blueprint.text,
-                                          flags=re.IGNORECASE)):
+                        if bool(re.search(r'\\Default\\', blueprint.text, flags=re.IGNORECASE)):
                             # This is for the ECMLS 365 NSE livery
                             destination = get_destination(c365_ecmls_nse, nm.group(2), 'a')
                         rv_num = number.text[0:6] + destination
                     nm = re.search('([a-zA-Z]?)........([0-9]{3})', number.text)
                     # Check if this is an RSC Class365Pack02 format number
                     if nm:
-                        if bool(re.search(r'\\CXSE_AP\\', blueprint.text,
-                                          flags=re.IGNORECASE)):
+                        if bool(re.search(r'\\CXSE_AP\\', blueprint.text, flags=re.IGNORECASE)):
                             # This is for the ECMLS 365 NSE livery
                             destination = get_destination(c365_apcxse, nm.group(1), 'a')
                         rv_num = '365' + nm.group(2) + destination
@@ -1921,29 +1918,29 @@ def c375_replace(provider, product, blueprint, name, number):
                     if nm:
                         destination = get_destination(c375_dtg_pack, nm.group(1), 'a')
                         if product.text == 'LondonGillingham':
-                            if bool(re.search(r'\\SN\\', blueprint.text,
-                                          flags=re.IGNORECASE)):
+                            if bool(re.search(r'\\SN\\', blueprint.text, flags=re.IGNORECASE)):
                                 # This is for the London-Gillingham Southern livery
                                 destination = get_destination(c377_lg_sn, nm.group(1), 'a')
                         if product.text == 'PortsmouthDirect':
-                            if bool(re.search(r'\\SN\\', blueprint.text,
-                                          flags=re.IGNORECASE)):
+                            if bool(re.search(r'\\SN\\', blueprint.text, flags=re.IGNORECASE)):
                                 # This is for the Portsmouth Direct Southern livery
                                 destination = get_destination(c377_lg_sn, nm.group(1), 'a')
                         if product.text == 'BrightonMainLine':
-                            if bool(re.search(r'\\FCC', blueprint.text,
-                                          flags=re.IGNORECASE)):
+                            if bool(re.search(r'\\FCC', blueprint.text, flags=re.IGNORECASE)):
                                 # This is for the Brighton Main Line FCC livery
                                 destination = get_destination(c377_fcc, nm.group(1), 'a')
-                            if bool(re.search(r'\\Southern', blueprint.text,
-                                          flags=re.IGNORECASE)):
+                            if bool(re.search(r'\\Southern', blueprint.text, flags=re.IGNORECASE)):
                                 # This is for the Brighton Main Line Southern livery
                                 destination = get_destination(c377_lg_sn, nm.group(1), 'a')
-                            if bool(re.search(r'\\SE-White', blueprint.text,
-                                          flags=re.IGNORECASE)):
+                            if bool(re.search(r'\\SE-White', blueprint.text, flags=re.IGNORECASE)):
                                 # This is for the Brighton Main Line SE White livery
                                 destination = get_destination(c377_lb_se, nm.group(1), 'a')
-                        rv_num = number.text[6:12] + destination
+                        # Check whether DMOSA, DMOSB, MOSL, PTOSL, or TOSL and change number accordingly
+                        v_type = re.search(r'375_([A-Z]*)', this_vehicle[5], flags=re.IGNORECASE)
+                        if v_type:
+                            rv_num = v_type.group(1) + number.text[6:12]
+                            if v_type.group(1) == 'DMOSA':
+                                rv_num = number.text[6:12] + destination
                     # Swap vehicle and set number / destination (where possible)
                     provider.text = this_vehicle[3]
                     product.text = this_vehicle[4]
