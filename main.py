@@ -43,6 +43,7 @@ values = {}
 vehicle_db = {}
 user_db = {}
 vp_blue_47_db = {}
+mu_last = 'none'
 railworks_path = ''
 c56_opts = ['Use nearest numbered AP enhanced loco', 'Retain original loco if no matching AP plaque / sector available']
 c86_opts = ['Use VP headcode blinds', 'Use AP plated box with markers', 'Do not swap this loco']
@@ -1906,6 +1907,7 @@ def c365_replace(provider, product, blueprint, name, number):
 
 
 def c375_replace(provider, product, blueprint, name, number):
+    global mu_last
     for i in range(0, len(vehicle_db['EMU375-7_set'])):
         this_vehicle = vehicle_db['EMU375-7_set'][i]
         if this_vehicle[0] in provider.text:
@@ -1935,17 +1937,39 @@ def c375_replace(provider, product, blueprint, name, number):
                             if bool(re.search(r'\\SE-White', blueprint.text, flags=re.IGNORECASE)):
                                 # This is for the Brighton Main Line SE White livery
                                 destination = get_destination(c377_lb_se, nm.group(1), 'a')
-                        # Check whether DMOSA, DMOSB, MOSL, PTOSL, or TOSL and change number accordingly
-                        v_type = re.search(r'375_([A-Z]*)', this_vehicle[5], flags=re.IGNORECASE)
-                        if v_type:
-                            rv_num = v_type.group(1) + number.text[6:12]
-                            if v_type.group(1) == 'DMOSA':
+                    # Check whether DMOSA, DMOSB, MOSL, PTOSL, or TOSL and change number accordingly
+                    # It's assumed the scenario being converted will have only one DMOSA vehicle at the front and that
+                    # all other DMOS vehicles in the consist will be DMOSB. If that's left as it is then the AP ones
+                    # will have headlights and taillights on at the same time and generally go to pot.
+                    this_bp = this_vehicle[5]
+                    this_name = this_vehicle[6]
+                    v_type = re.search('375_([A-Z]*)', this_vehicle[5], flags=re.IGNORECASE)
+                    if v_type:
+                        rv_num = v_type.group(1) + number.text[6:12]
+                        if v_type.group(1).upper() == 'DMOSA':
+                            rv_num = number.text[6:12] + destination
+                            # Remember that the last cab vehicle processed in this consist was an A. If the
+                            # next one is a B it won't need swapped.
+                            mu_last = 'DMOSA'
+                        if v_type.group(1).upper() == 'DMOSB':
+                            if mu_last == 'DMOSB':
+                                # Never allow two DMOSBs next to each other - swap for a DMOSA
                                 rv_num = number.text[6:12] + destination
+                                this_bp = re.sub('DMOSB', 'DMOSA', this_vehicle[5], flags=re.IGNORECASE)
+                                this_name = re.sub('DMOCB', 'DMOCA', this_vehicle[6], flags=re.IGNORECASE)
+                                # Remember that the last cab vehicle in this consist was an A. If the
+                                # next one is a B it won't need swapped.
+                                mu_last = 'DMOSA'
+                            else:
+                                # Leave the DMOSB as it is. Remember that the last cab vehicle processed in this
+                                # consist was a B though in case the next one is also a B, which will need swapping
+                                # for an A.
+                                mu_last = 'DMOSB'
                     # Swap vehicle and set number / destination (where possible)
                     provider.text = this_vehicle[3]
                     product.text = this_vehicle[4]
-                    blueprint.text = this_vehicle[5]
-                    name.text = this_vehicle[6]
+                    blueprint.text = this_bp
+                    name.text = this_name
                     number.text = str(rv_num)
                     rv_list.append(number.text)
                     rv_pairs.append([rv_orig, number.text])
@@ -2033,6 +2057,7 @@ def user_replace(provider, product, blueprint, name):
 
 def parse_xml(xml_file):
     # Check we can open the file, parse it and find some rail vehicle consists in it before proceeding
+    global mu_last
     try:
         parser_tree = ET.parse(xml_file)
     except FileNotFoundError:
@@ -2046,6 +2071,10 @@ def parse_xml(xml_file):
         return False
     ET.register_namespace("d", "http://www.kuju.com/TnT/2003/Delta")
     root = parser_tree.getroot()
+    # The following lines of code (commented out) should probably be removed. Specifying that the interim xml file
+    # should be written with utf-8 encoding appears to have fixed the issue with quote characters. See the line near
+    # the end of this file which reads -        xmlFile.write_text(xmlString, encoding='utf-8')
+    #
     #for elem in root.iter():
         #try:
             # Replace quote characters in the text which may cause xml problems
@@ -2102,6 +2131,7 @@ def parse_xml(xml_file):
                 vehicle_list.append(
                     [str(consist_nr), provider.text, product.text, blueprint.text, name.text, number.text, loaded.text,
                      service, playerdriven])
+            mu_last = 'none'
             consist_nr += 1
             progress_bar.UpdateBar(consist_nr, len(consists))
         for driver_inrvs in citem.findall('Driver/cDriver/InitialRV'):
