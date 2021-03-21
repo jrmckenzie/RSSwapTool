@@ -1978,6 +1978,7 @@ def c375_replace(provider, product, blueprint, name, number):
 
 
 def c450_replace(provider, product, blueprint, name, number):
+    global mu_last
     for i in range(0, len(vehicle_db['EMU450_set'])):
         this_vehicle = vehicle_db['EMU450_set'][i]
         if this_vehicle[0] in provider.text:
@@ -2004,11 +2005,48 @@ def c450_replace(provider, product, blueprint, name, number):
                                 else:
                                     destination = ';D=' + destination
                                 rv_num = nm.group(1) + destination
+                    # It's assumed the scenario being converted will have one DMC1 and one DMC2 in each set in the
+                    # consist. If 2 sets or more sets are joined the driving vehicles will alternate DMC1 / DMC2.
+                    this_bp = this_vehicle[5]
+                    this_name = this_vehicle[6]
+                    v_type = re.search(r'\\(444|450)_([A-Z]*)', this_vehicle[5], flags=re.IGNORECASE)
+                    if v_type:
+                        if v_type.group(2).upper() == 'DMOS':
+                            # Test if last DM was a DMOS - if so, swap for a DMOSB
+                            if mu_last == "DMOS":
+                                # Swap for a DMOS (DMC1)
+                                this_bp = re.sub('DMOS', 'DMOSB', this_vehicle[5], flags=re.IGNORECASE)
+                                this_name = re.sub('DMC1', 'DMC2', this_vehicle[6], flags=re.IGNORECASE)
+                                # Remember that the last cab vehicle in this consist was a DMC2. If the
+                                # next one is a DMC1 it won't need swapped.
+                                mu_last = 'DMOSB'
+                            else:
+                                # Leave the DMOS as it is. Remember that the last driving vehicle processed in this
+                                # consist was a DMC1 though in case the next one is also a DMC1, which will need
+                                # swapping for a DMC2.
+                                mu_last = 'DMOS'
+                        elif v_type.group(2).upper() == 'DMOSB':
+                            # Test if last DM was a DMOSB - if so, swap for a DMOS
+                            if mu_last == 'DMOSB':
+                                # Swap for a DMOS (DMC1)
+                                this_bp = re.sub('DMOSB', 'DMOS', this_vehicle[5], flags=re.IGNORECASE)
+                                this_name = re.sub('DMC2', 'DMC1', this_vehicle[6], flags=re.IGNORECASE)
+                                # Remember that the last cab vehicle in this consist was a DMC1. If the
+                                # next one is a DMC2 it won't need swapped.
+                                mu_last = 'DMOS'
+                            else:
+                                # Leave the DMOSB as it is. Remember that the last driving vehicle processed in this
+                                # consist was a DMC2 though in case the next one is also a DMC2, which will need
+                                # swapping for a DMC1.
+                                mu_last = 'DMOSB'
+                    if not bool(re.search('DMC1', this_name, flags=re.IGNORECASE)):
+                        # Any vehicle other than a DMOS/DMC1 gets a placeholder number
+                        rv_num = v_type.group(2) + number.text[0:6]
                     # Swap vehicle and set number / destination (where possible)
                     provider.text = this_vehicle[3]
                     product.text = this_vehicle[4]
-                    blueprint.text = this_vehicle[5]
-                    name.text = this_vehicle[6]
+                    blueprint.text = this_bp
+                    name.text = this_name
                     number.text = str(rv_num)
                     rv_list.append(number.text)
                     rv_pairs.append([rv_orig, number.text])
