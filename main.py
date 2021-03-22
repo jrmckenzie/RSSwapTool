@@ -33,7 +33,7 @@ from data_file import haa_e_wagons, haa_l_wagons, hha_e_wagons, hha_l_wagons, ht
     c158_s9bl_tpe, c158_s9bl_swt, c158_nwc, c158_dtg_fc, c158_livman_rr, ap40headcodes_69_77, ap40headcodes_62_69, \
     rsc20headcodes_62_69, rsc20headcodes_69_77, c168_chiltern, c170_ex_ar_aga_ap, c170_lm, c170_ct_xc, c170_ar23, \
     c170_scotrail, c170_ftpe, c170_ga_hull, c170_mml, c171_southern, c350_lb_ftpe, c365_ecmls_nse, c365_apcxse, \
-    c450_gu_swt, c465_se, c375_dtg_pack, c377_lb_se, c377_lg_sn, c377_fcc
+    c450_gu_swt, c465_se, c375_dtg_pack, c377_lb_se, c377_lg_sn, c377_fcc, c170_bp_name_lookup
 
 rv_list = []
 rv_pairs = []
@@ -468,6 +468,38 @@ def dcsv_gethstloco(this_dcsv, this_rv):
     # We didn't find a number to use. We must have reached the end of the available numbers so we will have to use the
     # last available number we found.
     return last_nm
+
+
+def alternate_mu_driving_vehicles(this_bp, this_v_type, vehicle_a, vehicle_b):
+    # This function makes sure that driving vehicles in a multiple unit consist alternate between DxxA and DxxB
+    # so that the AP scripting of multiple unit sets works properly.
+    # print(b[:len(a)])
+    global mu_last
+    if this_v_type.upper() == vehicle_a.upper():
+        # Test if last Driving vehicle was a DxxA - if so, swap this one for a DxxB
+        if mu_last == vehicle_a:
+            # Swap for a DxxB
+            this_bp = re.sub(vehicle_a, vehicle_b, this_bp, flags=re.IGNORECASE)
+            # Remember that the last driven vehicle in this consist was a DxxB.
+            mu_last = vehicle_b
+        else:
+            # Leave the DxxA as it is. Remember that the last driving vehicle processed in this
+            # consist was a DxxA.
+            mu_last = vehicle_a
+        return this_bp
+    elif this_v_type.upper() == vehicle_b.upper():
+        # Test if last Driving vehicle was a DxxB - if so, swap this one for a DxxA
+        if mu_last == vehicle_b:
+            # Swap for a DxxA
+            this_bp = re.sub(vehicle_b, vehicle_a, this_bp, flags=re.IGNORECASE)
+            # Remember that the last cab vehicle in this consist was a DxxA.
+            mu_last = vehicle_a
+        else:
+            # Leave the DxxB as it is. Remember that the last driving vehicle processed in this
+            # consist was a DxxB.
+            mu_last = vehicle_b
+    return this_bp
+
 
 
 def add_ploughs(this_rv):
@@ -1813,32 +1845,15 @@ def c170_replace(provider, product, blueprint, name, number):
                     this_name = this_vehicle[6]
                     v_type = re.search(r'\\Class170_([A-Z]*)', this_vehicle[5], flags=re.IGNORECASE)
                     if v_type:
-                        if v_type.group(1).upper() == 'DMCL':
-                            # Test if last DM was a DMCL - if so, swap for a DMSL
-                            if mu_last == "DMCL":
-                                # Swap for a DMSL
-                                this_bp = re.sub('DMCL', 'DMSL', this_vehicle[5], flags=re.IGNORECASE)
-                                this_name = get_ap_name_from_bp(vehicle_db['DMU170_set'], this_bp)
-                                # Remember that the last cab vehicle in this consist was a DMSL. If the
-                                # next one is a DMC1 it won't need swapped.
-                                mu_last = 'DMSL'
-                            else:
-                                # Leave the DMCL as it is. Remember that the last driving vehicle processed in this
-                                # consist was a DMC1 though in case the next one is also a DMC1, which will need
-                                # swapping for a DMC2.
-                                mu_last = 'DMCL'
-                        elif v_type.group(1).upper() == 'DMSL':
-                            # Test if last DM was a DMSL - if so, swap for a DMCL
-                            if mu_last == 'DMSL':
-                                # Swap for a DMCL
-                                this_bp = re.sub('DMSL', 'DMCL', this_vehicle[5], flags=re.IGNORECASE)
-                                this_name = get_ap_name_from_bp(vehicle_db['DMU170_set'], this_bp)
-                                # Remember that the last cab vehicle in this consist was a DMCL.
-                                mu_last = 'DMCL'
-                            else:
-                                # Leave the DMSL as it is. Remember that the last driving vehicle processed in this
-                                # consist was a DMSL.
-                                mu_last = 'DMSL'
+                        # The SR Saltire Class 170 with DMSL is unlike the others so need a workaround
+                        if v_type.group(1).upper() == 'DMCLA':
+                            this_bp = alternate_mu_driving_vehicles(this_bp, v_type.group(1), 'DMCLA', 'DMSLB')
+                        # The Southern Class 170 also needs a workaround
+                        elif re.search(r'\\Southern_AP', this_vehicle[5], flags=re.IGNORECASE):
+                            this_bp = alternate_mu_driving_vehicles(this_bp, v_type.group(1), 'DMCL', 'DMSLB')
+                        else:
+                            this_bp = alternate_mu_driving_vehicles(this_bp, v_type.group(1), 'DMCL', 'DMSL')
+                        this_name = c170_bp_name_lookup[this_bp]
                     # Swap vehicle and set number / destination (where possible)
                     provider.text = this_vehicle[3]
                     product.text = this_vehicle[4]
@@ -1888,37 +1903,15 @@ def c325_replace(provider, product, blueprint, name, number):
             if this_vehicle[1] in product.text:
                 bp = re.search(this_vehicle[2], blueprint.text, flags=re.IGNORECASE)
                 if bp:
-                    # It's assumed the scenario being converted will have one DMCL and one DMSL blueprintin each set in
-                    # the consist. If 2 sets or more sets are joined the driving vehicles will alternate DMCL / DMSL.
-                    # 170 Scotrail - DMCLB takes number
+                    # It's assumed the scenario being converted will have one DTVA and one DTVB blueprint in each
+                    # set in the consist. If 2 sets or more sets are joined the driving vehicles will alternate
+                    # DTVA / DTVB.
                     this_bp = this_vehicle[5]
                     this_name = this_vehicle[6]
                     v_type = re.search(r'\\Class325_([A-Z]*)', this_vehicle[5], flags=re.IGNORECASE)
                     if v_type:
-                        if v_type.group(1).upper() == 'DTVA':
-                            # Test if last DM was a DTVA - if so, swap for a DTVB
-                            if mu_last == "DTVA":
-                                # Swap for a DTVB
-                                this_bp = re.sub('DTVA', 'DTVB', this_vehicle[5], flags=re.IGNORECASE)
-                                this_name = get_ap_name_from_bp(vehicle_db['EMU325_set'], this_bp)
-                                # Remember that the last driven vehicle in this consist was a DTVB.
-                                mu_last = 'DTVB'
-                            else:
-                                # Leave the DTVA as it is. Remember that the last driving vehicle processed in this
-                                # consist was a DTVA.
-                                mu_last = 'DTVA'
-                        elif v_type.group(1).upper() == 'DTVB':
-                            # Test if last DM was a DTVB - if so, swap for a DTVA
-                            if mu_last == 'DTVB':
-                                # Swap for a DTVA
-                                this_bp = re.sub('DTVB', 'DTVA', this_vehicle[5], flags=re.IGNORECASE)
-                                this_name = get_ap_name_from_bp(vehicle_db['EMU325_set'], this_bp)
-                                # Remember that the last cab vehicle in this consist was a DTVA.
-                                mu_last = 'DTVA'
-                            else:
-                                # Leave the DTVB as it is. Remember that the last driving vehicle processed in this
-                                # consist was a DTVB.
-                                mu_last = 'DTVB'
+                        this_bp = alternate_mu_driving_vehicles(this_bp, v_type.group(1), 'DTVA', 'DTVB')
+                        this_name = get_ap_name_from_bp(vehicle_db['EMU325_set'], this_bp)
                     # Check if we're on DC power
                     dc = re.search('_DC', this_vehicle[5], flags=re.IGNORECASE)
                     if dc:
@@ -1926,14 +1919,13 @@ def c325_replace(provider, product, blueprint, name, number):
                     else:
                         this_dcsv = 'PMV.dcsv'
                     rv_orig = number.text
-                    # rv 68317325009 D 68123 / ;L=3;OHL=4
                     nm = re.search('[0-9]{5}(325[0-9]{3})', number.text)
                     if nm:
                         rv_num = nm.group(1)
                     else:
                         rv_num = number.text[0:5]
                         if 68340 <= int(rv_num) <= 68355:
-                            rv_num = str(int(rv_num + 256661))
+                            rv_num = str(int(rv_num) + 256661)
                             rv_num = dcsv_get_num(
                                 Path(railworks_path, 'Assets', 'RSC', 'Class325Pack01', 'RailVehicles', 'Class325',
                                 'RM1_W1_AP', this_dcsv), rv_num, '([0-9]{6})(.*)')
@@ -2055,26 +2047,10 @@ def c375_replace(provider, product, blueprint, name, number):
                     this_name = this_vehicle[6]
                     v_type = re.search('375_([A-Z]*)', this_vehicle[5], flags=re.IGNORECASE)
                     if v_type:
-                        rv_num = v_type.group(1) + number.text[6:12]
-                        if v_type.group(1).upper() == 'DMOSA':
-                            rv_num = number.text[6:12] + destination
-                            # Remember that the last cab vehicle processed in this consist was an A. If the
-                            # next one is a B it won't need swapped.
-                            mu_last = 'DMOSA'
-                        if v_type.group(1).upper() == 'DMOSB':
-                            if mu_last == 'DMOSB':
-                                # Never allow two DMOSBs next to each other - swap for a DMOSA
-                                rv_num = number.text[6:12] + destination
-                                this_bp = re.sub('DMOSB', 'DMOSA', this_vehicle[5], flags=re.IGNORECASE)
-                                this_name = get_ap_name_from_bp(vehicle_db['EMU375-7_set'], this_bp)
-                                # Remember that the last cab vehicle in this consist was an A. If the
-                                # next one is a B it won't need swapped.
-                                mu_last = 'DMOSA'
-                            else:
-                                # Leave the DMOSB as it is. Remember that the last cab vehicle processed in this
-                                # consist was a B though in case the next one is also a B, which will need swapping
-                                # for an A.
-                                mu_last = 'DMOSB'
+                        # To do - workarounds needed where simple following won't work
+                        this_bp = alternate_mu_driving_vehicles(this_bp, v_type.group(1), 'DMOSA', 'DMOSB')
+                        this_name = get_ap_name_from_bp(vehicle_db['EMU375-7_set'], this_bp)
+                        rv_num = number.text[6:12] + destination
                     # Swap vehicle and set number / destination (where possible)
                     provider.text = this_vehicle[3]
                     product.text = this_vehicle[4]
@@ -2121,34 +2097,8 @@ def c450_replace(provider, product, blueprint, name, number):
                     this_name = this_vehicle[6]
                     v_type = re.search(r'\\(444|450)_([A-Z]*)', this_vehicle[5], flags=re.IGNORECASE)
                     if v_type:
-                        if v_type.group(2).upper() == 'DMOS':
-                            # Test if last DM was a DMOS - if so, swap for a DMOSB
-                            if mu_last == "DMOS":
-                                # Swap for a DMOS (DMC1)
-                                this_bp = re.sub('DMOS', 'DMOSB', this_vehicle[5], flags=re.IGNORECASE)
-                                this_name = get_ap_name_from_bp(vehicle_db['EMU450_set'], this_bp)
-                                # Remember that the last cab vehicle in this consist was a DMC2. If the
-                                # next one is a DMC1 it won't need swapped.
-                                mu_last = 'DMOSB'
-                            else:
-                                # Leave the DMOS as it is. Remember that the last driving vehicle processed in this
-                                # consist was a DMC1 though in case the next one is also a DMC1, which will need
-                                # swapping for a DMC2.
-                                mu_last = 'DMOS'
-                        elif v_type.group(2).upper() == 'DMOSB':
-                            # Test if last DM was a DMOSB - if so, swap for a DMOS
-                            if mu_last == 'DMOSB':
-                                # Swap for a DMOS (DMC1)
-                                this_bp = re.sub('DMOSB', 'DMOS', this_vehicle[5], flags=re.IGNORECASE)
-                                this_name = re.sub('DMC2', 'DMC1', this_vehicle[6], flags=re.IGNORECASE)
-                                # Remember that the last cab vehicle in this consist was a DMC1. If the
-                                # next one is a DMC2 it won't need swapped.
-                                mu_last = 'DMOS'
-                            else:
-                                # Leave the DMOSB as it is. Remember that the last driving vehicle processed in this
-                                # consist was a DMC2 though in case the next one is also a DMC2, which will need
-                                # swapping for a DMC1.
-                                mu_last = 'DMOSB'
+                        this_bp = alternate_mu_driving_vehicles(this_bp, v_type.group(2), 'DMOS', 'DMOSB')
+                        this_name = get_ap_name_from_bp(vehicle_db['EMU450_set'], this_bp)
                     if not bool(re.search('DMC1', this_name, flags=re.IGNORECASE)):
                         # Any vehicle other than a DMOS/DMC1 gets a placeholder number
                         rv_num = v_type.group(2) + number.text[0:6]
