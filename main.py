@@ -123,6 +123,7 @@ if not config.has_section('defaults'):
     config.set('defaults', 'replace_c158', 'False')
     config.set('defaults', 'replace_c170', 'False')
     config.set('defaults', 'replace_c175', 'False')
+    config.set('defaults', 'replace_c325', 'False')
     config.set('defaults', 'replace_c350', 'False')
     config.set('defaults', 'replace_c365', 'False')
     config.set('defaults', 'replace_c375', 'False')
@@ -224,12 +225,12 @@ left_column = [
     [sg.Checkbox('Replace VDA wagons', default=get_my_config_boolean('defaults', 'replace_vda'), enable_events=True,
                  tooltip='Tick to enable replacing of VDA wagons with Fastline Simulation VDA pack',
                  key='Replace_VDA')],
-]
-mid_column = [
     [sg.Checkbox('Replace IHH stock', default=get_my_config_boolean('defaults', 'replace_ihh'), enable_events=True,
                  tooltip='Tick to enable replacing of old Iron Horse House (IHH) stock, if your scenario contains any'
                          ' (if in doubt, leave this unticked)',
                  key='Replace_IHH')],
+]
+mid_column = [
     [sg.Checkbox('Replace User-configured stock', default=get_my_config_boolean('defaults', 'replace_user'),
                  enable_events=True,
                  tooltip='Tick to enable replacing of user-configured stock, contained in file User.csv '
@@ -260,12 +261,12 @@ mid_column = [
     [sg.Checkbox('Replace HST sets', default=get_my_config_boolean('defaults', 'replace_hst'), enable_events=True,
                  tooltip='Tick to enable replacing of HST sets with AP enhanced versions (Valenta, MTU, VP185)',
                  key='Replace_HST')],
-]
-right_column = [
     [sg.Checkbox('Replace Class 91 EC sets', default=get_my_config_boolean('defaults', 'replace_c91'),
                  enable_events=True,
                  tooltip='Tick to enable replacing of Class 91 East Coast sets with AP enhanced versions',
                  key='Replace_C91')],
+]
+right_column = [
     [sg.Checkbox('Replace Class 101 sets', default=get_my_config_boolean('defaults', 'replace_c101'),
                  enable_events=True,
                  tooltip='Tick to enable replacing of retired RSC Class101Pack with RSC BritishRailClass101 sets',
@@ -289,6 +290,10 @@ right_column = [
                  enable_events=True,
                  tooltip='Tick to enable replacing of Class 175s with AP enhanced versions',
                  key='Replace_C175')],
+    [sg.Checkbox('Replace Class 325 sets', default=get_my_config_boolean('defaults', 'replace_c325'),
+                 enable_events=True,
+                 tooltip='Tick to enable replacing of Class 325s with AP enhanced versions',
+                 key='Replace_C325')],
     [sg.Checkbox('Replace Class 350 sets', default=get_my_config_boolean('defaults', 'replace_c350'),
                  enable_events=True,
                  tooltip='Tick to enable replacing of Class 350s with AP enhanced versions',
@@ -2323,6 +2328,8 @@ def vehicle_replacer(provider, product, blueprint, name, number, loaded):
         return True
     if values['Replace_C175'] and c175_replace(provider, product, blueprint, name, number):
         return True
+    if values['Replace_C325'] and c325_replace(provider, product, blueprint, name, number):
+        return True
     if values['Replace_C350'] and c350_replace(provider, product, blueprint, name, number):
         return True
     if values['Replace_C365'] and c365_replace(provider, product, blueprint, name, number):
@@ -2499,6 +2506,7 @@ if __name__ == "__main__":
             config.set('defaults', 'replace_c158', str(values['Replace_C158']))
             config.set('defaults', 'replace_c170', str(values['Replace_C170']))
             config.set('defaults', 'replace_c175', str(values['Replace_C175']))
+            config.set('defaults', 'replace_c325', str(values['Replace_C325']))
             config.set('defaults', 'replace_c350', str(values['Replace_C350']))
             config.set('defaults', 'replace_c365', str(values['Replace_C365']))
             config.set('defaults', 'replace_c375', str(values['Replace_C375']))
@@ -2592,6 +2600,7 @@ if __name__ == "__main__":
             config.set('defaults', 'replace_c158', str(values['Replace_C158']))
             config.set('defaults', 'replace_c170', str(values['Replace_C170']))
             config.set('defaults', 'replace_c175', str(values['Replace_C175']))
+            config.set('defaults', 'replace_c325', str(values['Replace_C325']))
             config.set('defaults', 'replace_c350', str(values['Replace_C350']))
             config.set('defaults', 'replace_c365', str(values['Replace_C365']))
             config.set('defaults', 'replace_c375', str(values['Replace_C375']))
