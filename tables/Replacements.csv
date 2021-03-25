@@ -2458,11 +2458,14 @@ EMU375-7_set,RSC,SouthLondonLines,RailVehicles\Electric\Class375\SE-WhiteGrey\Cl
 EMU375-7_set,RSC,SouthLondonLines,RailVehicles\Electric\Class375\SE-WhiteGrey\Class375_PTOSL_pantolow.xml,DTG,LondonGillingham,RailVehicles\Electric\Class375\CX_AP\375_PTOSL_SE1(2).xml,APEP 375/6 SE1(2) PTOSL,
 EMU375-7_set,RSC,SouthLondonLines,RailVehicles\Electric\Class375\SE-WhiteGrey\Class375_PTOSL.xml,DTG,LondonGillingham,RailVehicles\Electric\Class375\CX_AP\375_PTOSL_SE1(2).xml,APEP 375/6 SE1(2) PTOSL,
 EMU375-7_set,RSC,SouthLondonLines,RailVehicles\Electric\Class375\SE-WhiteGrey\Class375_TOSL.xml,DTG,LondonGillingham,RailVehicles\Electric\Class375\CX_AP\375_TOSL_SE1(2).xml,APEP 375 SE1(2) TOSL,
-#EMU375-7_set,RSC,KentHighSpeed,RailVehicles\Electric\Class375\NXC2C-White\Class375_DMOC_nd.xml,Class 375 DMOC nd NXC2C-White
-#EMU375-7_set,RSC,KentHighSpeed,RailVehicles\Electric\Class375\NXC2C-White\Class375_DMOC.xml,Class 375 DMOC NXC2C-White
-#EMU375-7_set,RSC,KentHighSpeed,RailVehicles\Electric\Class375\NXC2C-White\Class375_MOSL.xml,Class 375 MOSL NXC2C-White
-#EMU375-7_set,RSC,KentHighSpeed,RailVehicles\Electric\Class375\NXC2C-White\Class375_PTOSL_pantolow.xml,Class 375 PTOSL NXC2C-White Low
-#EMU375-7_set,RSC,KentHighSpeed,RailVehicles\Electric\Class375\NXC2C-White\Class375_PTOSL.xml,Class 375 PTOSL NXC2C-White High
+EMU456_set,RSC,SouthLondonLines,RailVehicles\Class456\Default\Engine\Class456_DMSO_nd.xml,AP_Waggonz,Class456Pack01,RailVehicles\Class456\Southern\DMSO\Class_456_DMSO.xml,APW Class 456 Southern DMSO,
+EMU456_set,RSC,SouthLondonLines,RailVehicles\Class456\Default\Engine\Class456_DMSO.xml,AP_Waggonz,Class456Pack01,RailVehicles\Class456\Southern\DMSO\Class_456_DMSO.xml,APW Class 456 Southern DMSO,
+EMU456_set,RSC,SouthLondonLines,RailVehicles\Class456\Default\Engine\Class456_DTSO_nd.xml,AP_Waggonz,Class456Pack01,RailVehicles\Class456\Southern\DTSO\Class_456_DTSO.xml,APW Class 456 Southern DTSO,
+EMU456_set,RSC,SouthLondonLines,RailVehicles\Class456\Default\Engine\Class456_DTSO.xml,AP_Waggonz,Class456Pack01,RailVehicles\Class456\Southern\DTSO\Class_456_DTSO.xml,APW Class 456 Southern DTSO,
+EMU456_set,RSC,SouthLondonLines,RailVehicles\Class456\NetworkSE\Engine\Class456_DMSO_nd.xml,AP_Waggonz,Class456Pack01,RailVehicles\Class456\NSE\DMSO\Class_456_DMSO.xml,APW Class 456 NSE DMSO,
+EMU456_set,RSC,SouthLondonLines,RailVehicles\Class456\NetworkSE\Engine\Class456_DMSO.xml,AP_Waggonz,Class456Pack01,RailVehicles\Class456\NSE\DMSO\Class_456_DMSO.xml,APW Class 456 NSE DMSO,
+EMU456_set,RSC,SouthLondonLines,RailVehicles\Class456\NetworkSE\Engine\Class456_DTSO_nd.xml,AP_Waggonz,Class456Pack01,RailVehicles\Class456\NSE\DTSO\Class_456_DTSO.xml,APW Class 456 NSE DTSO,
+EMU456_set,RSC,SouthLondonLines,RailVehicles\Class456\NetworkSE\Engine\Class456_DTSO.xml,AP_Waggonz,Class456Pack01,RailVehicles\Class456\NSE\DTSO\Class_456_DTSO.xml,APW Class 456 NSE DTSO,
 EMU465_set,DTG,LondonGillingham,RailVehicles\Electric\Class465-0\Engine\Class465-0_DMOC_A_ND.xml,RSC,Class465Pack01,RailVehicles\Electric\Class465\SE1_AP\Class465_DMOC_A_SE2.xml,APEP 465 SE1(2) DMSOA,
 EMU465_set,DTG,LondonGillingham,RailVehicles\Electric\Class465-0\Engine\Class465-0_DMOC_A.xml,RSC,Class465Pack01,RailVehicles\Electric\Class465\SE1_AP\Class465_DMOC_A_SE2.xml,APEP 465 SE1(2) DMSOA,
 EMU465_set,DTG,LondonGillingham,RailVehicles\Electric\Class465-0\Engine\Class465-0_DMOC_B_ND.xml,RSC,Class465Pack01,RailVehicles\Electric\Class465\SE1_AP\Class465_DMOC_B_SE2.xml,APEP 465 SE1(2) DMSOB,

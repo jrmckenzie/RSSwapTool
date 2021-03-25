@@ -33,7 +33,8 @@ from data_file import haa_e_wagons, haa_l_wagons, hha_e_wagons, hha_l_wagons, ht
     c158_s9bl_tpe, c158_s9bl_swt, c158_nwc, c158_dtg_fc, c158_livman_rr, ap40headcodes_69_77, ap40headcodes_62_69, \
     rsc20headcodes_62_69, rsc20headcodes_69_77, c168_chiltern, c170_ex_ar_aga_ap, c170_lm, c170_ct_xc, c170_ar23, \
     c170_scotrail, c170_ftpe, c170_ga_hull, c170_mml, c171_southern, c350_lb_ftpe, c365_ecmls_nse, c365_apcxse, \
-    c450_gu_swt, c465_se, c375_dtg_pack, c377_lb_se, c377_lg_sn, c377_fcc, c170_bp_name_lookup, c375_dmos_lookup
+    c450_gu_swt, c465_se, c375_dtg_pack, c377_lb_se, c377_lg_sn, c377_fcc, c170_bp_name_lookup, c375_dmos_lookup, \
+    c456_nse, c456_southern
 
 rv_list = []
 rv_pairs = []
@@ -128,6 +129,7 @@ if not config.has_section('defaults'):
     config.set('defaults', 'replace_c365', 'False')
     config.set('defaults', 'replace_c375', 'False')
     config.set('defaults', 'replace_c450', 'False')
+    config.set('defaults', 'replace_c456', 'False')
     config.set('defaults', 'replace_c465', 'False')
     config.set('defaults', 'save_report', 'False')
     config.set('defaults', 'c56_rf', c56_opts[0])
@@ -265,12 +267,12 @@ mid_column = [
                  enable_events=True,
                  tooltip='Tick to enable replacing of Class 91 East Coast sets with AP enhanced versions',
                  key='Replace_C91')],
-]
-right_column = [
     [sg.Checkbox('Replace Class 101 sets', default=get_my_config_boolean('defaults', 'replace_c101'),
                  enable_events=True,
                  tooltip='Tick to enable replacing of retired RSC Class101Pack with RSC BritishRailClass101 sets',
                  key='Replace_C101')],
+]
+right_column = [
     [sg.Checkbox('Replace Class 150/2 sets', default=get_my_config_boolean('defaults', 'replace_c150'),
                  enable_events=True,
                  tooltip='Tick to enable replacing Thomson-Oovee Class 150s with AP Class 150/2', key='Replace_C150')],
@@ -310,6 +312,10 @@ right_column = [
                  enable_events=True,
                  tooltip='Tick to enable replacing of Class 450s with AP enhanced versions',
                  key='Replace_C450')],
+    [sg.Checkbox('Replace Class 456 sets', default=get_my_config_boolean('defaults', 'replace_c456'),
+                 enable_events=True,
+                 tooltip='Tick to enable replacing of Class 456s with AP/Waggonz versions',
+                 key='Replace_C456')],
     [sg.Checkbox('Replace Class 465 sets', default=get_my_config_boolean('defaults', 'replace_c465'),
                  enable_events=True,
                  tooltip='Tick to enable replacing of Class 465s with AP enhanced versions',
@@ -478,7 +484,6 @@ def dcsv_gethstloco(this_dcsv, this_rv):
 def alternate_mu_driving_vehicles(this_bp, this_v_type, vehicle_a, vehicle_b):
     # This function makes sure that driving vehicles in a multiple unit consist alternate between DxxA and DxxB
     # so that the AP scripting of multiple unit sets works properly.
-    # print(b[:len(a)])
     global mu_last
     if this_v_type.upper() == vehicle_a.upper():
         # Test if last Driving vehicle was a DxxA - if so, swap this one for a DxxB
@@ -504,7 +509,6 @@ def alternate_mu_driving_vehicles(this_bp, this_v_type, vehicle_a, vehicle_b):
             # consist was a DxxB.
             mu_last = vehicle_b
     return this_bp
-
 
 
 def add_ploughs(this_rv):
@@ -2146,6 +2150,45 @@ def c450_replace(provider, product, blueprint, name, number):
                     return True
     return False
 
+
+def c456_replace(provider, product, blueprint, name, number):
+    global mu_last
+    for i in range(0, len(vehicle_db['EMU456_set'])):
+        this_vehicle = vehicle_db['EMU456_set'][i]
+        if this_vehicle[0] in provider.text:
+            if this_vehicle[1] in product.text:
+                bp = re.search(this_vehicle[2], blueprint.text, flags=re.IGNORECASE)
+                if bp:
+                    rv_orig = number.text
+                    rv_num = number.text[0:11]
+                    rv_dest = number.text[11]
+                    if bool(re.search(r'\\NetworkSE\\', blueprint.text, flags=re.IGNORECASE)):
+                        rv_num = c456_nse[rv_dest] + rv_num
+                    elif bool(re.search(r'\\Default\\', blueprint.text, flags=re.IGNORECASE)):
+                        rv_num = c456_southern[rv_dest] + rv_num
+                    else:
+                        # At the moment only the Default (Southern) 456 and the NSE 456 are configured
+                        return False
+                    # It's assumed the scenario being converted will have one DMC1 and one DMC2 in each set in the
+                    # consist. If 2 sets or more sets are joined the driving vehicles will alternate DMC1 / DMC2.
+                    this_bp = this_vehicle[5]
+                    this_name = this_vehicle[6]
+                    v_type = re.search(r'\\Class_456_([A-Z]*)', this_vehicle[5], flags=re.IGNORECASE)
+                    if v_type:
+                        this_bp = alternate_mu_driving_vehicles(this_bp, v_type.group(1), 'DMSO', 'DTSO')
+                        this_name = get_ap_name_from_bp(vehicle_db['EMU456_set'], this_bp)
+                    # Swap vehicle and set number / destination (where possible)
+                    provider.text = this_vehicle[3]
+                    product.text = this_vehicle[4]
+                    blueprint.text = this_bp
+                    name.text = this_name
+                    number.text = str(rv_num)
+                    rv_list.append(number.text)
+                    rv_pairs.append([rv_orig, number.text])
+                    return True
+    return False
+
+
 def c465_replace(provider, product, blueprint, name, number):
     for i in range(0, len(vehicle_db['EMU465_set'])):
         this_vehicle = vehicle_db['EMU465_set'][i]
@@ -2338,6 +2381,8 @@ def vehicle_replacer(provider, product, blueprint, name, number, loaded):
         return True
     if values['Replace_C450'] and c450_replace(provider, product, blueprint, name, number):
         return True
+    if values['Replace_C456'] and c456_replace(provider, product, blueprint, name, number):
+        return True
     if values['Replace_C465'] and c465_replace(provider, product, blueprint, name, number):
         return True
     if values['Replace_C31'] and c31_replace(provider, product, blueprint, name, number):
@@ -2511,6 +2556,7 @@ if __name__ == "__main__":
             config.set('defaults', 'replace_c365', str(values['Replace_C365']))
             config.set('defaults', 'replace_c375', str(values['Replace_C375']))
             config.set('defaults', 'replace_c450', str(values['Replace_C450']))
+            config.set('defaults', 'replace_c456', str(values['Replace_C456']))
             config.set('defaults', 'replace_c465', str(values['Replace_C465']))
             with open(path_to_config, 'w') as configfile:
                 config.write(configfile)
@@ -2605,6 +2651,7 @@ if __name__ == "__main__":
             config.set('defaults', 'replace_c365', str(values['Replace_C365']))
             config.set('defaults', 'replace_c375', str(values['Replace_C375']))
             config.set('defaults', 'replace_c450', str(values['Replace_C450']))
+            config.set('defaults', 'replace_c456', str(values['Replace_C456']))
             config.set('defaults', 'replace_c465', str(values['Replace_C465']))
             with open(path_to_config, 'w') as configfile:
                 config.write(configfile)
