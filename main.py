@@ -34,7 +34,7 @@ from data_file import haa_e_wagons, haa_l_wagons, hha_e_wagons, hha_l_wagons, ht
     rsc20headcodes_62_69, rsc20headcodes_69_77, c168_chiltern, c170_ex_ar_aga_ap, c170_lm, c170_ct_xc, c170_ar23, \
     c170_scotrail, c170_ftpe, c170_ga_hull, c170_mml, c171_southern, c350_lb_ftpe, c365_ecmls_nse, c365_apcxse, \
     c450_gu_swt, c465_se, c375_dtg_pack, c377_lb_se, c377_lg_sn, c377_fcc, c170_bp_name_lookup, c375_dmos_lookup, \
-    c456_nse, c456_southern
+    c456_nse, c456_southern, c319_dest
 
 rv_list = []
 rv_pairs = []
@@ -45,6 +45,7 @@ vehicle_db = {}
 user_db = {}
 vp_blue_47_db = {}
 mu_last = 'none'
+mso_num = ''
 railworks_path = ''
 c56_opts = ['Use nearest numbered AP enhanced loco', 'Retain original loco if no matching AP plaque / sector available']
 c86_opts = ['Use VP headcode blinds', 'Use AP plated box with markers', 'Do not swap this loco']
@@ -124,6 +125,7 @@ if not config.has_section('defaults'):
     config.set('defaults', 'replace_c158', 'False')
     config.set('defaults', 'replace_c170', 'False')
     config.set('defaults', 'replace_c175', 'False')
+    config.set('defaults', 'replace_c319', 'False')
     config.set('defaults', 'replace_c325', 'False')
     config.set('defaults', 'replace_c350', 'False')
     config.set('defaults', 'replace_c365', 'False')
@@ -292,6 +294,10 @@ right_column = [
                  enable_events=True,
                  tooltip='Tick to enable replacing of Class 175s with AP enhanced versions',
                  key='Replace_C175')],
+    [sg.Checkbox('Replace Class 319 sets', default=get_my_config_boolean('defaults', 'replace_c319'),
+                 enable_events=True,
+                 tooltip='Tick to enable replacing of Class 319s with AP versions',
+                 key='Replace_C319')],
     [sg.Checkbox('Replace Class 325 sets', default=get_my_config_boolean('defaults', 'replace_c325'),
                  enable_events=True,
                  tooltip='Tick to enable replacing of Class 325s with AP enhanced versions',
@@ -1912,6 +1918,44 @@ def c175_replace(provider, product, blueprint, name, number):
     return False
 
 
+def c319_replace(provider, product, blueprint, name, number):
+    global mu_last, mso_num
+    for i in range(0, len(vehicle_db['EMU319_set'])):
+        this_vehicle = vehicle_db['EMU319_set'][i]
+        if this_vehicle[0] in provider.text:
+            if this_vehicle[1] in product.text:
+                bp = re.search(this_vehicle[2], blueprint.text, flags=re.IGNORECASE)
+                if bp:
+                    this_bp = this_vehicle[5]
+                    this_name = this_vehicle[6]
+                    rv_orig = number.text
+                    rv_num = rv_orig
+                    set_nm = re.search('(319[0-9]{3}).....([a-zA-Z]?)', number.text)
+                    if set_nm:
+                        if set_nm.group(2) == '':
+                            dest = '#'
+                        else:
+                            dest = set_nm.group(2)
+                        mso_num = set_nm.group(1) + dest
+                    v_type = re.search(r'\\Class_319_([A-Z]*)', this_vehicle[5], flags=re.IGNORECASE)
+                    if v_type:
+                        if v_type.group(1).upper() == 'MSO':
+                            rv_num = dcsv_get_num(
+                            Path(railworks_path, 'Assets', this_vehicle[3], this_vehicle[4], this_vehicle[7]),
+                                mso_num[0:6], 'Z([0-9]{6})(.*)')
+                            rv_num = c319_dest[mso_num[6:]] + rv_num
+                    # Swap vehicle and set number / destination (where possible)
+                    provider.text = this_vehicle[3]
+                    product.text = this_vehicle[4]
+                    blueprint.text = this_bp
+                    name.text = this_name
+                    number.text = str(rv_num)
+                    rv_list.append(number.text)
+                    rv_pairs.append([rv_orig, number.text])
+                    return True
+    return False
+
+
 def c325_replace(provider, product, blueprint, name, number):
     global mu_last
     for i in range(0, len(vehicle_db['EMU325_set'])):
@@ -2306,6 +2350,7 @@ def parse_xml(xml_file):
                     [str(consist_nr), provider.text, product.text, blueprint.text, name.text, number.text, loaded.text,
                      service, playerdriven])
             mu_last = 'none'
+            mso_num = ''
             consist_nr += 1
             progress_bar.UpdateBar(consist_nr, len(consists))
         for driver_inrvs in citem.findall('Driver/cDriver/InitialRV'):
@@ -2370,6 +2415,8 @@ def vehicle_replacer(provider, product, blueprint, name, number, loaded):
     if values['Replace_C170'] and c170_replace(provider, product, blueprint, name, number):
         return True
     if values['Replace_C175'] and c175_replace(provider, product, blueprint, name, number):
+        return True
+    if values['Replace_C319'] and c319_replace(provider, product, blueprint, name, number):
         return True
     if values['Replace_C325'] and c325_replace(provider, product, blueprint, name, number):
         return True
@@ -2551,6 +2598,7 @@ if __name__ == "__main__":
             config.set('defaults', 'replace_c158', str(values['Replace_C158']))
             config.set('defaults', 'replace_c170', str(values['Replace_C170']))
             config.set('defaults', 'replace_c175', str(values['Replace_C175']))
+            config.set('defaults', 'replace_c319', str(values['Replace_C319']))
             config.set('defaults', 'replace_c325', str(values['Replace_C325']))
             config.set('defaults', 'replace_c350', str(values['Replace_C350']))
             config.set('defaults', 'replace_c365', str(values['Replace_C365']))
@@ -2646,6 +2694,7 @@ if __name__ == "__main__":
             config.set('defaults', 'replace_c158', str(values['Replace_C158']))
             config.set('defaults', 'replace_c170', str(values['Replace_C170']))
             config.set('defaults', 'replace_c175', str(values['Replace_C175']))
+            config.set('defaults', 'replace_c319', str(values['Replace_C319']))
             config.set('defaults', 'replace_c325', str(values['Replace_C325']))
             config.set('defaults', 'replace_c350', str(values['Replace_C350']))
             config.set('defaults', 'replace_c365', str(values['Replace_C365']))
