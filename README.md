@@ -17,6 +17,8 @@ Installation
 
 If you've retrieved the program from github and you've already got Python installed and PySimpleGUI added on, that's it. Python is a free download from https://www.python.org/downloads/release. If you've got Python installed but need to get PySimpleGUI you could try just opening a command prompt and typing "pip install pysimplegui" or consult https://pypi.org/project/PySimpleGUI/ for more information.
 
+If you prefer not to install Python and all it entails, there is a 7zip file you can download for windows 10 with packaged applications RSSwapTool.exe and RSReportTool.exe you just need to double-click to open, which you can get from https://www.dropbox.com/s/zhlir7l9oxfmscw. Just download the whole 7zip file and extract it to your computer. It may not be as up-to-date as the source code here on github, however. 
+
 Usage
 =====
 
