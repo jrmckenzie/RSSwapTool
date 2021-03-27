@@ -243,7 +243,7 @@ if __name__ == "__main__":
                      'Tool for listing rolling stock in Train Simulator (Dovetail Games) scenarios, bundled with '
                      'RSSwapTool to provide a standalone tool to examine scenarios and list rolling stock.',
                      'Issued under the GNU General Public License - see https://www.gnu.org/licenses/',
-                     'Version 0.10a',
+                     'Version 0.11a',
                      'Copyright 2021 JR McKenzie', 'https://github.com/jrmckenzie/RSSwapTool')
         elif event == 'Settings':
             # The settings button has been pressed, so allow the user to change the RailWorks folder setting
