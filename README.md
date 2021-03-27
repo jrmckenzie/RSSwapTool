@@ -63,6 +63,17 @@ The following substitutions are available:
 * Replace Class 150/2 sets - Tick to enable replacing of Thomson Oovee Class 150s with AP Class 150/2
 * Replace Class 156 sets - Tick to enable replacing of Oovee Class 156s with AP Class 156
 * Replace Class 158 sets - Tick to enable replacing of North Wales Coast / Settle Carlisle / Fife Circle Class 158s with AP enhanced versions (Cummins, Perkins)
+* Replace Class 168, 170, 171 sets - Tick to enable replacing of Thomson Class 170s with AP enhanced versions
+* Replace Class 175 sets - Tick to enable replacing of South Wales Coastal / North Wales / Welsh Marches Class 175s with AP enhanced versions (2.0)
+* Replace Class 319 sets - Tick to enable replacing of BedPanLine 319, DTG Class 319 NSE and RSC Class 319 units with AP versions
+* Replace Class 325 sets - Tick to enable replacing of RSC Class 325 pack units with AP enhanced versions
+* Replace Class 350 sets - Tick to enable replacing of Portsmouth Direct / Brighton Main Line / WCML Trent Valley Class 350 units with AP enhanced versions
+* Replace Class 350 sets - Tick to enable replacing of Portsmouth Direct / Brighton Main Line / WCML Trent Valley Class 350 units with AP enhanced versions
+* Replace Class 365 sets - Tick to enable replacing of ECMLS London-Peterborough / Class 365 pack Class 365 units with AP enhanced version
+* Replace Class 375, 377 sets - Tick to enable replacing of Class 375 Pack / London-Gillingham / Portsmouth Direct / Brighton Main Line Class 375 units with AP enhanced versions
+* Replace Class 444, 450 sets - Tick to enable replacing of Portsmouth Direct / Class 444 Pack / Brighton Main Line / Guildford Disrict Class 444/450 units with AP enhanced versions
+* Replace Class 456 sets - Tick to enable replacing of South London Lines Class 456 units with AP/Waggonz versions
+* Replace Class 465 sets - Tick to enable replacing of South London Lines / London-Gillingham / RSC Class 465 Pack Class 465 units with AP enhanced versions
 
 Note that in some cases the replacement loco, coach or wagon might come in a variety of different weathering options. The application will choose a random weathering. The HAA, HHA, HTO, HTV and VDA wagon replacements will also be slightly randomised within the consist to give a bit of variety - not too many clean new ones though! *(Coding tip: if you wish to modify the behaviour of RSSwapTool while swapping these wagons and randomising the replacements, you can have a look at the top of data_file.py and edit the code. There are some lists of replacement wagons and you can add to or remove from these lists to alter the probability of particular variants appearing.)*
 
