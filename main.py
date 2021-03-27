@@ -648,13 +648,13 @@ def hha_replace(provider, product, blueprint, name, number, loaded):
                     provider.text = 'AP'
                     product.text = 'HHAWagonPack01'
                     # Replace a loaded wagon
-                    if 'eTrue' in loaded.text:
+                    if 'eTrue' in loaded.text or bool(re.search('_LOADED', blueprint.text, flags=re.IGNORECASE)):
                         idx = random.randrange(0, len(hha_l_wagons))
                         # Select at random one of the wagons in the list of HHA loaded wagons to swap in
                         blueprint.text = hha_l_wagons[idx][0]
                         name.text = hha_l_wagons[idx][1]
                     # Replace an empty wagon
-                    if 'eFalse' in loaded.text:
+                    else:
                         idx = random.randrange(0, len(hha_e_wagons))
                         # Select at random one of the wagons in the list of HHA empty wagons to swap in
                         blueprint.text = hha_e_wagons[idx][0]
