@@ -2106,6 +2106,10 @@ C37_SectorMetals_numbers = ['37004;Config=Early90sUnrefurb;L=3;BR=1', '37037;Con
                             '37248;Config=Early90sUnrefurb;L=3;BR=1;DP=5', '37250;Config=Early90sUnrefurb;L=3',
                             '37293;Config=Early90sUnrefurb;L=3;BR=1;DP=5']
 
+# Class 150/1 destination mapping dictionaries
+c150_fgw = {'A': 'x', 'B': 'p', 'C': 'H', 'D': 'H', 'E': 'z', 'F': 'y', 'G': 'A', 'H': 'C', 'I': 'H', 'J': 'n', 'K': 'o', 'L': 'e', 'M': 'H', 'N': 'k', 'O': 'B', 'P': 'h', 'Q': 'i', 'R': 'H', 'S': 'f', 'T': 'l', 'U': 'g', 'V': 'a', 'W': 'x', 'X': 'u', 'Y': 'w', 'Z': 't', 'a': 'c', 'b': 'H', 'c': 'r', 'd': 'F', 'e': 'd', 'f': 'b', 'g': 'E', 'h': 'q'}
+c150_lo_silver = {'A': 'b', 'B': 'a', 'C': 'j', 'D': 'o', 'E': 'o', 'F': 'o', 'G': 'o', 'H': 'o', 'I': 'l', 'J': 'o', 'K': 'o', 'L': 'o', 'M': 'o', 'N': 'o', 'O': 'o', 'P': 'o', 'Q': 'o', 'R': 'o', 'S': 'o', 'T': 'o', 'U': 'o', 'V': 'o', 'W': 'b', 'X': 'o', 'Y': 'o', 'Z': 'o', 'a': 'm', 'b': 'o'}
+
 # Class 158 destination mapping dictionaries
 c158_s9bl_rr = {'A___': 'a', '_A__': 'a', '__A_': 'a', '___A': 'a', 'B___': 'a', '_B__': 'a', '__B_': 'a', '___B': 'a',
                 'C___': 'a', '_C__': 'a', '__C_': 'a', '___C': 'a', 'D___': 'a', '_D__': 'd', '__D_': 'e', '___D': 'f',
@@ -2186,6 +2190,47 @@ c158_dtg_fc = {'#': 'a', 'a': 'a', 'b': 'N', 'c': 'x', 'd': 'J', 'e': 'H', 'f': 
 c158_rsc_159 = {'A': 'a', 'B': 'e', 'C': 't', 'D': 'a', 'E': 'i', 'F': 'g', 'G': 'a', 'H': 'p', 'I': 'j', 'J': 'v',
                 'K': 'y', 'L': 'k', 'M': 'b', 'N': 'a', 'O': 'a', 'P': 'k', 'Q': 'a', 'R': 'r', 'S': 's', 'T': 'a',
                 'U': 'x', 'V': 'u', 'W': 'a', 'X': 'z', 'Y': 'A', 'Z': 'B', '#': 'a'}
+
+# Class 170 destination mapping dictionaries
+# FS,FSR
+c170_scotrail = {'a': 'S', 'b': 'Q', 'c': 'x', 'd': 'z', 'e': 'y', 'f': 's', 'g': 'r', 'h': 'q', 'i': 't', 'j': 'a', 'k': 'a', 'l': 'a', 'm': 'M', 'n': 'm', 'o': 'e', 'p': 'b', 'q': 'n', 'r': 'J', 's': 'B', 't': 'a', 'u': 'C', 'v': 'I', 'w': 'a', 'x': 'a', 'y': 'u', 'z': 'a', 'A': 'a', 'B': 'a', 'C': 'a', 'D': 'a', 'E': 'a', 'F': 'a', 'G': 'a', 'H': 'a', 'I': 'E', 'J': 'a', 'K': 'k', 'L': 'f', 'M': 'a', 'N': 'R'}
+c170_ct_xc = {'a': 'Z', 'b': 'X', 'c': 'y', 'd': 'B', 'e': 'J', 'f': 'j', 'g': 'd', 'h': 'e', 'i': 'O', 'j': 'T', 'k': 'K', 'l': 'G', 'm': 'P', 'n': 'w', 'o': 'g', 'p': 'h', 'q': 'a', 'r': 'a', 's': 'a', 't': 'a', 'u': 'a', 'v': 'a', 'w': 'a', 'x': 'a', 'y': 'a', 'z': 'a', 'A': 'a', 'B': 'a', 'C': 'a', 'D': 'a', 'E': 'a', 'F': 'a', 'G': 'a', 'H': 'f', 'I': 'k', 'J': 'a', 'K': 'a', 'L': 'a', 'M': 'x', 'N': 'a', 'O': 'z', 'P': 'a', 'Q': 'D', 'R': 'a', 'S': 'a', 'T': 'R', 'U': 'a', 'V': 'V', 'W': 'a', 'X': 'a', 'Y': 'a', 'Z': 'Y'}
+c170_lm = {'a': 'J', 'b': 'H', 'c': 'p', 'd': 'a', 'e': 'a', 'f': 'a', 'g': 'd', 'h': 'e', 'i': 'w', 'j': 'D', 'k': 'a', 'l': 'a', 'm': 'a', 'n': 'a', 'o': 'a', 'p': 'a', 'q': 'a', 'r': 'a', 's': 'a', 't': 'a', 'u': 'a', 'v': 'a', 'w': 'a', 'x': 'a', 'y': 'a', 'z': 'a', 'A': 'a', 'B': 'a', 'C': 'a', 'D': 'a', 'E': 'a', 'F': 'a', 'G': 'a', 'H': 'a', 'I': 'a', 'J': 'a', 'K': 'a', 'L': 'a', 'M': 'a', 'N': 'a', 'O': 'a', 'P': 'a', 'Q': 'a', 'R': 'a', 'S': 'a', 'T': 'A', 'U': 'a', 'V': 'E', 'W': 'a', 'X': 'a', 'Y': 'a', 'Z': 'I'}
+# Class170 AR 2Coach / NXEA-AR /  -> Class 170 DMCL AR Rev AP
+c170_ar23 = {'a': 't', 'b': 't', 'c': 't', 'd': 'v', 'e': 'u', 'f': 'a', 'g': 'a', 'h': 'h', 'i': 'y', 'j': 'a', 'k': 'a', 'l': 'k', 'm': 'l', 'n': 'm', 'o': 'a', 'p': 'a', 'q': 'r', 'r': 'r', 's': 'r', 't': 'x', 'u': 'p', 'v': 'a', 'w': 'a', 'x': 'a', 'y': 'a', 'z': 'a', 'A': 'a', 'B': 'a', 'C': 'a', 'D': 'a', 'E': 'a', 'F': 'a', 'G': 'a', 'H': 'a', 'I': 'a', 'J': 'a', 'K': 'G', 'L': 'p', 'M': 'a', 'N': 'H', 'O': 'r', 'P': 'a', 'Q': 'a', 'R': 'a', 'S': 'a', 'T': 'B', 'U': 'a', 'V': 'a', 'W': 'a', 'X': 'a', 'Y': 'a', 'Z': 'L'}
+# Class170 Class170 DMOCL Ex-Anglia Revised (AGA) AP + others -> Class 170 DMCL Ex-AR Rev (AGA) AP
+c170_ex_ar_aga_ap = {'a': 'a', 'b': 't', 'c': 'u', 'd': 'v', 'e': 'k', 'f': 'l', 'g': 'm', 'h': 'r', 'i': 'y', 'j': 'p', 'k': 'j', 'l': 'w', 'm': 'e', 'n': 's', 'o': 'C', 'p': 'n', 'q': 'g', 'r': 'q', 's': 'q', 't': 'd', 'u': 'i', 'v': 'h', 'w': 'K', 'x': 'w', 'y': 'M', 'z': 'K', 'A': 'a', 'B': 'a', 'C': 'a', 'D': 'a', 'E': 'a', 'F': 'a', 'G': 'd', 'H': 'e', 'I': 'a', 'J': 'a', 'K': 'G', 'L': 'p', 'M': 'a', 'N': 'H', 'O': 'r', 'P': 'a', 'Q': 'a', 'R': 'a', 'S': 'a', 'T': 'B', 'U': 'a', 'V': 'a', 'W': 'a', 'X': 'a', 'Y': 'a', 'Z': 'L'}
+# Class170 GA
+c170_ga_hull = {'a': 'M', 'b': 'K', 'c': 'a', 'd': 'a', 'e': 'a', 'f': 'a', 'g': 'a', 'h': 'a', 'i': 'a', 'j': 'a', 'k': 'w', 'l': 't', 'm': 'z', 'n': 'a', 'o': 'a', 'p': 'a', 'q': 'a', 'r': 'a', 's': 'a', 't': 'a', 'u': 'a', 'v': 'a', 'w': 'a', 'x': 'I', 'y': 'a', 'z': 'a', 'A': 'a', 'B': 'a', 'C': 'a', 'D': 'a', 'E': 'a', 'F': 'a', 'G': 'd', 'H': 'e', 'I': 'a', 'J': 'a', 'K': 'G', 'L': 'p', 'M': 'a', 'N': 'H', 'O': 'r', 'P': 'a', 'Q': 'a', 'R': 'a', 'S': 'a', 'T': 'B', 'U': 'a', 'V': 'a', 'W': 'a', 'X': 'a', 'Y': 'a', 'Z': 'L'}
+# Class170 FTPE
+c170_ftpe = {'a': 'L', 'b': 'J', 'c': 'o', 'd': 't', 'e': 'a', 'f': 'a', 'g': 'a', 'h': 'a', 'i': 'a', 'j': 'a', 'k': 'a', 'l': 'a', 'm': 'a', 'n': 'a', 'o': 'a', 'p': 'a', 'q': 'a', 'r': 'a', 's': 'a', 't': 'a', 'u': 'a', 'v': 'a', 'w': 'a', 'x': 'a', 'y': 'a', 'z': 'a', 'A': 'a', 'B': 'a', 'C': 'a', 'D': 'a', 'E': 'a', 'F': 'a', 'G': 'a', 'H': 'a', 'I': 'a', 'J': 'a', 'K': 'l', 'L': 'a', 'M': 'a', 'N': 'a', 'O': 'a', 'P': 'a', 'Q': 'a', 'R': 'z', 'S': 'a', 'T': 'a', 'U': 'a', 'V': 'a', 'W': 'a', 'X': 'H', 'Y': 'a', 'Z': 'K'}
+# Class170 MML
+c170_mml = {'a': 'D', 'b': 'B', 'c': 'a', 'd': 's', 'e': 'v', 'f': 'a', 'g': 'a', 'h': 'a', 'i': 'a', 'j': 'a', 'k': 'a', 'l': 'a', 'm': 'a', 'n': 'n', 'o': 'a', 'p': 'a', 'q': 'a', 'r': 'a', 's': 'a', 't': 'a', 'u': 'a', 'v': 'a', 'w': 'a', 'x': 'a', 'y': 'a', 'z': 'a', 'A': 'a', 'B': 'a', 'C': 'a', 'D': 'a', 'E': 'a', 'F': 'a', 'G': 'a', 'H': 'a', 'I': 'i', 'J': 'a', 'K': 'a', 'L': 'a', 'M': 'a', 'N': 'a', 'O': 'a', 'P': 'a', 'Q': 'u', 'R': 'w', 'S': 'o', 'T': 'a', 'U': 'a', 'V': 'a', 'W': 'a', 'X': 'z', 'Y': 'a', 'Z': 'C'}
+# Class171 Southern
+c171_southern = {'a': 'u', 'b': 's', 'c': 'a', 'd': 'a', 'e': 'a', 'f': 'a', 'g': 'a', 'h': 'a', 'i': 'a', 'j': 'a', 'k': 'a', 'l': 'a', 'm': 'a', 'n': 'a', 'o': 'a', 'p': 'a', 'q': 'a', 'r': 'a', 's': 'a', 't': 'a', 'u': 'a', 'v': 'd', 'w': 'a', 'x': 'a', 'y': 'a', 'z': 'a', 'A': 'a', 'B': 'a', 'C': 'a', 'D': 'a', 'E': 'a', 'F': 'c', 'G': 'a', 'H': 'a', 'I': 'a', 'J': 'j', 'K': 'a', 'L': 'a', 'M': 'a', 'N': 'a', 'O': 'a', 'P': 'a', 'Q': 'a', 'R': 'a', 'S': 'a', 'T': 'a', 'U': 'q', 'V': 'a', 'W': 'a', 'X': 'a', 'Y': 'm', 'Z': 't'}
+# Class168 Chiltern -> CR L2
+c168_chiltern = {'a': 'o', 'b': 'b', 'c': 'c', 'd': 'd', 'e': 'm', 'f': 's', 'g': 'g', 'h': 'q', 'i': 'e', 'j': 'a', 'k': 'i', 'l': 'j', 'm': 'u', 'n': 'n', 'o': 'v', 'p': 'a', 'q': 'B', 'r': 'A', 's': 'z', 't': 'y', 'u': 'a', 'v': 'a', 'w': 'a', 'x': 'a', 'y': 'a', 'z': 'a', 'A': 'a', 'B': 'a', 'C': 'a', 'D': 'a', 'E': 'a', 'F': 'a', 'G': 'a', 'H': 'a', 'I': 'a', 'J': 'a', 'K': 'a', 'L': 'a', 'M': 'a', 'N': 'a', 'O': 'a', 'P': 'o', 'Q': 'a', 'R': 'a', 'S': 'a', 'T': 'a', 'U': 'a', 'V': 'a', 'W': 'a', 'X': 'a', 'Y': 'a', 'Z': 'A'}
+# Class 350
+c350_lb_ftpe = {'A': '1', 'B': '0', 'C': '2', 'D': '3', 'E': '4', 'F': '0', 'G': '5', 'H': '6', 'I': '7', 'J': '0', 'K': '8', 'L': '9', 'M': '10', 'N': '11', 'O': '12', 'P': '0', 'Q': '0', 'R': '13', 'S': '0'}
+# Class 365
+c365_ecmls_nse = {'a': 'a', 'b': 't', 'c': 'a', 'd': 'a', 'e': 'f', 'f': 'h', 'g': 'a', 'h': 'i', 'i': 'a', 'j': 'a', 'k': 'm', 'l': 'a', 'm': 'a', 'n': 'w', 'o': 'a', 'p': 'r', 'q': 's', 'r': 'n', 's': 'v', 't': 'q', 'u': 'j', 'v': 'a', 'w': 'x', 'x': 'z', 'y': 'A', 'z': 'a'}
+c365_apcxse = {'a': 'a', 'b': 'f', 'c': 'i', 'd': 'o', 'e': 'P', 'f': 'r', 'g': 's', 'h': 'j', 'i': 'c', 'j': 't', 'k': 'a', 'l': 'a', 'm': 'B', 'n': 'Q', 'o': 'H', 'p': 'I', 'q': 'R', 'r': 'L', 's': 'N', 't': 'T', 'u': 'g', 'v': 'V', 'w': 'U', 'x': 'l', 'y': 'X', 'z': 'X', '#': 'a'}
+# DTG Class375Pack01 / DTG Class 375/3 (MP) SE-DarkBlue / SE GreyYellow / GreyBlue / London-Gillingham Ex-Southern / RSC London-Brighton SE-White / Class 377/1 (V) Southeastern
+c375_dtg_pack = {'a': 'W', 'b': 'W', 'c': 'h', 'd': 'k', 'e': 'c', 'f': 'i', 'g': 'j', 'h': 'l', 'i': 'n', 'j': 'o', 'k': 'p', 'l': 's', 'm': 'u', 'n': 'A', 'o': 'D', 'p': 'G', 'q': 'H', 'r': 'J', 's': 'L', 't': 'N', 'u': 'O', 'v': 'P', 'w': 'R', 'x': 'U', 'y': 'J', 'z': 'Y', 'A': 'J', 'B': 'c', 'C': 'a', 'D': 'd', 'E': 'g', 'F': 'n', 'G': 't', 'H': 'v', 'I': 'x', 'J': 'a', 'K': 'e', 'L': 'B', 'M': 'a', 'N': 'F', 'O': 'J', 'P': 'a', 'Q': 'a', 'R': 'Q', 'S': 'V', 'T': 'b', 'U': 'b', 'V': 'b', 'W': 'C', 'X': 'Y', 'Y': 'Z', 'Z': 'a'}
+# Class 377 SWT London-Brighton
+#c377_lb_swt = {'a': '11', 'b': '0', 'c': '0', 'd': '13', 'e': '0', 'f': '0', 'g': '0', 'h': '0', 'i': '21', 'j': '0', 'k': '0', 'l': '0', 'm': '0', 'n': '0', 'o': '0', 'p': '0', 'q': '40', 'r': '0', 's': '0', 't': '52', 'u': '0', 'v': '0', 'w': '0', 'x': '0', 'y': '69', 'z': '70'}
+#
+# RSC London-Brighton Class 377 FCC
+c377_fcc = {'a': 'e', 'b': 'e', 'c': 'w', 'd': 'w', 'e': 'w', 'f': 'D', 'g': 'H', 'h': 's', 'i': 'E', 'j': 'm', 'k': 'i', 'l': 'f', 'm': 'u', 'n': 'k', 'o': 'k', 'p': 'k', 'q': 'o', 'r': 'G', 's': 'q', 't': 'g', 'u': 'g', 'v': 'g', 'w': 'c', 'x': 'B', 'y': 'v', 'z': 'J', 'A': 'b'}
+# RSC London-Brighton SE White
+c377_lb_se = {'a': 'k', 'b': 'W', 'c': 'h', 'd': 'J', 'e': 'c', 'f': 'u', 'g': 'V', 'h': 'L', 'i': 'o', 'j': 'n', 'k': 'R', 'l': 'H', 'm': 'j', 'n': 'p', 'o': 'D', 'p': 'G', 'q': 'O', 'r': 's', 's': 'U', 't': 'N', 'u': 'l', 'v': 'Q', 'w': 'A', 'x': 'i', 'y': 'Y', 'z': 'Z', 'A': 'a'}
+# London-Gillingham Class 377 Southern, Portsmouth Direct Class 377 Southern, London-Brighton Class 377 Southern
+c377_lg_sn = {'a': 'f', 'b': 'e', 'c': 'g', 'd': 'i', 'e': 'j', 'f': 'm', 'g': 'n', 'h': 'r', 'i': 's', 'j': 't', 'k': 'u', 'l': 'v', 'm': 'w', 'n': 'y', 'o': 'A', 'p': 'z', 'q': 'E', 'r': 'H', 's': 'I', 't': 'N', 'u': 'O', 'v': 'R', 'w': 'T', 'x': 'V', 'y': 'a', 'z': 'Z', 'A': 'c', 'B': 'g', 'C': 'l', 'D': 'o', 'E': 'm', 'F': 'p', 'G': 'a', 'H': 'y', 'I': 'B', 'J': 'D', 'K': 'E', 'L': 'E', 'M': 'E', 'N': 'J', 'O': 'N', 'P': 'N', 'Q': 'Q', 'R': 'Q', 'S': 'R', 'T': 'W', 'U': 'a', 'V': 'a', 'W': 'a', 'X': 'a', 'Y': 'a', 'Z': 'a', '0': 'f'}
+# Class 450 GuildfordDistrict / BrightonMainLine
+c450_gu_swt = {'A': '27', 'B': '27', 'C': '27', 'D': '27', 'E': '27', 'F': '27', 'G': '40', 'H': '40', 'I': '40', 'J': '40', 'K': '40', 'L': '40', 'M': '44', 'N': '2', 'O': '5', 'P': '7', 'Q': '13', 'R': '21', 'S': '23', 'T': '69', 'U': '37', 'V': '48', 'W': '68', 'X': '71', 'Y': '62', 'Z': '67'}
+# Class 465 SE
+c465_se = {'#': 'a', 'a': 'c', 'b': 'f', 'c': 'i', 'd': 'o', 'e': 'P', 'f': 'r', 'g': 's', 'h': 'j', 'i': 'c', 'j': 't', 'k': 'A', 'l': 'A', 'm': 'B', 'n': 'Q', 'o': 'H', 'p': 'I', 'q': 'R', 'r': 'L', 's': 'N', 't': 'T', 'u': 'g', 'v': 'V', 'w': 'U', 'x': 'l', 'y': 'X', 'z': 'X'}
+# Headcode translation mapping dictionaries
 ap40headcodes_69_77 = {'1': '2121', '2': '1222', '3': '2211', '4': '1212', '5': '2221', '6': '1221', '7': '2112',
                        '8': '1122', '9': '2122', '0': '2212'}
 ap40headcodes_62_69 = {'1': '2121', '2': '1222', '3': '2211', '4': '2211', '5': '1221', '6': '2112', '7': '1122',
@@ -2194,3 +2239,162 @@ rsc20headcodes_62_69 = {'1': 'A', '2': 'B', '3': 'C', '4': 'C', '5': 'D', '6': '
                         '0': 'G'}
 rsc20headcodes_69_77 = {'1': 'A', '2': 'B', '3': 'C', '4': 'H', '5': 'J', '6': 'D', '7': 'E', '8': 'F', '9': 'K',
                         '0': 'G'}
+c170_bp_name_lookup = {'RailVehicles\\Class170\\Anglia_AP\\Engine\\Class170_DMCL.xml': 'APEP 170 AR DMCL',
+'RailVehicles\\Class170\\Anglia_AP\\Engine\\Class170_DMSL.xml': 'APEP 170 AR DMSL',
+'RailVehicles\\Class170\\Anglia_AP\\Engine\\Class170_MSL.xml': 'APEP 170 AR MS',
+'RailVehicles\\Class170\\Anglia_Rev_AP\\Engine\\Class170_DMCL.xml': 'APEP 170 AR Rev DMCL',
+'RailVehicles\\Class170\\Anglia_Rev_AP\\Engine\\Class170_DMSL.xml': 'APEP 170 AR Rev DMSL',
+'RailVehicles\\Class170\\CR_AP\\Engine\\Class170_DMCL-L2.xml': 'APEP 168 CR (L2) DMSLB',
+'RailVehicles\\Class170\\CR_AP\\Engine\\Class170_DMCL.xml': 'APEP 168 CR (L1) DMSLB',
+'RailVehicles\\Class170\\CR_AP\\Engine\\Class170_DMSL-L2.xml': 'APEP 168 CR (L2) DMSLA',
+'RailVehicles\\Class170\\CR_AP\\Engine\\Class170_DMSL.xml': 'APEP 168 CR (L1) DMSLA',
+'RailVehicles\\Class170\\CR_AP\\Engine\\Class170_MSL-MS2.xml': 'APEP 168 CR MS2',
+'RailVehicles\\Class170\\CR_AP\\Engine\\Class170_MSL.xml': 'APEP 168 CR MS',
+'RailVehicles\\Class170\\CR_M_AP\\Engine\\Class170_DMCL-L2.xml': 'APEP 168 CR(M) (L2) DMSLB',
+'RailVehicles\\Class170\\CR_M_AP\\Engine\\Class170_DMCL.xml': 'APEP 168 CR(M) (L1) DMSLB',
+'RailVehicles\\Class170\\CR_M_AP\\Engine\\Class170_DMSL-L2.xml': 'APEP 168 CR(M) (L2) DMSLA',
+'RailVehicles\\Class170\\CR_M_AP\\Engine\\Class170_DMSL.xml': 'APEP 168 CR(M) (L1) DMSLA',
+'RailVehicles\\Class170\\CR_M_AP\\Engine\\Class170_MSL-MS2.xml': 'APEP 168 CR(M) MS2',
+'RailVehicles\\Class170\\CR_M_AP\\Engine\\Class170_MSL.xml': 'APEP 168 CR(M) MS',
+'RailVehicles\\Class170\\CT_AP\\Engine\\Class170_DMCL.xml': 'APEP 170 CT DMSLB',
+'RailVehicles\\Class170\\CT_AP\\Engine\\Class170_DMCL_XC.xml': 'APEP 170 Ex-CT (XC) DMSLB',
+'RailVehicles\\Class170\\CT_AP\\Engine\\Class170_DMSL.xml': 'APEP 170 CT DMSLA',
+'RailVehicles\\Class170\\CT_AP\\Engine\\Class170_DMSL_XC.xml': 'APEP 170 Ex-CT (XC) DMSLA',
+'RailVehicles\\Class170\\CT_AP\\Engine\\Class170_MSL.xml': 'APEP 170 CT MS',
+'RailVehicles\\Class170\\CT_AP\\Engine\\Class170_MSL_XC.xml': 'APEP 170 Ex-CT (XC) MS',
+'RailVehicles\\Class170\\Ex-Anglia_Rev_AP\\Engine\\Class170_DMCL.xml': 'APEP 170 Ex-AR Rev (NXEA) DMCL',
+'RailVehicles\\Class170\\Ex-Anglia_Rev_AP\\Engine\\Class170_DMCL_AGA.xml': 'APEP 170 Ex-AR Rev (AGA) DMCL',
+'RailVehicles\\Class170\\Ex-Anglia_Rev_AP\\Engine\\Class170_DMCL_GA.xml': 'APEP 170 Ex-AR Rev (GA) DMCL',
+'RailVehicles\\Class170\\Ex-Anglia_Rev_AP\\Engine\\Class170_DMCL_GA2.xml': 'APEP 170 Ex-AR Rev (GA2) DMCL',
+'RailVehicles\\Class170\\Ex-Anglia_Rev_AP\\Engine\\Class170_DMSL.xml': 'APEP 170 Ex-AR Rev (NXEA) DMSL',
+'RailVehicles\\Class170\\Ex-Anglia_Rev_AP\\Engine\\Class170_DMSL_AGA.xml': 'APEP 170 Ex-AR Rev (AGA) DMSL',
+'RailVehicles\\Class170\\Ex-Anglia_Rev_AP\\Engine\\Class170_DMSL_GA.xml': 'APEP 170 Ex-AR Rev (GA) DMSL',
+'RailVehicles\\Class170\\Ex-Anglia_Rev_AP\\Engine\\Class170_DMSL_GA2.xml': 'APEP 170 Ex-AR Rev (GA2) DMSL',
+'RailVehicles\\Class170\\Ex-FSR_AP\\Engine\\Class170_DMCL-L2.xml': 'APEP 170 Ex-FSR (L2) DMCLA',
+'RailVehicles\\Class170\\Ex-FSR_AP\\Engine\\Class170_DMCL.xml': 'APEP 170 Ex-FSR (L1) DMCLA',
+'RailVehicles\\Class170\\Ex-FSR_AP\\Engine\\Class170_DMSL-L2.xml': 'APEP 170 Ex-FSR (L2) DMCLB',
+'RailVehicles\\Class170\\Ex-FSR_AP\\Engine\\Class170_DMSL.xml': 'APEP 170 Ex-FSR (L1) DMCLB',
+'RailVehicles\\Class170\\Ex-FSR_AP\\Engine\\Class170_MSL.xml': 'APEP 170 Ex-FSR MS',
+'RailVehicles\\Class170\\Ex-MML_AP\\Engine\\Class170_DMCL.xml': 'APEP 170 Ex-MML (CT) DMSLB',
+'RailVehicles\\Class170\\Ex-MML_AP\\Engine\\Class170_DMCL_XC.xml': 'APEP 170 Ex-MML (XC) DMSLB',
+'RailVehicles\\Class170\\Ex-MML_AP\\Engine\\Class170_DMSL.xml': 'APEP 170 Ex-MML (CT) DMSLA',
+'RailVehicles\\Class170\\Ex-MML_AP\\Engine\\Class170_DMSL_XC.xml': 'APEP 170 Ex-MML (XC) DMSLA',
+'RailVehicles\\Class170\\Ex-MML_AP\\Engine\\Class170_MSL.xml': 'APEP 170 Ex-MML (CT) MS',
+'RailVehicles\\Class170\\Ex-MML_AP\\Engine\\Class170_MSL_XC.xml': 'APEP 170 Ex-MML (XC) MS',
+'RailVehicles\\Class170\\Ex-ONE_AP\\Engine\\Class170_DMCL.xml': 'APEP 170 Ex-ONE (NXEA) DMCL',
+'RailVehicles\\Class170\\Ex-ONE_AP\\Engine\\Class170_DMCL_AGA.xml': 'APEP 170 Ex-ONE (AGA) DMCL',
+'RailVehicles\\Class170\\Ex-ONE_AP\\Engine\\Class170_DMCL_GA.xml': 'APEP 170 Ex-ONE (GA) DMCL',
+'RailVehicles\\Class170\\Ex-ONE_AP\\Engine\\Class170_DMCL_GA2.xml': 'APEP 170 Ex-ONE (GA2) DMCL',
+'RailVehicles\\Class170\\Ex-ONE_AP\\Engine\\Class170_DMSL.xml': 'APEP 170 Ex-ONE (NXEA) DMSL',
+'RailVehicles\\Class170\\Ex-ONE_AP\\Engine\\Class170_DMSL_AGA.xml': 'APEP 170 Ex-ONE (AGA) DMSL',
+'RailVehicles\\Class170\\Ex-ONE_AP\\Engine\\Class170_DMSL_GA.xml': 'APEP 170 Ex-ONE (GA) DMSL',
+'RailVehicles\\Class170\\Ex-ONE_AP\\Engine\\Class170_DMSL_GA2.xml': 'APEP 170 Ex-ONE (GA2) DMSL',
+'RailVehicles\\Class170\\Ex-ONE_AP\\Engine\\Class170_MSL.xml': 'APEP 170 Ex-ONE (NXEA) MS',
+'RailVehicles\\Class170\\Ex-ONE_AP\\Engine\\Class170_MSL_AGA.xml': 'APEP 170 Ex-ONE (AGA) MS',
+'RailVehicles\\Class170\\Ex-ONE_AP\\Engine\\Class170_MSL_GA.xml': 'APEP 170 Ex-ONE (GA) MS',
+'RailVehicles\\Class170\\Ex-ONE_AP\\Engine\\Class170_MSL_GA2.xml': 'APEP 170 Ex-ONE (GA2) MS',
+'RailVehicles\\Class170\\Ex-ONE_Dark_AP\\Engine\\Class170_DMCL.xml': 'APEP 170 Ex-ONE 2 (NXEA) DMCL',
+'RailVehicles\\Class170\\Ex-ONE_Dark_AP\\Engine\\Class170_DMCL_AGA.xml': 'APEP 170 Ex-ONE 2 (AGA) DMCL',
+'RailVehicles\\Class170\\Ex-ONE_Dark_AP\\Engine\\Class170_DMCL_GA.xml': 'APEP 170 Ex-ONE 2 (GA) DMCL',
+'RailVehicles\\Class170\\Ex-ONE_Dark_AP\\Engine\\Class170_DMSL.xml': 'APEP 170 Ex-ONE 2 (NXEA) DMSL',
+'RailVehicles\\Class170\\Ex-ONE_Dark_AP\\Engine\\Class170_DMSL_AGA.xml': 'APEP 170 Ex-ONE 2 (AGA) DMSL',
+'RailVehicles\\Class170\\Ex-ONE_Dark_AP\\Engine\\Class170_DMSL_GA.xml': 'APEP 170 Ex-ONE 2 (GA) DMSL',
+'RailVehicles\\Class170\\FSR_AP\\Engine\\Class170_DMCL-L2.xml': 'APEP 170 FSR (L2) DMCLA',
+'RailVehicles\\Class170\\FSR_AP\\Engine\\Class170_DMCL.xml': 'APEP 170 FSR (L1) DMCLA',
+'RailVehicles\\Class170\\FSR_AP\\Engine\\Class170_DMSL-L2.xml': 'APEP 170 FSR (L2) DMCLB',
+'RailVehicles\\Class170\\FSR_AP\\Engine\\Class170_DMSL.xml': 'APEP 170 FSR (L1) DMCLB',
+'RailVehicles\\Class170\\FSR_AP\\Engine\\Class170_MSL.xml': 'APEP 170 FSR MS',
+'RailVehicles\\Class170\\FTPE_AP\\Engine\\Class170_DMCL.xml': 'APEP 170 FTPE DMCL',
+'RailVehicles\\Class170\\FTPE_AP\\Engine\\Class170_DMSL.xml': 'APEP 170 FTPE DMSL',
+'RailVehicles\\Class170\\GA_AP\\Engine\\Class170_DMCL.xml': 'APEP 170 GA DMCL',
+'RailVehicles\\Class170\\GA_AP\\Engine\\Class170_DMSL.xml': 'APEP 170 GA DMSL',
+'RailVehicles\\Class170\\GA_AP\\Engine\\Class170_MSL.xml': 'APEP 170 GA MS',
+'RailVehicles\\Class170\\HT_AP\\Engine\\Class170_DMCL.xml': 'APEP 170 HT DMCL',
+'RailVehicles\\Class170\\HT_AP\\Engine\\Class170_DMSL.xml': 'APEP 170 HT DMSL',
+'RailVehicles\\Class170\\HT_AP\\Engine\\Class170_MSL.xml': 'APEP 170 HT MS',
+'RailVehicles\\Class170\\LM_AP\\Engine\\Class170_DMCL.xml': 'APEP 170 LM DMSLB',
+'RailVehicles\\Class170\\LM_AP\\Engine\\Class170_DMCL2.xml': 'APEP 170 Ex-LM DMSLB',
+'RailVehicles\\Class170\\LM_AP\\Engine\\Class170_DMSL.xml': 'APEP 170 LM DMSLA',
+'RailVehicles\\Class170\\LM_AP\\Engine\\Class170_DMSL2.xml': 'APEP 170 Ex-LM DMSLA',
+'RailVehicles\\Class170\\LM_AP\\Engine\\Class170_MSL.xml': 'APEP 170 LM MS',
+'RailVehicles\\Class170\\LM_AP\\Engine\\Class170_MSL2.xml': 'APEP 170 Ex-LM MS',
+'RailVehicles\\Class170\\MML_AP\\Engine\\Class170_DMCL.xml': 'APEP 170 MML DMCLA',
+'RailVehicles\\Class170\\MML_AP\\Engine\\Class170_DMSL.xml': 'APEP 170 MML DMCLB',
+'RailVehicles\\Class170\\MML_AP\\Engine\\Class170_MSL.xml': 'APEP 170 MML MS',
+'RailVehicles\\Class170\\ONE_AP\\Engine\\Class170_DMCL.xml': 'APEP 170 ONE DMCL',
+'RailVehicles\\Class170\\ONE_AP\\Engine\\Class170_DMSL.xml': 'APEP 170 ONE DMSL',
+'RailVehicles\\Class170\\ONE_AP\\Engine\\Class170_MSL.xml': 'APEP 170 ONE MS',
+'RailVehicles\\Class170\\ONE_Dark_AP\\Engine\\Class170_DMCL.xml': 'APEP 170 ONE 2 DMCL',
+'RailVehicles\\Class170\\ONE_Dark_AP\\Engine\\Class170_DMSL.xml': 'APEP 170 ONE 2 DMSL',
+'RailVehicles\\Class170\\Southern_AP\\Engine\\Class170_DMCL-L2.xml': 'APEP 171 SN (L2) DMCLA',
+'RailVehicles\\Class170\\Southern_AP\\Engine\\Class170_DMCL.xml': 'APEP 171 SN (L1) DMCLA',
+'RailVehicles\\Class170\\Southern_AP\\Engine\\Class170_DMSL-L2.xml': 'APEP 171 SN (L2) DMSL',
+'RailVehicles\\Class170\\Southern_AP\\Engine\\Class170_DMSL.xml': 'APEP 171 SN (L1) DMSL',
+'RailVehicles\\Class170\\Southern_AP\\Engine\\Class170_DMSLB-L2.xml': 'APEP 171 SN (L2) DMCLB',
+'RailVehicles\\Class170\\Southern_AP\\Engine\\Class170_DMSLB.xml': 'APEP 171 SN (L1) DMCLB',
+'RailVehicles\\Class170\\Southern_AP\\Engine\\Class170_MSL-MS2.xml': 'APEP 171 SN MS2',
+'RailVehicles\\Class170\\Southern_AP\\Engine\\Class170_MSL.xml': 'APEP 171 SN MS',
+'RailVehicles\\Class170\\SPT_Rail_AP\\Engine\\Class170_DMCL.xml': 'APEP 170 SPT Rail DMSLB',
+'RailVehicles\\Class170\\SPT_Rail_AP\\Engine\\Class170_DMSL.xml': 'APEP 170 SPT Rail DMSLA',
+'RailVehicles\\Class170\\SPT_Rail_AP\\Engine\\Class170_MSL.xml': 'APEP 170 SPT Rail MS',
+'RailVehicles\\Class170\\SR_AP\\Engine\\Class170_DMCL-L2.xml': 'APEP 170 SR (L2) DMCLA',
+'RailVehicles\\Class170\\SR_AP\\Engine\\Class170_DMCL-L2_FSR.xml': 'APEP 170 Ex-SR (FSR) (L2) DMCLA',
+'RailVehicles\\Class170\\SR_AP\\Engine\\Class170_DMCL.xml': 'APEP 170 SR (L1) DMCLA',
+'RailVehicles\\Class170\\SR_AP\\Engine\\Class170_DMCL_FSR.xml': 'APEP 170 Ex-SR (FSR) (L1) DMCLA',
+'RailVehicles\\Class170\\SR_AP\\Engine\\Class170_DMSL-L2.xml': 'APEP 170 SR (L2) DMCLB',
+'RailVehicles\\Class170\\SR_AP\\Engine\\Class170_DMSL-L2_FSR.xml': 'APEP 170 Ex-SR (FSR) (L2) DMCLB',
+'RailVehicles\\Class170\\SR_AP\\Engine\\Class170_DMSL.xml': 'APEP 170 SR (L1) DMCLB',
+'RailVehicles\\Class170\\SR_AP\\Engine\\Class170_DMSL_FSR.xml': 'APEP 170 Ex-SR (FSR) (L1) DMCLB',
+'RailVehicles\\Class170\\SR_AP\\Engine\\Class170_MSL.xml': 'APEP 170 SR MS',
+'RailVehicles\\Class170\\SR_AP\\Engine\\Class170_MSL_FSR.xml': 'APEP 170 Ex-SR (FSR) MS',
+'RailVehicles\\Class170\\SR_Salt_AP\\Engine\\Class170_DMCL-L2.xml': 'APEP 170 SR Salt (L2) DMCLA',
+'RailVehicles\\Class170\\SR_Salt_AP\\Engine\\Class170_DMCL.xml': 'APEP 170 SR Salt (L1) DMCLA',
+'RailVehicles\\Class170\\SR_Salt_AP\\Engine\\Class170_DMCLA-L2.xml': 'APEP 170 SR Salt (L2) DMSLA',
+'RailVehicles\\Class170\\SR_Salt_AP\\Engine\\Class170_DMCLA.xml': 'APEP 170 SR Salt (L1) DMSLA',
+'RailVehicles\\Class170\\SR_Salt_AP\\Engine\\Class170_DMSL-L2.xml': 'APEP 170 SR Salt (L2) DMCLB',
+'RailVehicles\\Class170\\SR_Salt_AP\\Engine\\Class170_DMSL.xml': 'APEP 170 SR Salt (L1) DMCLB',
+'RailVehicles\\Class170\\SR_Salt_AP\\Engine\\Class170_DMSLB-L2.xml': 'APEP 170 SR Salt (L2) DMSLB',
+'RailVehicles\\Class170\\SR_Salt_AP\\Engine\\Class170_DMSLB.xml': 'APEP 170 SR Salt (L1) DMSLB',
+'RailVehicles\\Class170\\SR_Salt_AP\\Engine\\Class170_MSL.xml': 'APEP 170 SR Salt MS',
+'RailVehicles\\Class170\\SWT_AP\\Engine\\Class170_DMCL.xml': 'APEP 170 SWT DMCL',
+'RailVehicles\\Class170\\SWT_AP\\Engine\\Class170_DMSL.xml': 'APEP 170 SWT DMSL',
+'RailVehicles\\Class170\\XC_AP\\Engine\\Class170_DMCL.xml': 'APEP 170 XC DMCL',
+'RailVehicles\\Class170\\XC_AP\\Engine\\Class170_DMSL.xml': 'APEP 170 XC DMSL',
+'RailVehicles\\Class170\\XC_AP\\Engine\\Class170_MSL.xml': 'APEP 170 XC MS'}
+
+c375_dmos_lookup = {'RailVehicles\\Electric\\Class375\\CX_AP\\375_DMOSA_2.xml': 'RailVehicles\\Electric\\Class375\\CX_AP\\375_DMOSB_2.xml',
+'RailVehicles\\Electric\\Class375\\CX_AP\\375_DMOSA_SE1(2).xml': 'RailVehicles\\Electric\\Class375\\CX_AP\\375_DMOSB_SE1(2).xml',
+'RailVehicles\\Electric\\Class375\\CX_AP\\375_DMOSA.xml': 'RailVehicles\\Electric\\Class375\\CX_AP\\375_DMOSB.xml',
+'RailVehicles\\Electric\\Class375\\FCC_AP\\375_DMOSA_AC.xml': 'RailVehicles\\Electric\\Class375\\FCC_AP\\375_DMOSB.xml',
+'RailVehicles\\Electric\\Class375\\FCC_AP\\375_DMOSA_TL_AC.xml': 'RailVehicles\\Electric\\Class375\\FCC_AP\\375_DMOSB_TL.xml',
+'RailVehicles\\Electric\\Class375\\FCC_AP\\375_DMOSA_TL.xml': 'RailVehicles\\Electric\\Class375\\FCC_AP\\375_DMOSB_TL.xml',
+'RailVehicles\\Electric\\Class375\\FCC_AP\\375_DMOSA.xml': 'RailVehicles\\Electric\\Class375\\FCC_AP\\375_DMOSB.xml',
+'RailVehicles\\Electric\\Class375\\SE2_AP\\375_DMOSA_2-3.xml': 'RailVehicles\\Electric\\Class375\\SE2_AP\\375_DMOSB_2.xml',
+'RailVehicles\\Electric\\Class375\\SE2_AP\\375_DMOSA_2-6.xml': 'RailVehicles\\Electric\\Class375\\SE2_AP\\375_DMOSB_2.xml',
+'RailVehicles\\Electric\\Class375\\SE2_AP\\375_DMOSA_2.xml': 'RailVehicles\\Electric\\Class375\\SE2_AP\\375_DMOSB_2.xml',
+'RailVehicles\\Electric\\Class375\\SE3_AP\\375_DMOSA.xml': 'RailVehicles\\Electric\\Class375\\SE3_AP\\375_DMOSB.xml',
+'RailVehicles\\Electric\\Class375\\SE4_AP\\375_DMOSA-6.xml': 'RailVehicles\\Electric\\Class375\\SE4_AP\\375_DMOSB.xml',
+'RailVehicles\\Electric\\Class375\\SE4_AP\\375_DMOSA.xml': 'RailVehicles\\Electric\\Class375\\SE4_AP\\375_DMOSB.xml',
+'RailVehicles\\Electric\\Class375\\SE5_AP\\375_DMOSA-3.xml': 'RailVehicles\\Electric\\Class375\\SE5_AP\\375_DMOSB.xml',
+'RailVehicles\\Electric\\Class375\\SE5_AP\\375_DMOSA-5.xml': 'RailVehicles\\Electric\\Class375\\SE5_AP\\375_DMOSB-5.xml',
+'RailVehicles\\Electric\\Class375\\SE5_AP\\375_DMOSA-6.xml': 'RailVehicles\\Electric\\Class375\\SE5_AP\\375_DMOSB.xml',
+'RailVehicles\\Electric\\Class375\\SE5_AP\\375_DMOSA.xml': 'RailVehicles\\Electric\\Class375\\SE5_AP\\375_DMOSB.xml',
+'RailVehicles\\Electric\\Class375\\SN_AP\\375_DMOSA_SE.xml': 'RailVehicles\\Electric\\Class375\\SN_AP\\375_DMOSB_SE.xml',
+'RailVehicles\\Electric\\Class375\\SN_AP\\375_DMOSA-3.xml': 'RailVehicles\\Electric\\Class375\\SN_AP\\375_DMOSB.xml',
+'RailVehicles\\Electric\\Class375\\SN_AP\\375_DMOSA.xml': 'RailVehicles\\Electric\\Class375\\SN_AP\\375_DMOSB.xml',
+'RailVehicles\\Electric\\Class375\\CX_AP\\375_DMOSB_2.xml': 'RailVehicles\\Electric\\Class375\\CX_AP\\375_DMOSA_2.xml',
+'RailVehicles\\Electric\\Class375\\CX_AP\\375_DMOSB_SE1(2).xml': 'RailVehicles\\Electric\\Class375\\CX_AP\\375_DMOSA_SE1(2).xml',
+'RailVehicles\\Electric\\Class375\\CX_AP\\375_DMOSB.xml': 'RailVehicles\\Electric\\Class375\\CX_AP\\375_DMOSA.xml',
+'RailVehicles\\Electric\\Class375\\FCC_AP\\375_DMOSB_TL.xml': 'RailVehicles\\Electric\\Class375\\FCC_AP\\375_DMOSA_TL.xml',
+'RailVehicles\\Electric\\Class375\\FCC_AP\\375_DMOSB.xml': 'RailVehicles\\Electric\\Class375\\FCC_AP\\375_DMOSA.xml',
+'RailVehicles\\Electric\\Class375\\SE2_AP\\375_DMOSB_2.xml': 'RailVehicles\\Electric\\Class375\\SE2_AP\\375_DMOSA_2.xml',
+'RailVehicles\\Electric\\Class375\\SE3_AP\\375_DMOSB.xml': 'RailVehicles\\Electric\\Class375\\SE3_AP\\375_DMOSA.xml',
+'RailVehicles\\Electric\\Class375\\SE4_AP\\375_DMOSB.xml': 'RailVehicles\\Electric\\Class375\\SE4_AP\\375_DMOSA.xml',
+'RailVehicles\\Electric\\Class375\\SE5_AP\\375_DMOSB-5.xml': 'RailVehicles\\Electric\\Class375\\SE5_AP\\375_DMOSA-5.xml',
+'RailVehicles\\Electric\\Class375\\SE5_AP\\375_DMOSB.xml': 'RailVehicles\\Electric\\Class375\\SE5_AP\\375_DMOSA.xml',
+'RailVehicles\\Electric\\Class375\\SN_AP\\375_DMOSB_SE.xml': 'RailVehicles\\Electric\\Class375\\SN_AP\\375_DMOSA_SE.xml',
+'RailVehicles\\Electric\\Class375\\SN_AP\\375_DMOSB.xml': 'RailVehicles\\Electric\\Class375\\SN_AP\\375_DMOSA.xml' }
+
+c456_southern = {'a': '00000', 'b': '00000', 'c': '00000', 'd': '00000', 'e': '00000', 'f': '00000', 'g': '00000', 'h': '00000', 'i': '00000', 'j': '00000', 'k': '00000', 'l': '00000', 'm': '00000', 'n': '00000', 'o': '00000', 'p': '00000', 'q': '00000', 'r': '00000', 's': '00000', 't': '00000', 'u': '00000', 'A': '00018', 'B': '00019', 'C': '00052', 'D': '00000', 'E': '00000', 'F': '00234', 'G': '00256', 'H': '00295', 'I': '00811', 'J': '00832', 'K': '00812', 'L': '00817', 'M': '00819', 'N': '00821', 'O': '00000', 'P': '00824', 'Q': '00826', 'R': '00827', 'S': '00828', 'T': '00836', 'U': '00837', 'V': '00176', 'W': '00000', 'X': '00815', 'Y': '00201', 'Z': '00812'}
+c456_nse = {'(': '43', ')': '44', 'A': '41', 'B': '21', 'C': '04', 'D': '43', 'E': '22', 'F': '20', 'G': '00', 'H': '31', 'I': '22', 'J': '39', 'K': '44', 'L': '43', 'M': '22', 'N': '29', 'O': '13', 'P': '22', 'Q': '13', 'R': '39', 'S': '13', 'T': '22', 'U': '13', 'V': '40', 'W': '22', 'X': '12', 'Y': '22', 'Z': '12', 'a': '18', 'b': '39', 'c': '14', 'd': '34', 'e': '22', 'f': '05', 'g': '40', 'h': '13', 'i': '22', 'j': '00', 'k': '00', 'l': '22', 'm': '34', 'n': '39', 'o': '15', 'p': '22', 'q': '15', 'r': '39', 's': '08', 't': '09', 'u': '22', 'v': '43', 'w': '43', 'x': '00', 'y': '15', 'z': '20', '@': '15', '#': '39', '%': '22', '=': '35', '~': '09', '_': '22', '+': '00', '-': '01', '$': '00'}
+c319_dest = {'#': 'Z', 'a': 'd', 'b': 'E', 'c': 't', 'd': 'a', 'e': 'e', 'f': 's', 'g': 'h', 'h': 'Z', 'i': 'S', 'j': 'u', 'k': 'x', 'l': 'l', 'm': 'c', 'n': 'Z', 'o': 'A', 'p': 'b', 'q': 'm', 'r': 'i', 's': 'y', 't': 'Z', 'u': 'p', 'v': 'J', 'w': 'r', 'x': 'Z', 'y': 'Y', 'z': 'Y'}

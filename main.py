@@ -1,6 +1,6 @@
 #     RSSwapTool - A script to swap in up to date or enhanced rolling stock
 #     for older versions of stock in Train Simulator scenarios.
-#     Copyright (C) 2021 James McKenzie jrmckenzie @ gmail . com
+#     Copyright (C) 2021 James McKenzie jrmknz@yahoo.co.uk
 #
 #     This program is free software: you can redistribute it and/or modify
 #     it under the terms of the GNU General Public License as published by
@@ -31,7 +31,10 @@ from data_file import haa_e_wagons, haa_l_wagons, hha_e_wagons, hha_l_wagons, ht
     htv_e_wagons, htv_l_wagons, vda_e_wagons, vda_l_wagons, HTO_141_numbers, HTO_143_numbers, HTO_146_numbers, \
     HTO_rebodied_numbers, HTV_146_numbers, HTV_rebodied_numbers, c158_s9bl_rr, c158_s9bl_nr, c158_s9bl_fgw, \
     c158_s9bl_tpe, c158_s9bl_swt, c158_nwc, c158_dtg_fc, c158_livman_rr, ap40headcodes_69_77, ap40headcodes_62_69, \
-    rsc20headcodes_62_69, rsc20headcodes_69_77
+    rsc20headcodes_62_69, rsc20headcodes_69_77, c168_chiltern, c170_ex_ar_aga_ap, c170_lm, c170_ct_xc, c170_ar23, \
+    c170_scotrail, c170_ftpe, c170_ga_hull, c170_mml, c171_southern, c350_lb_ftpe, c365_ecmls_nse, c365_apcxse, \
+    c450_gu_swt, c465_se, c375_dtg_pack, c377_lb_se, c377_lg_sn, c377_fcc, c170_bp_name_lookup, c375_dmos_lookup, \
+    c456_nse, c456_southern, c319_dest
 
 rv_list = []
 rv_pairs = []
@@ -41,6 +44,8 @@ values = {}
 vehicle_db = {}
 user_db = {}
 vp_blue_47_db = {}
+mu_last = 'none'
+mso_num = ''
 railworks_path = ''
 c56_opts = ['Use nearest numbered AP enhanced loco', 'Retain original loco if no matching AP plaque / sector available']
 c86_opts = ['Use VP headcode blinds', 'Use AP plated box with markers', 'Do not swap this loco']
@@ -118,6 +123,16 @@ if not config.has_section('defaults'):
     config.set('defaults', 'replace_c150', 'False')
     config.set('defaults', 'replace_c156', 'False')
     config.set('defaults', 'replace_c158', 'False')
+    config.set('defaults', 'replace_c170', 'False')
+    config.set('defaults', 'replace_c175', 'False')
+    config.set('defaults', 'replace_c319', 'False')
+    config.set('defaults', 'replace_c325', 'False')
+    config.set('defaults', 'replace_c350', 'False')
+    config.set('defaults', 'replace_c365', 'False')
+    config.set('defaults', 'replace_c375', 'False')
+    config.set('defaults', 'replace_c450', 'False')
+    config.set('defaults', 'replace_c456', 'False')
+    config.set('defaults', 'replace_c465', 'False')
     config.set('defaults', 'save_report', 'False')
     config.set('defaults', 'c56_rf', c56_opts[0])
     config.set('defaults', 'c86_hc', c86_opts[0])
@@ -135,6 +150,13 @@ def get_my_config_boolean(section, configvalue):
             config.write(myconfigfile)
             myconfigfile.close()
         return config.getboolean(section, configvalue)
+
+
+def get_destination(this_dict, this_key, this_blank):
+    if this_key in this_dict:
+        return this_dict[this_key]
+    else:
+        return this_blank
 
 
 def import_data_from_csv(csv_filename):
@@ -176,7 +198,8 @@ vp_blue_47_db = import_data_from_csv('tables/Class47BRBlue_numbers.csv')
 
 # Set the layout of the GUI
 left_column = [
-    [sg.Text('RSSwapTool\n', font='Helvetica 16')],
+    [sg.Text('RSSwapTool', font='Helvetica 16')],
+    [sg.Text('© 2021 JR McKenzie', font='Helvetica 7')],
     [sg.FileBrowse('Select scenario file to process', key='Scenario_xml', tooltip='Locate the scenario .bin or .xml '
                                                                                   'file you wish to process')],
     [sg.Text('Tick the boxes below to choose the\nsubstitutions you would like to make.')],
@@ -210,14 +233,13 @@ left_column = [
                  tooltip='Tick to enable replacing of old Iron Horse House (IHH) stock, if your scenario contains any'
                          ' (if in doubt, leave this unticked)',
                  key='Replace_IHH')],
+]
+mid_column = [
     [sg.Checkbox('Replace User-configured stock', default=get_my_config_boolean('defaults', 'replace_user'),
                  enable_events=True,
                  tooltip='Tick to enable replacing of user-configured stock, contained in file User.csv '
                          '(leave this unticked unless you have added your own substitutions to User.csv).',
                  key='Replace_User')],
-    [sg.Text('© 2021 JR McKenzie', font='Helvetica 7')],
-]
-right_column = [
     [sg.Checkbox('Replace Class 31s', default=get_my_config_boolean('defaults', 'replace_c31'), enable_events=True,
                  tooltip='Replace Class 31s with AP enhancement pack equivalent', key='Replace_C31')],
     [sg.Checkbox('Replace Class 37s', default=get_my_config_boolean('defaults', 'replace_c37'), enable_events=True,
@@ -251,17 +273,59 @@ right_column = [
                  enable_events=True,
                  tooltip='Tick to enable replacing of retired RSC Class101Pack with RSC BritishRailClass101 sets',
                  key='Replace_C101')],
+]
+right_column = [
     [sg.Checkbox('Replace Class 150/2 sets', default=get_my_config_boolean('defaults', 'replace_c150'),
                  enable_events=True,
                  tooltip='Tick to enable replacing Thomson-Oovee Class 150s with AP Class 150/2', key='Replace_C150')],
     [sg.Checkbox('Replace Class 156 sets', default=get_my_config_boolean('defaults', 'replace_c156'),
                  enable_events=True,
                  tooltip='Tick to enable replacing of Oovee Class 156s with AP Class 156', key='Replace_C156')],
-    [sg.Checkbox('Replace Class 158 sets', default=get_my_config_boolean('defaults', 'replace_c158'),
+    [sg.Checkbox('Replace Class 158, 159 sets', default=get_my_config_boolean('defaults', 'replace_c158'),
                  enable_events=True,
                  tooltip='Tick to enable replacing of North Wales Coast / Settle Carlisle / Fife Circle Class 158s '
                          'with AP enhanced versions (Cummins, Perkins)',
                  key='Replace_C158')],
+    [sg.Checkbox('Replace Class 168, 170, 171 sets', default=get_my_config_boolean('defaults', 'replace_c170'),
+                 enable_events=True,
+                 tooltip='Tick to enable replacing of Class 168s / 170s with AP enhanced versions',
+                 key='Replace_C170')],
+    [sg.Checkbox('Replace Class 175 sets', default=get_my_config_boolean('defaults', 'replace_c175'),
+                 enable_events=True,
+                 tooltip='Tick to enable replacing of Class 175s with AP enhanced versions',
+                 key='Replace_C175')],
+    [sg.Checkbox('Replace Class 319 sets', default=get_my_config_boolean('defaults', 'replace_c319'),
+                 enable_events=True,
+                 tooltip='Tick to enable replacing of Class 319s with AP versions',
+                 key='Replace_C319')],
+    [sg.Checkbox('Replace Class 325 sets', default=get_my_config_boolean('defaults', 'replace_c325'),
+                 enable_events=True,
+                 tooltip='Tick to enable replacing of Class 325s with AP enhanced versions',
+                 key='Replace_C325')],
+    [sg.Checkbox('Replace Class 350 sets', default=get_my_config_boolean('defaults', 'replace_c350'),
+                 enable_events=True,
+                 tooltip='Tick to enable replacing of Class 350s with AP enhanced versions',
+                 key='Replace_C350')],
+    [sg.Checkbox('Replace Class 365 sets', default=get_my_config_boolean('defaults', 'replace_c365'),
+                 enable_events=True,
+                 tooltip='Tick to enable replacing of Class 365s with AP enhanced versions',
+                 key='Replace_C365')],
+    [sg.Checkbox('Replace Class 375, 377 sets', default=get_my_config_boolean('defaults', 'replace_c375'),
+                 enable_events=True,
+                 tooltip='Tick to enable replacing of Class 365s with AP enhanced versions',
+                 key='Replace_C375')],
+    [sg.Checkbox('Replace Class 450 sets', default=get_my_config_boolean('defaults', 'replace_c450'),
+                 enable_events=True,
+                 tooltip='Tick to enable replacing of Class 450s with AP enhanced versions',
+                 key='Replace_C450')],
+    [sg.Checkbox('Replace Class 456 sets', default=get_my_config_boolean('defaults', 'replace_c456'),
+                 enable_events=True,
+                 tooltip='Tick to enable replacing of Class 456s with AP/Waggonz versions',
+                 key='Replace_C456')],
+    [sg.Checkbox('Replace Class 465 sets', default=get_my_config_boolean('defaults', 'replace_c465'),
+                 enable_events=True,
+                 tooltip='Tick to enable replacing of Class 465s with AP enhanced versions',
+                 key='Replace_C465')],
     [sg.Button('Replace!'), sg.Button('Settings'), sg.Button('About'), sg.Button('Exit')],
 ]
 
@@ -269,6 +333,8 @@ right_column = [
 layout = [
     [
         sg.Column(left_column),
+        sg.VSeperator(),
+        sg.Column(mid_column),
         sg.VSeperator(),
         sg.Column(right_column),
     ]
@@ -421,6 +487,36 @@ def dcsv_gethstloco(this_dcsv, this_rv):
     return last_nm
 
 
+def alternate_mu_driving_vehicles(this_bp, this_v_type, vehicle_a, vehicle_b):
+    # This function makes sure that driving vehicles in a multiple unit consist alternate between DxxA and DxxB
+    # so that the AP scripting of multiple unit sets works properly.
+    global mu_last
+    if this_v_type.upper() == vehicle_a.upper():
+        # Test if last Driving vehicle was a DxxA - if so, swap this one for a DxxB
+        if mu_last == vehicle_a:
+            # Swap for a DxxB
+            this_bp = re.sub(vehicle_a, vehicle_b, this_bp, flags=re.IGNORECASE)
+            # Remember that the last driven vehicle in this consist was a DxxB.
+            mu_last = vehicle_b
+        else:
+            # Leave the DxxA as it is. Remember that the last driving vehicle processed in this
+            # consist was a DxxA.
+            mu_last = vehicle_a
+        return this_bp
+    elif this_v_type.upper() == vehicle_b.upper():
+        # Test if last Driving vehicle was a DxxB - if so, swap this one for a DxxA
+        if mu_last == vehicle_b:
+            # Swap for a DxxA
+            this_bp = re.sub(vehicle_b, vehicle_a, this_bp, flags=re.IGNORECASE)
+            # Remember that the last cab vehicle in this consist was a DxxA.
+            mu_last = vehicle_a
+        else:
+            # Leave the DxxB as it is. Remember that the last driving vehicle processed in this
+            # consist was a DxxB.
+            mu_last = vehicle_b
+    return this_bp
+
+
 def add_ploughs(this_rv):
     # set full snow ploughs on AP locos that can have them
     this_rv = this_rv.replace(';plough=none', '')
@@ -503,6 +599,13 @@ def set_weathering(this_weather_variant, this_vehicle):
     elif this_weather_variant == 3:
         weather = 'W' + str(random.randint(1, 3))
         return this_vehicle[5].replace('W1', weather), this_vehicle[6].replace('W1', weather)
+    return False
+
+
+def get_ap_name_from_bp(this_vehicle_db, this_bp):
+    for i in range(0,len(this_vehicle_db)):
+        if this_bp.upper() == this_vehicle_db[i][5].upper():
+            return this_vehicle_db[i][6]
     return False
 
 
@@ -1671,15 +1774,15 @@ def c158_replace(provider, product, blueprint, name, number):
                         nm = re.search('(....).....([0-9]{6})', number.text)
                         if nm:
                             if bool(re.search('Default', blueprint.text, flags=re.IGNORECASE)):
-                                destination = c158_s9bl_rr[nm.group(1)]
+                                destination = get_destination(c158_s9bl_rr, nm.group(1), 'a')
                             elif bool(re.search('FGW', blueprint.text, flags=re.IGNORECASE)):
-                                destination = c158_s9bl_fgw[nm.group(1)]
+                                destination = get_destination(c158_s9bl_fgw, nm.group(1), 'a')
                             elif bool(re.search('NR', blueprint.text, flags=re.IGNORECASE)):
-                                destination = c158_s9bl_nr[nm.group(1)]
+                                destination = get_destination(c158_s9bl_nr, nm.group(1), 'a')
                             elif bool(re.search('NTPE', blueprint.text, flags=re.IGNORECASE)):
-                                destination = c158_s9bl_tpe[nm.group(1)]
+                                destination = get_destination(c158_s9bl_tpe, nm.group(1), 'a')
                             elif bool(re.search('South|SWT', blueprint.text, flags=re.IGNORECASE)):
-                                destination = c158_s9bl_swt[nm.group(1)]
+                                destination = get_destination(c158_s9bl_swt, nm.group(1), 'a')
                             rv_num = nm.group(2) + destination
                     else:
                         nm = re.search('(.)([0-9]{4}).*', number.text)
@@ -1689,19 +1792,460 @@ def c158_replace(provider, product, blueprint, name, number):
                                     provider.text == 'DTG' and product.text == 'NorthWalesCoast' and bool(
                                 re.search('Default', blueprint.text, flags=re.IGNORECASE))):
                                 # Arriva Trains Wales liveried stock
-                                destination = c158_nwc[nm.group(1)]
+                                destination = get_destination(c158_nwc, nm.group(1), 'a')
                             elif provider.text == 'DTG' and product.text == 'FifeCircle' and bool(
                                     re.search('Default', blueprint.text, flags=re.IGNORECASE)):
                                 # ScotRail saltire liveried stock
-                                destination = c158_dtg_fc[nm.group(1)]
+                                destination = get_destination(c158_dtg_fc, nm.group(1), 'a')
                             elif provider.text == 'RSC' and product.text == 'LiverpoolManchester' and bool(
                                     re.search('Default', blueprint.text, flags=re.IGNORECASE)):
                                 # Regional Railways liveried stock
-                                destination = c158_livman_rr[nm.group(1)]
+                                destination = get_destination(c158_livman_rr, nm.group(1), 'a')
                             rv_num = '15' + nm.group(2) + destination
                         if provider.text == 'RSC' and product.text == 'SettleCarlisle':
                             # Destination blank - Settle-Carlisle units don't support destination displays
                             rv_num = '158' + rv_orig[2:5] + 'a'
+                    # It's assumed the scenario being converted will have one DMSLA and one DMSLB blueprint in each set
+                    # in the consist. If 2 sets or more sets are joined the driving vehicles will alternate DMSLA /
+                    # DMSLB.
+                    this_bp = this_vehicle[5]
+                    this_name = this_vehicle[6]
+                    v_type = re.search(r'\\Class158C?_([A-Z]*)', this_vehicle[5], flags=re.IGNORECASE)
+                    if v_type:
+                        this_bp = alternate_mu_driving_vehicles(this_bp, v_type.group(1), 'DMSLA', 'DMSLB')
+                        this_name = get_ap_name_from_bp(vehicle_db['DMU158_set'], this_bp)
+                    # Swap vehicle and set number / destination (where possible)
+                    provider.text = this_vehicle[3]
+                    product.text = this_vehicle[4]
+                    blueprint.text = this_bp
+                    name.text = this_name
+                    number.text = str(rv_num)
+                    rv_list.append(number.text)
+                    rv_pairs.append([rv_orig, number.text])
+                    return True
+    return False
+
+
+def c170_replace(provider, product, blueprint, name, number):
+    global mu_last
+    for i in range(0, len(vehicle_db['DMU170_set'])):
+        this_vehicle = vehicle_db['DMU170_set'][i]
+        if this_vehicle[0] in provider.text:
+            if this_vehicle[1] in product.text:
+                bp = re.search(this_vehicle[2], blueprint.text, flags=re.IGNORECASE)
+                if bp:
+                    rv_orig = rv_num = number.text
+                    destination = 'a'
+                    nm = re.search('([a-zA-Z]).....([0-9]{6})', number.text)
+                    if nm:
+                        if bool(re.search(r'\\AR[2-3]\\|\\NXEAWhite\\|\\OR[2-3]\\', blueprint.text,
+                                          flags=re.IGNORECASE)):
+                            destination = get_destination(c170_ar23, nm.group(1), 'a')
+                        elif bool(re.search(r'\\CH\\', blueprint.text, flags=re.IGNORECASE)):
+                            destination = get_destination(c168_chiltern, nm.group(1), 'a')
+                        elif bool(re.search(r'\\CT\\|\\CTMML\\|\\XC\\', blueprint.text, flags=re.IGNORECASE)):
+                            destination = get_destination(c170_ct_xc, nm.group(1), 'a')
+                        elif bool(re.search(r'\\LM\\', blueprint.text, flags=re.IGNORECASE)):
+                            destination = get_destination(c170_lm, nm.group(1), 'a')
+                        elif bool(re.search('Ex-Anglia_Rev_AP|Ex-ONE_AP|Ex-ONE_Dark_AP', blueprint.text,
+                                            flags=re.IGNORECASE)):
+                            destination = get_destination(c170_ex_ar_aga_ap, nm.group(1), 'a')
+                        elif bool(re.search(r'Scotrail|\\FS\\|\\FSRS|\\FSRT|\\SP\\|\\SPSnow\\|',
+                                            blueprint.text, flags=re.IGNORECASE)):
+                            destination = get_destination(c170_scotrail, nm.group(1), 'a')
+                        elif bool(re.search(r'\\GA\\|\\HT\\|\\NXEA\s[2-3]C\\', blueprint.text, flags=re.IGNORECASE)):
+                            destination = get_destination(c170_ga_hull, nm.group(1), 'a')
+                        elif bool(re.search(r'\\FTPE\\', blueprint.text, flags=re.IGNORECASE)):
+                            destination = get_destination(c170_ftpe, nm.group(1), 'a')
+                        elif bool(re.search(r'\\MML\\', blueprint.text, flags=re.IGNORECASE)):
+                            destination = get_destination(c170_mml, nm.group(1), 'a')
+                        elif bool(re.search(r'\\S171\\', blueprint.text, flags=re.IGNORECASE)):
+                            destination = get_destination(c171_southern, nm.group(1), 'a')
+                        rv_num = nm.group(2) + destination
+                    # It's assumed the scenario being converted will have one DMCL and one DMSL blueprintin each set in
+                    # the consist. If 2 sets or more sets are joined the driving vehicles will alternate DMCL / DMSL.
+                    this_bp = this_vehicle[5]
+                    this_name = this_vehicle[6]
+                    v_type = re.search(r'\\Class170_([A-Z]*)', this_vehicle[5], flags=re.IGNORECASE)
+                    if v_type:
+                        # The SR Saltire Class 170 with DMSL is unlike the others so need a workaround
+                        if v_type.group(1).upper() == 'DMCLA':
+                            this_bp = alternate_mu_driving_vehicles(this_bp, v_type.group(1), 'DMCLA', 'DMSLB')
+                        # The Southern Class 170 also needs a workaround
+                        elif re.search(r'\\Southern_AP', this_vehicle[5], flags=re.IGNORECASE):
+                            this_bp = alternate_mu_driving_vehicles(this_bp, v_type.group(1), 'DMCL', 'DMSLB')
+                        else:
+                            this_bp = alternate_mu_driving_vehicles(this_bp, v_type.group(1), 'DMCL', 'DMSL')
+                        this_name = c170_bp_name_lookup[this_bp]
+                    # Swap vehicle and set number / destination (where possible)
+                    provider.text = this_vehicle[3]
+                    product.text = this_vehicle[4]
+                    blueprint.text = this_bp
+                    name.text = this_name
+                    number.text = str(rv_num)
+                    rv_list.append(number.text)
+                    rv_pairs.append([rv_orig, number.text])
+                    return True
+    return False
+
+
+def c175_replace(provider, product, blueprint, name, number):
+    for i in range(0, len(vehicle_db['DMU175_set'])):
+        this_vehicle = vehicle_db['DMU175_set'][i]
+        if this_vehicle[0] in provider.text:
+            if this_vehicle[1] in product.text:
+                bp = re.search(this_vehicle[2], blueprint.text, flags=re.IGNORECASE)
+                if bp:
+                    rv_orig = rv_num = number.text
+                    nm = re.search('([0-9]{6})([a-zA-Z])', number.text)
+                    if nm:
+                        # Check if destination is 'v' - Empty to Depot. If so, change to uppercase 'V' used by AP.
+                        # Otherwise, destination is consistent with AP scheme and doesn't need changed.
+                        if nm.group(2) == 'v':
+                            destination = 'V'
+                        else:
+                            destination = nm.group(2)
+                        rv_num = nm.group(1) + destination
+                    # Swap vehicle and set number / destination (where possible)
+                    provider.text = this_vehicle[3]
+                    product.text = this_vehicle[4]
+                    blueprint.text = this_vehicle[5]
+                    name.text = this_vehicle[6]
+                    number.text = str(rv_num)
+                    rv_list.append(number.text)
+                    rv_pairs.append([rv_orig, number.text])
+                    return True
+    return False
+
+
+def c319_replace(provider, product, blueprint, name, number):
+    global mu_last, mso_num
+    for i in range(0, len(vehicle_db['EMU319_set'])):
+        this_vehicle = vehicle_db['EMU319_set'][i]
+        if this_vehicle[0] in provider.text:
+            if this_vehicle[1] in product.text:
+                bp = re.search(this_vehicle[2], blueprint.text, flags=re.IGNORECASE)
+                if bp:
+                    this_bp = this_vehicle[5]
+                    this_name = this_vehicle[6]
+                    rv_orig = number.text
+                    rv_num = rv_orig
+                    set_nm = re.search('(319[0-9]{3}).....([a-zA-Z]?)', number.text)
+                    if set_nm:
+                        if set_nm.group(2) == '':
+                            dest = '#'
+                        else:
+                            dest = set_nm.group(2)
+                        mso_num = set_nm.group(1) + dest
+                    v_type = re.search(r'\\Class_319_([A-Z]*)', this_vehicle[5], flags=re.IGNORECASE)
+                    if v_type:
+                        if v_type.group(1).upper() == 'MSO':
+                            rv_num = dcsv_get_num(
+                            Path(railworks_path, 'Assets', this_vehicle[3], this_vehicle[4], this_vehicle[7]),
+                                mso_num[0:6], 'Z([0-9]{6})(.*)')
+                            rv_num = c319_dest[mso_num[6:]] + rv_num
+                    # Swap vehicle and set number / destination (where possible)
+                    provider.text = this_vehicle[3]
+                    product.text = this_vehicle[4]
+                    blueprint.text = this_bp
+                    name.text = this_name
+                    number.text = str(rv_num)
+                    rv_list.append(number.text)
+                    rv_pairs.append([rv_orig, number.text])
+                    return True
+    return False
+
+
+def c325_replace(provider, product, blueprint, name, number):
+    global mu_last
+    for i in range(0, len(vehicle_db['EMU325_set'])):
+        this_vehicle = vehicle_db['EMU325_set'][i]
+        if this_vehicle[0] in provider.text:
+            if this_vehicle[1] in product.text:
+                bp = re.search(this_vehicle[2], blueprint.text, flags=re.IGNORECASE)
+                if bp:
+                    # It's assumed the scenario being converted will have one DTVA and one DTVB blueprint in each
+                    # set in the consist. If 2 sets or more sets are joined the driving vehicles will alternate
+                    # DTVA / DTVB.
+                    this_bp = this_vehicle[5]
+                    this_name = this_vehicle[6]
+                    v_type = re.search(r'\\Class325_([A-Z]*)', this_vehicle[5], flags=re.IGNORECASE)
+                    if v_type:
+                        this_bp = alternate_mu_driving_vehicles(this_bp, v_type.group(1), 'DTVA', 'DTVB')
+                        this_name = get_ap_name_from_bp(vehicle_db['EMU325_set'], this_bp)
+                    # Check if we're on DC power
+                    dc = re.search('_DC', this_vehicle[5], flags=re.IGNORECASE)
+                    if dc:
+                        this_dcsv = 'PMV_DC.dcsv'
+                    else:
+                        this_dcsv = 'PMV.dcsv'
+                    rv_orig = number.text
+                    nm = re.search('[0-9]{5}(325[0-9]{3})', number.text)
+                    if nm:
+                        rv_num = nm.group(1)
+                    else:
+                        rv_num = number.text[0:5]
+                        if 68340 <= int(rv_num) <= 68355:
+                            rv_num = str(int(rv_num) + 256661)
+                            rv_num = dcsv_get_num(
+                                Path(railworks_path, 'Assets', 'RSC', 'Class325Pack01', 'RailVehicles', 'Class325',
+                                'RM1_W1_AP', this_dcsv), rv_num, '([0-9]{6})(.*)')
+                    # Swap vehicle and set number / destination (where possible)
+                    provider.text = this_vehicle[3]
+                    product.text = this_vehicle[4]
+                    blueprint.text = this_bp
+                    name.text = this_name
+                    number.text = str(rv_num)
+                    rv_list.append(number.text)
+                    rv_pairs.append([rv_orig, number.text])
+                    return True
+    return False
+
+
+def c350_replace(provider, product, blueprint, name, number):
+    for i in range(0, len(vehicle_db['EMU350_set'])):
+        this_vehicle = vehicle_db['EMU350_set'][i]
+        if this_vehicle[0] in provider.text:
+            if this_vehicle[1] in product.text:
+                bp = re.search(this_vehicle[2], blueprint.text, flags=re.IGNORECASE)
+                if bp:
+                    rv_orig = number.text
+                    destination = ''
+                    nm = re.search('([0-9]{6}).....([a-zA-Z]?)', number.text)
+                    if nm:
+                        if bool(re.search(r'\\FTPE\\', blueprint.text, flags=re.IGNORECASE)):
+                            destination = get_destination(c350_lb_ftpe, nm.group(2), '0')
+                            if destination == '0':
+                                destination = ''
+                            else:
+                                destination = ';D=' + destination
+                        rv_num = nm.group(1) + destination
+                    else:
+                        rv_num = number.text[0:6]
+                    # Swap vehicle and set number / destination (where possible)
+                    provider.text = this_vehicle[3]
+                    product.text = this_vehicle[4]
+                    blueprint.text = this_vehicle[5]
+                    name.text = this_vehicle[6]
+                    number.text = str(rv_num)
+                    rv_list.append(number.text)
+                    rv_pairs.append([rv_orig, number.text])
+                    return True
+    return False
+
+
+def c365_replace(provider, product, blueprint, name, number):
+    for i in range(0, len(vehicle_db['EMU365_set'])):
+        this_vehicle = vehicle_db['EMU365_set'][i]
+        if this_vehicle[0] in provider.text:
+            if this_vehicle[1] in product.text:
+                bp = re.search(this_vehicle[2], blueprint.text, flags=re.IGNORECASE)
+                if bp:
+                    rv_orig = rv_num = number.text
+                    destination = 'a'
+                    nm = re.search('([0-9]{6})......([a-zA-Z]?)', number.text)
+                    # Check if this is an RSC ECMLS 365 format number
+                    if nm:
+                        if bool(re.search(r'\\Default\\', blueprint.text, flags=re.IGNORECASE)):
+                            # This is for the ECMLS 365 NSE livery
+                            destination = get_destination(c365_ecmls_nse, nm.group(2), 'a')
+                        rv_num = number.text[0:6] + destination
+                    nm = re.search('([a-zA-Z]?)........([0-9]{3})', number.text)
+                    # Check if this is an RSC Class365Pack02 format number
+                    if nm:
+                        if bool(re.search(r'\\CXSE_AP\\', blueprint.text, flags=re.IGNORECASE)):
+                            # This is for the ECMLS 365 NSE livery
+                            destination = get_destination(c365_apcxse, nm.group(1), 'a')
+                        rv_num = '365' + nm.group(2) + destination
+                    # Swap vehicle and set number / destination (where possible)
+                    provider.text = this_vehicle[3]
+                    product.text = this_vehicle[4]
+                    blueprint.text = this_vehicle[5]
+                    name.text = this_vehicle[6]
+                    number.text = str(rv_num)
+                    rv_list.append(number.text)
+                    rv_pairs.append([rv_orig, number.text])
+                    return True
+    return False
+
+
+def c375_replace(provider, product, blueprint, name, number):
+    global mu_last
+    for i in range(0, len(vehicle_db['EMU375-7_set'])):
+        this_vehicle = vehicle_db['EMU375-7_set'][i]
+        if this_vehicle[0] in provider.text:
+            if this_vehicle[1] in product.text:
+                bp = re.search(this_vehicle[2], blueprint.text, flags=re.IGNORECASE)
+                if bp:
+                    rv_orig = rv_num = number.text
+                    destination = 'a'
+                    nm = re.search('([a-zA-Z]).....([0-9]{6})', number.text)
+                    if nm:
+                        destination = get_destination(c375_dtg_pack, nm.group(1), 'a')
+                        if product.text == 'LondonGillingham':
+                            if bool(re.search(r'\\SN\\', blueprint.text, flags=re.IGNORECASE)):
+                                # This is for the London-Gillingham Southern livery
+                                destination = get_destination(c377_lg_sn, nm.group(1), 'a')
+                        if product.text == 'PortsmouthDirect':
+                            if bool(re.search(r'\\SN\\', blueprint.text, flags=re.IGNORECASE)):
+                                # This is for the Portsmouth Direct Southern livery
+                                destination = get_destination(c377_lg_sn, nm.group(1), 'a')
+                        if product.text == 'BrightonMainLine':
+                            if bool(re.search(r'\\FCC', blueprint.text, flags=re.IGNORECASE)):
+                                # This is for the Brighton Main Line FCC livery
+                                destination = get_destination(c377_fcc, nm.group(1), 'a')
+                            if bool(re.search(r'\\Southern', blueprint.text, flags=re.IGNORECASE)):
+                                # This is for the Brighton Main Line Southern livery
+                                destination = get_destination(c377_lg_sn, nm.group(1), 'a')
+                            if bool(re.search(r'\\SE-White', blueprint.text, flags=re.IGNORECASE)):
+                                # This is for the Brighton Main Line SE White livery
+                                destination = get_destination(c377_lb_se, nm.group(1), 'a')
+                    # Check whether DMOSA, DMOSB, MOSL, PTOSL, or TOSL and change number accordingly
+                    # It's assumed the scenario being converted will have only one DMOSA vehicle at the front and that
+                    # all other DMOS vehicles in the consist will be DMOSB. If that's left as it is then the AP ones
+                    # will have headlights and taillights on at the same time and generally go to pot.
+                    this_bp = this_vehicle[5]
+                    this_name = this_vehicle[6]
+                    v_type = re.search('375_([A-Z]*)', this_vehicle[5], flags=re.IGNORECASE)
+                    if v_type:
+                        rv_num = number.text[6:12] + destination
+                        if v_type.group(1).upper() == 'DMOSA':
+                            # Test if last Driving vehicle was a DxxA - if so, swap this one for a DxxB
+                            if mu_last == 'DMOSA':
+                                # Swap for a DxxB
+                                this_bp = c375_dmos_lookup[this_bp]
+                                # Remember that the last driven vehicle in this consist was a DxxB.
+                                mu_last = 'DMOSB'
+                            else:
+                                # Leave the DxxA as it is. Remember that the last driving vehicle processed in this
+                                # consist was a DxxA.
+                                mu_last = 'DMOSA'
+                        elif v_type.group(1).upper() == 'DMOSB':
+                            # Test if last Driving vehicle was a DxxB - if so, swap this one for a DxxA
+                            if mu_last == 'DMOSB':
+                                # Swap for a DxxA
+                                this_bp = c375_dmos_lookup[this_bp]
+                                # Remember that the last cab vehicle in this consist was a DxxA.
+                                mu_last = 'DMOSA'
+                            else:
+                                # Leave the DxxB as it is. Remember that the last driving vehicle processed in this
+                                # consist was a DxxB.
+                                mu_last = 'DMOSB'
+                        this_name = get_ap_name_from_bp(vehicle_db['EMU375-7_set'], this_bp)
+                    # Swap vehicle and set number / destination (where possible)
+                    provider.text = this_vehicle[3]
+                    product.text = this_vehicle[4]
+                    blueprint.text = this_bp
+                    name.text = this_name
+                    number.text = str(rv_num)
+                    rv_list.append(number.text)
+                    rv_pairs.append([rv_orig, number.text])
+                    return True
+    return False
+
+
+def c450_replace(provider, product, blueprint, name, number):
+    global mu_last
+    for i in range(0, len(vehicle_db['EMU450_set'])):
+        this_vehicle = vehicle_db['EMU450_set'][i]
+        if this_vehicle[0] in provider.text:
+            if this_vehicle[1] in product.text:
+                bp = re.search(this_vehicle[2], blueprint.text, flags=re.IGNORECASE)
+                if bp:
+                    rv_orig = number.text
+                    rv_num = number.text[0:6]
+                    if provider.text == 'DTG' and product.text == 'PortsmouthDirect':
+                        # AP Class 450 uses same destination codes as PortsmouthDirect C450s
+                        nm = re.search('([0-9]{6}).....([0-9]{0,2})', number.text)
+                        if nm:
+                            if len(nm.group(2)) > 0:
+                                destination = ';D=' + str(int(nm.group(2)))
+                                rv_num = nm.group(1) + destination
+                    else:
+                        nm = re.search('([0-9]{6}).....([A-Z]{0,1})', number.text)
+                        if nm:
+                            if len(nm.group(2)) > 0:
+                                # London-Brighton and Guildford C450s destinations need translation via dictionary
+                                destination = get_destination(c450_gu_swt, nm.group(2), '0')
+                                if destination == '0':
+                                    destination = ''
+                                else:
+                                    destination = ';D=' + destination
+                                rv_num = nm.group(1) + destination
+                    # It's assumed the scenario being converted will have one DMC1 and one DMC2 in each set in the
+                    # consist. If 2 sets or more sets are joined the driving vehicles will alternate DMC1 / DMC2.
+                    this_bp = this_vehicle[5]
+                    this_name = this_vehicle[6]
+                    v_type = re.search(r'\\(444|450)_([A-Z]*)', this_vehicle[5], flags=re.IGNORECASE)
+                    if v_type:
+                        this_bp = alternate_mu_driving_vehicles(this_bp, v_type.group(2), 'DMOS', 'DMOSB')
+                        this_name = get_ap_name_from_bp(vehicle_db['EMU450_set'], this_bp)
+                    if not bool(re.search('DMC1', this_name, flags=re.IGNORECASE)):
+                        # Any vehicle other than a DMOS/DMC1 gets a placeholder number
+                        rv_num = v_type.group(2) + number.text[0:6]
+                    # Swap vehicle and set number / destination (where possible)
+                    provider.text = this_vehicle[3]
+                    product.text = this_vehicle[4]
+                    blueprint.text = this_bp
+                    name.text = this_name
+                    number.text = str(rv_num)
+                    rv_list.append(number.text)
+                    rv_pairs.append([rv_orig, number.text])
+                    return True
+    return False
+
+
+def c456_replace(provider, product, blueprint, name, number):
+    global mu_last
+    for i in range(0, len(vehicle_db['EMU456_set'])):
+        this_vehicle = vehicle_db['EMU456_set'][i]
+        if this_vehicle[0] in provider.text:
+            if this_vehicle[1] in product.text:
+                bp = re.search(this_vehicle[2], blueprint.text, flags=re.IGNORECASE)
+                if bp:
+                    rv_orig = number.text
+                    rv_num = number.text[0:11]
+                    rv_dest = number.text[11]
+                    if bool(re.search(r'\\NetworkSE\\', blueprint.text, flags=re.IGNORECASE)):
+                        rv_num = c456_nse[rv_dest] + rv_num
+                    elif bool(re.search(r'\\Default\\', blueprint.text, flags=re.IGNORECASE)):
+                        rv_num = c456_southern[rv_dest] + rv_num
+                    else:
+                        # At the moment only the Default (Southern) 456 and the NSE 456 are configured
+                        return False
+                    # It's assumed the scenario being converted will have one DMC1 and one DMC2 in each set in the
+                    # consist. If 2 sets or more sets are joined the driving vehicles will alternate DMC1 / DMC2.
+                    this_bp = this_vehicle[5]
+                    this_name = this_vehicle[6]
+                    v_type = re.search(r'\\Class_456_([A-Z]*)', this_vehicle[5], flags=re.IGNORECASE)
+                    if v_type:
+                        this_bp = alternate_mu_driving_vehicles(this_bp, v_type.group(1), 'DMSO', 'DTSO')
+                        this_name = get_ap_name_from_bp(vehicle_db['EMU456_set'], this_bp)
+                    # Swap vehicle and set number / destination (where possible)
+                    provider.text = this_vehicle[3]
+                    product.text = this_vehicle[4]
+                    blueprint.text = this_bp
+                    name.text = this_name
+                    number.text = str(rv_num)
+                    rv_list.append(number.text)
+                    rv_pairs.append([rv_orig, number.text])
+                    return True
+    return False
+
+
+def c465_replace(provider, product, blueprint, name, number):
+    for i in range(0, len(vehicle_db['EMU465_set'])):
+        this_vehicle = vehicle_db['EMU465_set'][i]
+        if this_vehicle[0] in provider.text:
+            if this_vehicle[1] in product.text:
+                bp = re.search(this_vehicle[2], blueprint.text, flags=re.IGNORECASE)
+                if bp:
+                    rv_orig = rv_num = number.text
+                    destination = 'a'
+                    nm = re.search('([a-zA-Z]?)........([0-9]{3})', number.text)
+                    if nm:
+                        destination = get_destination(c465_se, nm.group(1), 'a')
+                        rv_num = '465' + nm.group(2) + destination
                     # Swap vehicle and set number / destination (where possible)
                     provider.text = this_vehicle[3]
                     product.text = this_vehicle[4]
@@ -1731,6 +2275,7 @@ def user_replace(provider, product, blueprint, name):
 
 def parse_xml(xml_file):
     # Check we can open the file, parse it and find some rail vehicle consists in it before proceeding
+    global mu_last
     try:
         parser_tree = ET.parse(xml_file)
     except FileNotFoundError:
@@ -1744,6 +2289,19 @@ def parse_xml(xml_file):
         return False
     ET.register_namespace("d", "http://www.kuju.com/TnT/2003/Delta")
     root = parser_tree.getroot()
+    # The following lines of code (commented out) should probably be removed. Specifying that the interim xml file
+    # should be written with utf-8 encoding appears to have fixed the issue with quote characters. See the line near
+    # the end of this file which reads -        xmlFile.write_text(xmlString, encoding='utf-8')
+    #
+    #for elem in root.iter():
+        #try:
+            # Replace quote characters in the text which may cause xml problems
+            #elem.text = elem.text.replace('‘', "'")
+            #elem.text = elem.text.replace('’', "'")
+            #elem.text = elem.text.replace('“', '"')
+            #elem.text = elem.text.replace('”', '"')
+        #except AttributeError:
+            #pass
     consists = root.findall('./Record/cConsist')
     if len(consists) == 0:
         sg.popup('The file you requested (' + str(Path(xml_file)) + ') does not appear to contain any rail vehicle '
@@ -1791,6 +2349,8 @@ def parse_xml(xml_file):
                 vehicle_list.append(
                     [str(consist_nr), provider.text, product.text, blueprint.text, name.text, number.text, loaded.text,
                      service, playerdriven])
+            mu_last = 'none'
+            mso_num = ''
             consist_nr += 1
             progress_bar.UpdateBar(consist_nr, len(consists))
         for driver_inrvs in citem.findall('Driver/cDriver/InitialRV'):
@@ -1851,6 +2411,26 @@ def vehicle_replacer(provider, product, blueprint, name, number, loaded):
     if values['Replace_C156'] and c156_replace(provider, product, blueprint, name, number):
         return True
     if values['Replace_C158'] and c158_replace(provider, product, blueprint, name, number):
+        return True
+    if values['Replace_C170'] and c170_replace(provider, product, blueprint, name, number):
+        return True
+    if values['Replace_C175'] and c175_replace(provider, product, blueprint, name, number):
+        return True
+    if values['Replace_C319'] and c319_replace(provider, product, blueprint, name, number):
+        return True
+    if values['Replace_C325'] and c325_replace(provider, product, blueprint, name, number):
+        return True
+    if values['Replace_C350'] and c350_replace(provider, product, blueprint, name, number):
+        return True
+    if values['Replace_C365'] and c365_replace(provider, product, blueprint, name, number):
+        return True
+    if values['Replace_C375'] and c375_replace(provider, product, blueprint, name, number):
+        return True
+    if values['Replace_C450'] and c450_replace(provider, product, blueprint, name, number):
+        return True
+    if values['Replace_C456'] and c456_replace(provider, product, blueprint, name, number):
+        return True
+    if values['Replace_C465'] and c465_replace(provider, product, blueprint, name, number):
         return True
     if values['Replace_C31'] and c31_replace(provider, product, blueprint, name, number):
         return True
@@ -1985,7 +2565,7 @@ if __name__ == "__main__":
                      'Tool for swapping rolling stock in Train Simulator (Dovetail Games) scenarios',
                      'Issued under the GNU General Public License - see https://www.gnu.org/licenses/',
                      'Version 0.10a',
-                     'Copyright 2021 JR McKenzie', 'https://github.com/jrmckenzie/RSSwapTool')
+                     'Copyright 2021 JR McKenzie (jrmknz@yahoo.co.uk)', 'https://github.com/jrmckenzie/RSSwapTool')
         elif event == 'Settings':
             if not config.has_section('defaults'):
                 config.add_section('defaults')
@@ -2016,6 +2596,16 @@ if __name__ == "__main__":
             config.set('defaults', 'replace_c150', str(values['Replace_C150']))
             config.set('defaults', 'replace_c156', str(values['Replace_C156']))
             config.set('defaults', 'replace_c158', str(values['Replace_C158']))
+            config.set('defaults', 'replace_c170', str(values['Replace_C170']))
+            config.set('defaults', 'replace_c175', str(values['Replace_C175']))
+            config.set('defaults', 'replace_c319', str(values['Replace_C319']))
+            config.set('defaults', 'replace_c325', str(values['Replace_C325']))
+            config.set('defaults', 'replace_c350', str(values['Replace_C350']))
+            config.set('defaults', 'replace_c365', str(values['Replace_C365']))
+            config.set('defaults', 'replace_c375', str(values['Replace_C375']))
+            config.set('defaults', 'replace_c450', str(values['Replace_C450']))
+            config.set('defaults', 'replace_c456', str(values['Replace_C456']))
+            config.set('defaults', 'replace_c465', str(values['Replace_C465']))
             with open(path_to_config, 'w') as configfile:
                 config.write(configfile)
                 configfile.close()
@@ -2102,6 +2692,16 @@ if __name__ == "__main__":
             config.set('defaults', 'replace_c150', str(values['Replace_C150']))
             config.set('defaults', 'replace_c156', str(values['Replace_C156']))
             config.set('defaults', 'replace_c158', str(values['Replace_C158']))
+            config.set('defaults', 'replace_c170', str(values['Replace_C170']))
+            config.set('defaults', 'replace_c175', str(values['Replace_C175']))
+            config.set('defaults', 'replace_c319', str(values['Replace_C319']))
+            config.set('defaults', 'replace_c325', str(values['Replace_C325']))
+            config.set('defaults', 'replace_c350', str(values['Replace_C350']))
+            config.set('defaults', 'replace_c365', str(values['Replace_C365']))
+            config.set('defaults', 'replace_c375', str(values['Replace_C375']))
+            config.set('defaults', 'replace_c450', str(values['Replace_C450']))
+            config.set('defaults', 'replace_c456', str(values['Replace_C456']))
+            config.set('defaults', 'replace_c465', str(values['Replace_C465']))
             with open(path_to_config, 'w') as configfile:
                 config.write(configfile)
                 configfile.close()
@@ -2140,7 +2740,7 @@ if __name__ == "__main__":
                 xmlString = fix_short_tags(xmlString.decode())
                 xmlFile = scenarioPath.parent / Path(str(scenarioPath.stem) + '.xml')
                 xmlFile.touch()
-                xmlFile.write_text(xmlString)
+                xmlFile.write_text(xmlString, encoding='utf-8')
                 output_message = 'Scenario converted and saved to ' + str(xmlFile)
                 html_report_status_text = ''
                 if str(scenarioPath.suffix) == '.bin':
