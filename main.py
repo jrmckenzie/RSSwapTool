@@ -609,7 +609,20 @@ def get_ap_name_from_bp(this_vehicle_db, this_bp):
     return False
 
 
-def haa_replace(provider, product, blueprint, name, number, loaded):
+def direction_flip(flipped, followers):
+    if flipped.text == '0':
+        flipped.text = '1'
+    else:
+        flipped.text = '0'
+    for follower in followers.findall('Network-cTrackFollower'):
+        dir = follower.find('Direction/Network-cDirection/_dir')
+        if dir.text == 'forwards':
+            dir.text = 'backwards'
+        else:
+            dir.text = 'forwards'
+    return True
+
+def haa_replace(provider, product, blueprint, name, number, loaded, flipped, followers, tailmarker):
     # Replace HAA wagons
     for i in range(0, len(vehicle_db['HAA'])):
         this_vehicle = vehicle_db['HAA'][i]
@@ -623,14 +636,28 @@ def haa_replace(provider, product, blueprint, name, number, loaded):
                     if 'eTrue' in loaded.text:
                         idx = random.randrange(0, len(haa_l_wagons))
                         # Select at random one of the wagons in the list of HAA loaded wagons to swap in
-                        blueprint.text = haa_l_wagons[idx][0]
-                        name.text = haa_l_wagons[idx][1]
+                        this_blueprint = haa_l_wagons[idx][0]
+                        this_name = haa_l_wagons[idx][1]
                     # Replace an empty wagon
-                    if 'eFalse' in loaded.text:
+                    else:
                         idx = random.randrange(0, len(haa_e_wagons))
                         # Select at random one of the wagons in the list of HAA empty wagons to swap in
-                        blueprint.text = haa_e_wagons[idx][0]
-                        name.text = haa_e_wagons[idx][1]
+                        this_blueprint = haa_e_wagons[idx][0]
+                        this_name = haa_e_wagons[idx][1]
+                    if not tailmarker == 1:
+                        # The vehicle is at one end of the consist and should have a red tail light
+                        this_blueprint = re.sub('\.xml', '_TL.xml', this_blueprint, flags=re.IGNORECASE)
+                        this_name = this_name + ' TL'
+                        # If the vehicle is it the top of the consist it will need to be flipped to have the tail
+                        # light facing the right direction
+                        if tailmarker == 0:
+                            if flipped.text == '0':
+                                direction_flip(flipped, followers)
+                        if tailmarker == 2:
+                            if flipped.text == '1':
+                                direction_flip(flipped, followers)
+                    blueprint.text = this_blueprint
+                    name.text = this_name
                     # Now extract the vehicle number
                     rv_list.append(number.text)
                     return True
@@ -865,7 +892,7 @@ def mk2df_replace(provider, product, blueprint, name, number):
     return False
 
 
-def vda_replace(provider, product, blueprint, name, number, loaded):
+def vda_replace(provider, product, blueprint, name, number, loaded, flipped, followers, tailmarker):
     # Replace VDA wagons
     if 'JL' in provider.text:
         if 'WHL' in product.text:
@@ -877,19 +904,33 @@ def vda_replace(provider, product, blueprint, name, number, loaded):
                     # Replace a loaded wagon
                     idx = random.randrange(0, len(vda_l_wagons))
                     product.text = vda_l_wagons[idx][1]
-                    blueprint.text = vda_l_wagons[idx][2]
-                    name.text = vda_l_wagons[idx][3]
+                    this_blueprint = vda_l_wagons[idx][2]
+                    this_name = vda_l_wagons[idx][3]
                 else:
                     # Replace an empty wagon
                     idx = random.randrange(0, len(vda_e_wagons))
                     product.text = vda_e_wagons[idx][1]
-                    blueprint.text = vda_e_wagons[idx][2]
-                    name.text = vda_e_wagons[idx][3]
+                    this_blueprint = vda_e_wagons[idx][2]
+                    this_name = vda_e_wagons[idx][3]
+                if not tailmarker == 1:
+                    # The vehicle is at one end of the consist and should have a red tail light
+                    this_blueprint = re.sub('\.xml', 'R.xml', this_blueprint, flags=re.IGNORECASE)
+                    this_name = this_name + '.R'
+                    # If the vehicle is it the top of the consist it will need to be flipped to have the tail
+                    # light facing the right direction
+                    if tailmarker == 0:
+                        if flipped.text == '0':
+                            direction_flip(flipped, followers)
+                    if tailmarker == 2:
+                        if flipped.text == '1':
+                            direction_flip(flipped, followers)
                 # Now process the vehicle number
                 rv_num = rv_orig + "#####"
                 rv_list.append(rv_num)
                 rv_pairs.append([rv_orig, rv_num])
                 # Set Fastline wagon number
+                blueprint.text = this_blueprint
+                name.text = this_name
                 number.text = rv_num
                 return True
     return False
@@ -2321,8 +2362,10 @@ def parse_xml(xml_file):
         service = citem.find('Driver/cDriver/ServiceName/Localisation-cUserLocalisedString/English')
         if service is None:
             service = 'Loose consist'
+            driven = False
         else:
             service = service.text
+            driven = True
         # Find if this consist is driven by the player
         playerdriver = citem.find('Driver/cDriver/PlayerDriver')
         if playerdriver is None:
@@ -2334,7 +2377,10 @@ def parse_xml(xml_file):
         # Iterate through RailVehicles list of the consist
         for rvehicles in citem.findall('RailVehicles'):
             # Iterate through each RailVehicle in the consist
+            consist_item_nr = 0
             for coentity in rvehicles.findall('cOwnedEntity'):
+                consist_item_nr = consist_item_nr + 1
+                consist_items_total = len(rvehicles.findall('cOwnedEntity'))
                 provider = coentity.find(
                     'BlueprintID/iBlueprintLibrary-cAbsoluteBlueprintID/BlueprintSetID/iBlueprintLibrary'
                     '-cBlueprintSetID/Provider')
@@ -2345,7 +2391,18 @@ def parse_xml(xml_file):
                 name = coentity.find('Name')
                 number = coentity.find('Component/*/UniqueNumber')
                 loaded = coentity.find('Component/cCargoComponent/IsPreLoaded')
-                vehicle_replacer(provider, product, blueprint, name, number, loaded)
+                flipped = coentity.find('Component/*/Flipped')
+                followers = coentity.find('Component/*/Followers')
+                # Set tailmarker - 0 if vehicle is first in consist, 2 if last, 1 if somewhere in between
+                # We need this if the vehicles with tail lights come in a separate blueprint (e.g. AP HAA).
+                # A vehicle will not get a tail light added if it is in a loose consist.
+                tailmarker = 1
+                if driven == True:
+                    if consist_item_nr == 1:
+                        tailmarker = 0
+                    elif consist_item_nr == consist_items_total:
+                        tailmarker = 2
+                vehicle_replacer(provider, product, blueprint, name, number, loaded, flipped, followers, tailmarker)
                 vehicle_list.append(
                     [str(consist_nr), provider.text, product.text, blueprint.text, name.text, number.text, loaded.text,
                      service, playerdriven])
@@ -2375,7 +2432,7 @@ def parse_xml(xml_file):
     return parser_tree
 
 
-def vehicle_replacer(provider, product, blueprint, name, number, loaded):
+def vehicle_replacer(provider, product, blueprint, name, number, loaded, flipped, followers, tailmarker):
     # Check the rail vehicle found by the XML parser against each of the enabled substitutions.
     # A soon as a replacement is made, return to the XML parser and search for the next vehicle.
     if values['Replace_Mk1']:
@@ -2386,7 +2443,7 @@ def vehicle_replacer(provider, product, blueprint, name, number, loaded):
         return True
     if values['Replace_FSA'] and fsafta_replace(provider, product, blueprint, name, number, loaded):
         return True
-    if values['Replace_HAA'] and haa_replace(provider, product, blueprint, name, number, loaded):
+    if values['Replace_HAA'] and haa_replace(provider, product, blueprint, name, number, loaded, flipped, followers, tailmarker):
         return True
     if values['Replace_HHA'] and hha_replace(provider, product, blueprint, name, number, loaded):
         return True
@@ -2394,7 +2451,7 @@ def vehicle_replacer(provider, product, blueprint, name, number, loaded):
         return True
     if values['Replace_HTV'] and coal21_t_htv_replace(provider, product, blueprint, name, number, loaded):
         return True
-    if values['Replace_VDA'] and vda_replace(provider, product, blueprint, name, number, loaded):
+    if values['Replace_VDA'] and vda_replace(provider, product, blueprint, name, number, loaded, flipped, followers, tailmarker):
         return True
     if values['Replace_IHH'] and ihh_replace(provider, product, blueprint, name, number):
         return True
@@ -2564,7 +2621,7 @@ if __name__ == "__main__":
             sg.Popup('About RSSwapTool',
                      'Tool for swapping rolling stock in Train Simulator (Dovetail Games) scenarios',
                      'Issued under the GNU General Public License - see https://www.gnu.org/licenses/',
-                     'Version 0.11a',
+                     'Version 0.12a',
                      'Copyright 2021 JR McKenzie (jrmknz@yahoo.co.uk)', 'https://github.com/jrmckenzie/RSSwapTool')
         elif event == 'Settings':
             if not config.has_section('defaults'):
