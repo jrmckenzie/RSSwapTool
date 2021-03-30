@@ -125,6 +125,7 @@ if not config.has_section('defaults'):
     config.set('defaults', 'replace_c158', 'False')
     config.set('defaults', 'replace_c170', 'False')
     config.set('defaults', 'replace_c175', 'False')
+    config.set('defaults', 'replace_c221', 'False')
     config.set('defaults', 'replace_c319', 'False')
     config.set('defaults', 'replace_c325', 'False')
     config.set('defaults', 'replace_c350', 'False')
@@ -294,6 +295,10 @@ right_column = [
                  enable_events=True,
                  tooltip='Tick to enable replacing of Class 175s with AP enhanced versions',
                  key='Replace_C175')],
+    [sg.Checkbox('Replace DTG WCMLS Voyager', default=get_my_config_boolean('defaults', 'replace_c221'),
+                 enable_events=True,
+                 tooltip='Tick to enable replacing of DTG WCML South Voyager with JT (Virgin livery) Advanced Voyager',
+                 key='Replace_C221')],
     [sg.Checkbox('Replace Class 319 sets', default=get_my_config_boolean('defaults', 'replace_c319'),
                  enable_events=True,
                  tooltip='Tick to enable replacing of Class 319s with AP versions',
@@ -1959,6 +1964,34 @@ def c175_replace(provider, product, blueprint, name, number):
     return False
 
 
+def c221_replace(provider, product, blueprint, name, number):
+    for i in range(0, len(vehicle_db['DMU221_set'])):
+        this_vehicle = vehicle_db['DMU221_set'][i]
+        if this_vehicle[0] in provider.text:
+            if this_vehicle[1] in product.text:
+                bp = re.search(this_vehicle[2], blueprint.text, flags=re.IGNORECASE)
+                if bp:
+                    rv_orig = rv_num = number.text
+                    nm_driven = re.search('^..([0-9]{6})([0-9]{5})$', number.text)
+                    nm_coach = re.search('^..([0-9]{5})$', number.text)
+                    if nm_driven:
+                        # Driving vehicle found.
+                        rv_num = nm_driven.group(1) + nm_driven.group(2)
+                    elif nm_coach:
+                        # Coach found
+                        rv_num = '221012' + nm_coach.group(1)
+                    # Swap vehicle and set number / destination (where possible)
+                    provider.text = this_vehicle[3]
+                    product.text = this_vehicle[4]
+                    blueprint.text = this_vehicle[5]
+                    name.text = this_vehicle[6]
+                    number.text = str(rv_num)
+                    rv_list.append(number.text)
+                    rv_pairs.append([rv_orig, number.text])
+                    return True
+    return False
+
+
 def c319_replace(provider, product, blueprint, name, number):
     global mu_last, mso_num
     for i in range(0, len(vehicle_db['EMU319_set'])):
@@ -2486,6 +2519,8 @@ def vehicle_replacer(provider, product, blueprint, name, number, loaded, flipped
         return True
     if values['Replace_C175'] and c175_replace(provider, product, blueprint, name, number):
         return True
+    if values['Replace_C221'] and c221_replace(provider, product, blueprint, name, number):
+        return True
     if values['Replace_C319'] and c319_replace(provider, product, blueprint, name, number):
         return True
     if values['Replace_C325'] and c325_replace(provider, product, blueprint, name, number):
@@ -2668,6 +2703,7 @@ if __name__ == "__main__":
             config.set('defaults', 'replace_c158', str(values['Replace_C158']))
             config.set('defaults', 'replace_c170', str(values['Replace_C170']))
             config.set('defaults', 'replace_c175', str(values['Replace_C175']))
+            config.set('defaults', 'replace_c221', str(values['Replace_C221']))
             config.set('defaults', 'replace_c319', str(values['Replace_C319']))
             config.set('defaults', 'replace_c325', str(values['Replace_C325']))
             config.set('defaults', 'replace_c350', str(values['Replace_C350']))
@@ -2764,6 +2800,7 @@ if __name__ == "__main__":
             config.set('defaults', 'replace_c158', str(values['Replace_C158']))
             config.set('defaults', 'replace_c170', str(values['Replace_C170']))
             config.set('defaults', 'replace_c175', str(values['Replace_C175']))
+            config.set('defaults', 'replace_c221', str(values['Replace_C221']))
             config.set('defaults', 'replace_c319', str(values['Replace_C319']))
             config.set('defaults', 'replace_c325', str(values['Replace_C325']))
             config.set('defaults', 'replace_c350', str(values['Replace_C350']))
