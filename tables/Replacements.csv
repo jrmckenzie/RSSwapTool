@@ -1580,6 +1580,19 @@ FSA,RSC,LiverpoolManchester,RailVehicles\Freight\FSA\default\fsa_fl_early1c.xml,
 FSA,RSC,LiverpoolManchester,RailVehicles\Freight\FSA\default\fsa_fl_late2a.xml,AP,FSAWagonPack,RailVehicles\Freight\FL\FSA_2000_20ft_40ft_2.xml,AP FSA FL (2000) (20/40ft) - 2,RailVehicles\Freight\FL\FSA_No_HC.dcsv
 FSA,RSC,LiverpoolManchester,RailVehicles\Freight\FSA\default\fsa_fl_late2b.xml,AP,FSAWagonPack,RailVehicles\Freight\FL\FSA_2000_40ft_2.xml,AP FSA FL (2000) (40ft) - 2,RailVehicles\Freight\FL\FSA_40ft_No_HC.dcsv
 FSA,RSC,LiverpoolManchester,RailVehicles\Freight\FSA\default\fsa_fl_late2c.xml,AP,FSAWagonPack,RailVehicles\Freight\FL\FSA_2000_20ft_2.xml,AP FSA FL (2000) (20ft) - 2,RailVehicles\Freight\FL\FSA_20ft_No_HC.dcsv
+FSA,DTG,WCML-South,RailVehicles\Freight\FSA\default\fsa_fl_latePink.xml,AP,FSAWagonPack,RailVehicles\Freight\FL\FSA_2020_20ft.xml,AP FSA FL (2020) (20ft) - 1,RailVehicles\Freight\FL\FSA_20ft_No_HC.dcsv
+FSA,DTG,WCML-South,RailVehicles\Freight\FSA\default\fsa_fl_latePink20+40.xml,AP,FSAWagonPack,RailVehicles\Freight\FL\FSA_2020_20ft_40ft.xml,AP FSA FL (2020) (20/40ft) - 1,RailVehicles\Freight\FL\FSA_No_HC.dcsv
+FSA,DTG,WCML-South,RailVehicles\Freight\FSA\default\fsa_fl_latePink40ft.xml,AP,FSAWagonPack,RailVehicles\Freight\FL\FSA_2020_40ft.xml,AP FSA FL (2020) (40ft) - 1,RailVehicles\Freight\FL\FSA_40ft_No_HC.dcsv
+FSA,DTG,WCML-South,RailVehicles\Freight\FSA\default\fsa_fl_latePinkmixed1.xml,AP,FSAWagonPack,RailVehicles\Freight\FL\FSA_2020_20ft_2.xml,AP FSA FL (2020) (20ft) - 2,RailVehicles\Freight\FL\FSA_20ft_No_HC.dcsv
+FSA,DTG,WCML-South,RailVehicles\Freight\FSA\default\fsa_fl_latePinkmixed2.xml,AP,FSAWagonPack,RailVehicles\Freight\FL\FSA_2020_20ft.xml,AP FSA FL (2020) (20ft) - 1,RailVehicles\Freight\FL\FSA_20ft_No_HC.dcsv
+FSA,DTG,WCML-South,RailVehicles\Freight\FSA\default\fsa_fl_latePinkx2.xml,AP,FSAWagonPack,RailVehicles\Freight\FL\FSA_2020_20ft_2.xml,AP FSA FL (2020) (20ft) - 2,RailVehicles\Freight\FL\FSA_20ft_No_HC.dcsv
+FSA,DTG,WCML-South,RailVehicles\Freight\FSA\default\fsa_fl_latePinkx3.xml,AP,FSAWagonPack,RailVehicles\Freight\FL\FSA_2020_20ft.xml,AP FSA FL (2020) (20ft) - 1,RailVehicles\Freight\FL\FSA_20ft_No_HC.dcsv
+FSA,DTG,WCML-South,RailVehicles\Freight\FSA\default\fsa_fl_lateWhite+Pink.xml,AP,FSAWagonPack,RailVehicles\Freight\FL\FSA_2020_20ft_2.xml,AP FSA FL (2020) (20ft) - 2,RailVehicles\Freight\FL\FSA_20ft_No_HC.dcsv
+FSA,DTG,WCML-South,RailVehicles\Freight\FSA\default\fsa_fl_lateWhite.xml,AP,FSAWagonPack,RailVehicles\Freight\FL\FSA_2020_20ft.xml,AP FSA FL (2020) (20ft) - 1,RailVehicles\Freight\FL\FSA_20ft_No_HC.dcsv
+FSA,DTG,WCML-South,RailVehicles\Freight\FSA\default\fsa_fl_lateWhite20+40.xml,AP,FSAWagonPack,RailVehicles\Freight\FL\FSA_2020_20ft_40ft_2.xml,AP FSA FL (2020) (20/40ft) - 2,RailVehicles\Freight\FL\FSA_No_HC.dcsv
+FSA,DTG,WCML-South,RailVehicles\Freight\FSA\default\fsa_fl_lateWhite40ft.xml,AP,FSAWagonPack,RailVehicles\Freight\FL\FSA_2020_40ft_2.xml,AP FSA FL (2020) (40ft) - 2,RailVehicles\Freight\FL\FSA_40ft_No_HC.dcsv
+FSA,DTG,WCML-South,RailVehicles\Freight\FSA\default\fsa_fl_lateWhitex2.xml,AP,FSAWagonPack,RailVehicles\Freight\FL\FSA_2020_20ft_2.xml,AP FSA FL (2020) (20ft) - 2,RailVehicles\Freight\FL\FSA_20ft_No_HC.dcsv
+FSA,DTG,WCML-South,RailVehicles\Freight\FSA\default\fsa_fl_latewhitex3.xml,AP,FSAWagonPack,RailVehicles\Freight\FL\FSA_2020_20ft.xml,AP FSA FL (2020) (20ft) - 1,RailVehicles\Freight\FL\FSA_20ft_No_HC.dcsv
 FTA,DTG,BedPanLine,RailVehicles\Freight\FTA\default\fta_fl_early1a_loaded.xml,AP,FSAWagonPack,RailVehicles\Freight\FL\FTA_2010_20ft_40ft.xml,AP FTA FL (2010) (20/40ft) - 1,RailVehicles\Freight\FL\FTA_No_HC.dcsv
 FTA,DTG,BedPanLine,RailVehicles\Freight\FTA\default\fta_fl_early1a.xml,AP,FSAWagonPack,RailVehicles\Freight\FL\FTA.xml,AP FTA FL,RailVehicles\Freight\FL\FTA.dcsv
 FTA,DTG,BedPanLine,RailVehicles\Freight\FTA\default\fta_fl_early1b_loaded.xml,AP,FSAWagonPack,RailVehicles\Freight\FL\FTA_2010_40ft.xml,AP FTA FL (2010) (40ft) - 1,RailVehicles\Freight\FL\FTA_40ft_No_HC.dcsv
@@ -1622,6 +1635,19 @@ FTA,RSC,LiverpoolManchester,RailVehicles\Freight\FTA\default\fta_fl_early1c.xml,
 FTA,RSC,LiverpoolManchester,RailVehicles\Freight\FTA\default\fta_fl_late2a.xml,AP,FSAWagonPack,RailVehicles\Freight\FL\FTA_2000_20ft_40ft_2.xml,AP FTA FL (2000) (20/40ft) - 2,RailVehicles\Freight\FL\FTA_No_HC.dcsv
 FTA,RSC,LiverpoolManchester,RailVehicles\Freight\FTA\default\fta_fl_late2b.xml,AP,FSAWagonPack,RailVehicles\Freight\FL\FTA_2000_40ft_2.xml,AP FTA FL (2000) (40ft) - 2,RailVehicles\Freight\FL\FTA_40ft_No_HC.dcsv
 FTA,RSC,LiverpoolManchester,RailVehicles\Freight\FTA\default\fta_fl_late2c.xml,AP,FSAWagonPack,RailVehicles\Freight\FL\FTA_2000_20ft_2.xml,AP FTA FL (2000) (20ft) - 2,RailVehicles\Freight\FL\FTA_20ft_No_HC.dcsv
+FTA,DTG,WCML-South,RailVehicles\Freight\FTA\default\fta_fl_latePink.xml,AP,FSAWagonPack,RailVehicles\Freight\FL\FTA_2020_20ft.xml,AP FTA FL (2020) (20ft) - 1,RailVehicles\Freight\FL\FTA_20ft_No_HC.dcsv
+FTA,DTG,WCML-South,RailVehicles\Freight\FTA\default\fta_fl_latePink20+40.xml,AP,FSAWagonPack,RailVehicles\Freight\FL\FTA_2020_20ft_40ft.xml,AP FTA FL (2020) (20/40ft) - 1,RailVehicles\Freight\FL\FTA_No_HC.dcsv
+FTA,DTG,WCML-South,RailVehicles\Freight\FTA\default\fta_fl_latePink40ft.xml,AP,FSAWagonPack,RailVehicles\Freight\FL\FTA_2020_40ft.xml,AP FTA FL (2020) (40ft) - 1,RailVehicles\Freight\FL\FTA_40ft_No_HC.dcsv
+FTA,DTG,WCML-South,RailVehicles\Freight\FTA\default\fta_fl_latePinkmixed1.xml,AP,FSAWagonPack,RailVehicles\Freight\FL\FTA_2020_20ft_2.xml,AP FTA FL (2020) (20ft) - 2,RailVehicles\Freight\FL\FTA_20ft_No_HC.dcsv
+FTA,DTG,WCML-South,RailVehicles\Freight\FTA\default\fta_fl_latePinkmixed2.xml,AP,FSAWagonPack,RailVehicles\Freight\FL\FTA_2020_20ft.xml,AP FTA FL (2020) (20ft) - 1,RailVehicles\Freight\FL\FTA_20ft_No_HC.dcsv
+FTA,DTG,WCML-South,RailVehicles\Freight\FTA\default\fta_fl_latePinkx2.xml,AP,FSAWagonPack,RailVehicles\Freight\FL\FTA_2020_20ft_2.xml,AP FTA FL (2020) (20ft) - 2,RailVehicles\Freight\FL\FTA_20ft_No_HC.dcsv
+FTA,DTG,WCML-South,RailVehicles\Freight\FTA\default\fta_fl_latePinkx3.xml,AP,FSAWagonPack,RailVehicles\Freight\FL\FTA_2020_20ft.xml,AP FTA FL (2020) (20ft) - 1,RailVehicles\Freight\FL\FTA_20ft_No_HC.dcsv
+FTA,DTG,WCML-South,RailVehicles\Freight\FTA\default\fta_fl_lateWhite+Pink.xml,AP,FSAWagonPack,RailVehicles\Freight\FL\FTA_2020_20ft_2.xml,AP FTA FL (2020) (20ft) - 2,RailVehicles\Freight\FL\FTA_20ft_No_HC.dcsv
+FTA,DTG,WCML-South,RailVehicles\Freight\FTA\default\fta_fl_lateWhite.xml,AP,FSAWagonPack,RailVehicles\Freight\FL\FTA_2020_20ft.xml,AP FTA FL (2020) (20ft) - 1,RailVehicles\Freight\FL\FTA_20ft_No_HC.dcsv
+FTA,DTG,WCML-South,RailVehicles\Freight\FTA\default\fta_fl_lateWhite20+40.xml,AP,FSAWagonPack,RailVehicles\Freight\FL\FTA_2020_20ft_40ft_2.xml,AP FTA FL (2020) (20/40ft) - 2,RailVehicles\Freight\FL\FTA_No_HC.dcsv
+FTA,DTG,WCML-South,RailVehicles\Freight\FTA\default\fta_fl_lateWhite40ft.xml,AP,FSAWagonPack,RailVehicles\Freight\FL\FTA_2020_40ft_2.xml,AP FTA FL (2020) (40ft) - 2,RailVehicles\Freight\FL\FTA_40ft_No_HC.dcsv
+FTA,DTG,WCML-South,RailVehicles\Freight\FTA\default\fta_fl_lateWhitex2.xml,AP,FSAWagonPack,RailVehicles\Freight\FL\FTA_2020_20ft_2.xml,AP FTA FL (2020) (20ft) - 2,RailVehicles\Freight\FL\FTA_20ft_No_HC.dcsv
+FTA,DTG,WCML-South,RailVehicles\Freight\FTA\default\fta_fl_latewhitex3.xml,AP,FSAWagonPack,RailVehicles\Freight\FL\FTA_2020_20ft.xml,AP FTA FL (2020) (20ft) - 1,RailVehicles\Freight\FL\FTA_20ft_No_HC.dcsv
 HAA,Kuju,RailSimulator,RailVehicles\Freight\HAA\Default\Wagon\HAA.xml,,,,,
 HAA,CreativeRail,EastCoast,RailVehicles\Freight\HAA\Default\Wagon\HAA.xml,,,,,
 HAA,DTG,WoodheadBR,RailVehicles\Freight\HAA\Default\Wagon\HAA_Unbraked.xml,,,,,
@@ -2167,6 +2193,24 @@ EMU350_set,Thomson,WCMLTrentValley,RailVehicles\Electric\Class350\Default\Engine
 EMU350_set,Thomson,WCMLTrentValley,RailVehicles\Electric\Class350\Default\Engine\Class350_2_3 PTSO_LNREX.xml,DTG,PortsmouthDirect,RailVehicles\Electric\Class450\LM_AP\350_TSO_LNWR.xml,APEP 350 Ex-LM (LNWR) TOSLW,
 EMU350_set,Thomson,WCMLTrentValley,RailVehicles\Electric\Class350\Default\Engine\Class350_2_3 TCO.xml,DTG,PortsmouthDirect,RailVehicles\Electric\Class450\LM_AP\350_TCO.xml,APEP 350 LM TOSL,
 EMU350_set,Thomson,WCMLTrentValley,RailVehicles\Electric\Class350\Default\Engine\Class350_2_3 TCO_LNREX.xml,DTG,PortsmouthDirect,RailVehicles\Electric\Class450\LM_AP\350_TCO_LNWR.xml,APEP 350 Ex-LM (LNWR) TOSL,
+EMU350_set,DTG,WCML-South,RailVehicles\Electric\Class350\Default\Engine\Class350_1 DMSO_A.xml,DTG,PortsmouthDirect,RailVehicles\Electric\Class450\LM_AP\350_DMOS.xml,APEP 350 LM DMC1,
+EMU350_set,DTG,WCML-South,RailVehicles\Electric\Class350\Default\Engine\Class350_1 DMSO_A_ND.xml,DTG,PortsmouthDirect,RailVehicles\Electric\Class450\LM_AP\350_DMOS.xml,APEP 350 LM DMC1,
+EMU350_set,DTG,WCML-South,RailVehicles\Electric\Class350\Default\Engine\Class350_1 DMSO_B.xml,DTG,PortsmouthDirect,RailVehicles\Electric\Class450\LM_AP\350_DMOSB.xml,APEP 350 LM DMC2,
+EMU350_set,DTG,WCML-South,RailVehicles\Electric\Class350\Default\Engine\Class350_1 DMSO_B_ND.xml,DTG,PortsmouthDirect,RailVehicles\Electric\Class450\LM_AP\350_DMOSB.xml,APEP 350 LM DMC2,
+EMU350_set,DTG,WCML-South,RailVehicles\Electric\Class350\Default\Engine\Class350_1 PTSO.xml,DTG,PortsmouthDirect,RailVehicles\Electric\Class450\LM_AP\350_TSO.xml,APEP 350 LM TOSLW,
+EMU350_set,DTG,WCML-South,RailVehicles\Electric\Class350\Default\Engine\Class350_1 TCO.xml,DTG,PortsmouthDirect,RailVehicles\Electric\Class450\LM_AP\350_TCO.xml,APEP 350 LM TOSL,
+EMU350_set,DTG,WCML-South,RailVehicles\Electric\Class350\Default\Engine\Class350_2 DMSO_A.xml,DTG,PortsmouthDirect,RailVehicles\Electric\Class450\LM_AP\350_DMOS.xml,APEP 350 LM DMC1,
+EMU350_set,DTG,WCML-South,RailVehicles\Electric\Class350\Default\Engine\Class350_2 DMSO_A_ND.xml,DTG,PortsmouthDirect,RailVehicles\Electric\Class450\LM_AP\350_DMOS.xml,APEP 350 LM DMC1,
+EMU350_set,DTG,WCML-South,RailVehicles\Electric\Class350\Default\Engine\Class350_2 DMSO_B.xml,DTG,PortsmouthDirect,RailVehicles\Electric\Class450\LM_AP\350_DMOSB.xml,APEP 350 LM DMC2,
+EMU350_set,DTG,WCML-South,RailVehicles\Electric\Class350\Default\Engine\Class350_2 DMSO_B_ND.xml,DTG,PortsmouthDirect,RailVehicles\Electric\Class450\LM_AP\350_DMOSB.xml,APEP 350 LM DMC2,
+EMU350_set,DTG,WCML-South,RailVehicles\Electric\Class350\Default\Engine\Class350_2 PTSO.xml,DTG,PortsmouthDirect,RailVehicles\Electric\Class450\LM_AP\350_TSO.xml,APEP 350 LM TOSLW,
+EMU350_set,DTG,WCML-South,RailVehicles\Electric\Class350\Default\Engine\Class350_2 TCO.xml,DTG,PortsmouthDirect,RailVehicles\Electric\Class450\LM_AP\350_TCO.xml,APEP 350 LM TOSL,
+EMU350_set,DTG,WCML-South,RailVehicles\Electric\Class350\Default\Engine\Class350_3 DMSO_A.xml,DTG,PortsmouthDirect,RailVehicles\Electric\Class450\LM_AP\350_DMOS.xml,APEP 350 LM DMC1,
+EMU350_set,DTG,WCML-South,RailVehicles\Electric\Class350\Default\Engine\Class350_3 DMSO_A_ND.xml,DTG,PortsmouthDirect,RailVehicles\Electric\Class450\LM_AP\350_DMOS.xml,APEP 350 LM DMC1,
+EMU350_set,DTG,WCML-South,RailVehicles\Electric\Class350\Default\Engine\Class350_3 DMSO_B.xml,DTG,PortsmouthDirect,RailVehicles\Electric\Class450\LM_AP\350_DMOSB.xml,APEP 350 LM DMC2,
+EMU350_set,DTG,WCML-South,RailVehicles\Electric\Class350\Default\Engine\Class350_3 DMSO_B_ND.xml,DTG,PortsmouthDirect,RailVehicles\Electric\Class450\LM_AP\350_DMOSB.xml,APEP 350 LM DMC2,
+EMU350_set,DTG,WCML-South,RailVehicles\Electric\Class350\Default\Engine\Class350_3 PTSO.xml,DTG,PortsmouthDirect,RailVehicles\Electric\Class450\LM_AP\350_TSO.xml,APEP 350 LM TOSLW,
+EMU350_set,DTG,WCML-South,RailVehicles\Electric\Class350\Default\Engine\Class350_3 TCO.xml,DTG,PortsmouthDirect,RailVehicles\Electric\Class450\LM_AP\350_TCO.xml,APEP 350 LM TOSL,
 EMU450_set,DTG,PortsmouthDirect,RailVehicles\Electric\Class444\Default\Engine\Class444_DMOC_nd.xml,DTG,PortsmouthDirect,RailVehicles\Electric\Class450\SWT_444_AP\444_DMOC.xml,APEP 444 SWT DMC2,
 EMU450_set,DTG,PortsmouthDirect,RailVehicles\Electric\Class444\Default\Engine\Class444_DMOC.xml,DTG,PortsmouthDirect,RailVehicles\Electric\Class450\SWT_444_AP\444_DMOC.xml,APEP 444 SWT DMC2,
 EMU450_set,DTG,PortsmouthDirect,RailVehicles\Electric\Class444\Default\Engine\Class444_DMOS_nd.xml,DTG,PortsmouthDirect,RailVehicles\Electric\Class450\SWT_444_AP\444_DMOS.xml,APEP 444 SWT DMC1,
@@ -2545,6 +2589,11 @@ EMU375-7_set,RSC,SouthLondonLines,RailVehicles\Electric\Class375\SE-WhiteGrey\Cl
 EMU375-7_set,RSC,SouthLondonLines,RailVehicles\Electric\Class375\SE-WhiteGrey\Class375_PTOSL_pantolow.xml,DTG,LondonGillingham,RailVehicles\Electric\Class375\CX_AP\375_PTOSL_SE1(2).xml,APEP 375/6 SE1(2) PTOSL,
 EMU375-7_set,RSC,SouthLondonLines,RailVehicles\Electric\Class375\SE-WhiteGrey\Class375_PTOSL.xml,DTG,LondonGillingham,RailVehicles\Electric\Class375\CX_AP\375_PTOSL_SE1(2).xml,APEP 375/6 SE1(2) PTOSL,
 EMU375-7_set,RSC,SouthLondonLines,RailVehicles\Electric\Class375\SE-WhiteGrey\Class375_TOSL.xml,DTG,LondonGillingham,RailVehicles\Electric\Class375\CX_AP\375_TOSL_SE1(2).xml,APEP 375 SE1(2) TOSL,
+EMU375-7_set,DTG,WCML-South,RailVehicles\Electric\Class377\Engine\Class377_DMOC.xml,DTG,LondonGillingham,RailVehicles\Electric\Class375\SN_AP\375_DMOSA.xml,APEP 377 SN1 DMOCA,
+EMU375-7_set,DTG,WCML-South,RailVehicles\Electric\Class377\Engine\Class377_DMOC_nd.xml,DTG,LondonGillingham,RailVehicles\Electric\Class375\SN_AP\375_DMOSB.xml,APEP 377 SN1 DMOCB,
+EMU375-7_set,DTG,WCML-South,RailVehicles\Electric\Class377\Engine\Class377_MOSL.xml,DTG,LondonGillingham,RailVehicles\Electric\Class375\SN_AP\375_MOSL.xml,APEP 377 SN1 MOSL,
+EMU375-7_set,DTG,WCML-South,RailVehicles\Electric\Class377\Engine\Class377_PTOSL.xml,DTG,LondonGillingham,RailVehicles\Electric\Class375\SN_AP\375_PTOSL.xml,APEP 377/2 SN1 PTOSL,
+EMU375-7_set,DTG,WCML-South,RailVehicles\Electric\Class377\Engine\Class377_TOSL.xml,DTG,LondonGillingham,RailVehicles\Electric\Class375\SN_AP\375_TOSL.xml,APEP 377 SN1 TOSL,
 EMU456_set,RSC,SouthLondonLines,RailVehicles\Class456\Default\Engine\Class456_DMSO_nd.xml,AP_Waggonz,Class456Pack01,RailVehicles\Class456\Southern\DMSO\Class_456_DMSO.xml,APW Class 456 Southern DMSO,
 EMU456_set,RSC,SouthLondonLines,RailVehicles\Class456\Default\Engine\Class456_DMSO.xml,AP_Waggonz,Class456Pack01,RailVehicles\Class456\Southern\DMSO\Class_456_DMSO.xml,APW Class 456 Southern DMSO,
 EMU456_set,RSC,SouthLondonLines,RailVehicles\Class456\Default\Engine\Class456_DTSO_nd.xml,AP_Waggonz,Class456Pack01,RailVehicles\Class456\Southern\DTSO\Class_456_DTSO.xml,APW Class 456 Southern DTSO,

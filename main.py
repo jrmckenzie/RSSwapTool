@@ -34,7 +34,7 @@ from data_file import haa_e_wagons, haa_l_wagons, hha_e_wagons, hha_l_wagons, ht
     rsc20headcodes_62_69, rsc20headcodes_69_77, c168_chiltern, c170_ex_ar_aga_ap, c170_lm, c170_ct_xc, c170_ar23, \
     c170_scotrail, c170_ftpe, c170_ga_hull, c170_mml, c171_southern, c350_lb_ftpe, c365_ecmls_nse, c365_apcxse, \
     c450_gu_swt, c465_se, c375_dtg_pack, c377_lb_se, c377_lg_sn, c377_fcc, c170_bp_name_lookup, c375_dmos_lookup, \
-    c456_nse, c456_southern, c319_dest
+    c456_nse, c456_southern, c319_dest, c350_lm_wcmls, c375_southern_wcmls
 
 rv_list = []
 rv_pairs = []
@@ -2050,12 +2050,20 @@ def c350_replace(provider, product, blueprint, name, number):
             if this_vehicle[1] in product.text:
                 bp = re.search(this_vehicle[2], blueprint.text, flags=re.IGNORECASE)
                 if bp:
-                    rv_orig = number.text
+                    rv_orig = number.text   # 3503696014219
                     destination = ''
-                    nm = re.search('([0-9]{6}).....([a-zA-Z]?)', number.text)
+                    nm = re.search('([0-9]{6}).....(.*)', number.text)
                     if nm:
                         if bool(re.search(r'\\FTPE\\', blueprint.text, flags=re.IGNORECASE)):
                             destination = get_destination(c350_lb_ftpe, nm.group(2), '0')
+                            if destination == '0':
+                                destination = ''
+                            else:
+                                destination = ';D=' + destination
+                        if product.text == 'WCML-South' and \
+                                bool(re.search(r'RailVehicles\\Electric\\Class350\\Default\\Engine\\Class350_',
+                                               blueprint.text, flags=re.IGNORECASE)):
+                            destination = get_destination(c350_lm_wcmls, nm.group(2), '0')
                             if destination == '0':
                                 destination = ''
                             else:
@@ -2123,7 +2131,7 @@ def c375_replace(provider, product, blueprint, name, number):
                     nm = re.search('([a-zA-Z]).....([0-9]{6})', number.text)
                     if nm:
                         destination = get_destination(c375_dtg_pack, nm.group(1), 'a')
-                        if product.text == 'LondonGillingham':
+                        if product.text.upper() == 'LondonGillingham':
                             if bool(re.search(r'\\SN\\', blueprint.text, flags=re.IGNORECASE)):
                                 # This is for the London-Gillingham Southern livery
                                 destination = get_destination(c377_lg_sn, nm.group(1), 'a')
@@ -2141,6 +2149,11 @@ def c375_replace(provider, product, blueprint, name, number):
                             if bool(re.search(r'\\SE-White', blueprint.text, flags=re.IGNORECASE)):
                                 # This is for the Brighton Main Line SE White livery
                                 destination = get_destination(c377_lb_se, nm.group(1), 'a')
+                        if product.text == 'WCML-South':
+                            if bool(re.search(r'\\Class377\\Engine\\Class377_[A-Z_]*\.xml', blueprint.text,
+                                              flags=re.IGNORECASE)):
+                                # This is for the DTG WCML South Southern livery
+                                destination = get_destination(c375_southern_wcmls, nm.group(1), 'a')
                     # Check whether DMOSA, DMOSB, MOSL, PTOSL, or TOSL and change number accordingly
                     # It's assumed the scenario being converted will have only one DMOSA vehicle at the front and that
                     # all other DMOS vehicles in the consist will be DMOSB. If that's left as it is then the AP ones
