@@ -374,10 +374,10 @@ def dcsv_get_num(this_dcsv, this_rv, this_re):
             curr_nm = nm.group(1) + nm.group(2)
             dcsv_nm = int(nm.group(1))
             if curr_nm in s:
-                # This number is already in use in another swapped loco - move on and try the next one
+                # This dcsv number is already in use in another swapped loco - move on and try the next one
                 continue
             if ithis_rv > dcsv_nm:
-                # This number is still less than the number we're looking for - but remember how close it is and try the
+                # This dcsv number is still less than the number we're looking for - but remember how close it is and try the
                 # next one to see if it is a match or is even further away than this number.
                 diff = ithis_rv - dcsv_nm
             elif ithis_rv == dcsv_nm:
@@ -1587,17 +1587,19 @@ def c66_replace(provider, product, blueprint, name, number):
                     product.text = this_vehicle[4]
                     blueprint.text = this_vehicle[5]
                     name.text = this_vehicle[6]
-                    rv_orig = number.text
-                    nm = re.search('(66[0-9]{3}).*', number.text)
+                    rv_orig = rv_num = number.text
+                    nm = re.search('(66[0-9]{3})', number.text)
                     if nm:
                         rv_found = nm.group(1)
                         rv_num = dcsv_get_num(
                             Path(railworks_path, 'Assets', this_vehicle[3], this_vehicle[4], this_vehicle[7]), rv_found,
                             '([0-9]{5})(.*)')
-                        # Set number
-                        number.text = str(rv_num)
-                        rv_list.append(number.text)
-                        rv_pairs.append([rv_orig, number.text])
+                    # Set number
+                    if len(rv_num) < 6:
+                        rv_num = rv_num + 'x'
+                    number.text = rv_num
+                    rv_list.append(number.text)
+                    rv_pairs.append([rv_orig, number.text])
                     return True
     return False
 
