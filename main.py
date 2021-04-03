@@ -2820,6 +2820,7 @@ if __name__ == "__main__":
                 inFile = scenarioPath
                 cmd = railworks_path / Path('serz.exe')
                 serz_output = ''
+                output_message = ''
                 vehicle_list = []
                 if str(scenarioPath.suffix) == '.bin':
                     # This is a bin file so we need to run serz.exe command to convert it to a readable .xml
@@ -2832,7 +2833,8 @@ if __name__ == "__main__":
                     inFile = scenarioPath.parent / Path(str(scenarioPath.stem) + '.xml')
                     p1 = subprocess.Popen([str(cmd), str(scenarioPath), '/xml:' + str(inFile)], stdout=subprocess.PIPE)
                     p1.wait()
-                    serz_output = 'serz.exe ' + p1.communicate()[0].decode('ascii')
+                    # Uncomment the line below to see the output of the serz.exe command
+                    # serz_output = 'serz.exe ' + p1.communicate()[0].decode('ascii')
                     # Now the intermediate .xml has been created by serz.exe, read it in to this script and do the
                     # processing
                 tree = parse_xml(inFile)
@@ -2848,7 +2850,7 @@ if __name__ == "__main__":
                 xmlFile = scenarioPath.parent / Path(str(scenarioPath.stem) + '.xml')
                 xmlFile.touch()
                 xmlFile.write_text(xmlString, encoding='utf-8')
-                output_message = 'Scenario converted and saved to ' + str(xmlFile)
+                output_message = 'Scenario converted.\n'
                 html_report_status_text = ''
                 if str(scenarioPath.suffix) == '.bin':
                     # Run the serz.exe command again to generate the output scenario .bin file
@@ -2856,7 +2858,8 @@ if __name__ == "__main__":
                     p2 = subprocess.Popen([str(cmd), str(xmlFile), '/bin:' + str(binFile)], stdout=subprocess.PIPE)
                     p2.wait()
                     inFile.unlink()
-                    output_message = serz_output + '\nserz.exe ' + p2.communicate()[0].decode('ascii')
+                    # Uncomment the following line to see the output of the serz.exe command
+                    # output_message = serz_output + '\nserz.exe ' + p2.communicate()[0].decode('ascii')
                 output_message = output_message + \
                                  '\nOriginal scenario backup located in ' + str(outPathStem) + str(scenarioPath.suffix)
                 if get_my_config_boolean('defaults', 'save_report'):
