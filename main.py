@@ -295,9 +295,9 @@ right_column = [
                  enable_events=True,
                  tooltip='Tick to enable replacing of Class 175s with AP enhanced versions',
                  key='Replace_C175')],
-    [sg.Checkbox('Replace DTG WCMLS Voyager', default=get_my_config_boolean('defaults', 'replace_c221'),
+    [sg.Checkbox('Replace Class 220, 221 sets', default=get_my_config_boolean('defaults', 'replace_c221'),
                  enable_events=True,
-                 tooltip='Tick to enable replacing of DTG WCML South Voyager with JT (Virgin livery) Advanced Voyager',
+                 tooltip='Tick to enable replacing of DTG Voyager with JT Advanced Voyager',
                  key='Replace_C221')],
     [sg.Checkbox('Replace Class 319 sets', default=get_my_config_boolean('defaults', 'replace_c319'),
                  enable_events=True,
@@ -1965,8 +1965,8 @@ def c175_replace(provider, product, blueprint, name, number):
 
 
 def c221_replace(provider, product, blueprint, name, number):
-    for i in range(0, len(vehicle_db['DMU221_set'])):
-        this_vehicle = vehicle_db['DMU221_set'][i]
+    for i in range(0, len(vehicle_db['DMU220-1_set'])):
+        this_vehicle = vehicle_db['DMU220-1_set'][i]
         if this_vehicle[0] in provider.text:
             if this_vehicle[1] in product.text:
                 bp = re.search(this_vehicle[2], blueprint.text, flags=re.IGNORECASE)
@@ -2669,7 +2669,7 @@ if __name__ == "__main__":
             sg.Popup('About RSSwapTool',
                      'Tool for swapping rolling stock in Train Simulator (Dovetail Games) scenarios',
                      'Issued under the GNU General Public License - see https://www.gnu.org/licenses/',
-                     'Version 0.13a',
+                     'Version 0.14a',
                      'Copyright 2021 JR McKenzie (jrmknz@yahoo.co.uk)', 'https://github.com/jrmckenzie/RSSwapTool')
         elif event == 'Settings':
             if not config.has_section('defaults'):

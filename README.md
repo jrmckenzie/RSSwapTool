@@ -67,12 +67,12 @@ The following substitutions are available:
 * Replace Class 158 sets - Tick to enable replacing of North Wales Coast / Settle Carlisle / Fife Circle Class 158s with AP enhanced versions (Cummins, Perkins)
 * Replace Class 168, 170, 171 sets - Tick to enable replacing of Thomson Class 170s with AP enhanced versions
 * Replace Class 175 sets - Tick to enable replacing of South Wales Coastal / North Wales / Welsh Marches Class 175s with AP enhanced versions (2.0)
+* Replace Class 220, 221 sets - Tick to enable replacing of DTG Class 220 Pack XC, Class 221 North Wales Coast and WCML-South sets with JT Advanced Voyagers. Note that, in the case of the DTG WCML-South units, this relies on the Meridian/Voyager Advanced 2019 Overhaul available from https://semaphoresim.com/file/104-meridianvoyager-advanced-2019-overhaul/ and it will replace the WCML-South Avanti livery with a different look - one with Avanti vinyl wraps over the old Virgin livery.   
 * Replace Class 319 sets - Tick to enable replacing of BedPanLine 319, DTG Class 319 NSE and RSC Class 319 units with AP versions
 * Replace Class 325 sets - Tick to enable replacing of RSC Class 325 pack units with AP enhanced versions
-* Replace Class 350 sets - Tick to enable replacing of Portsmouth Direct / Brighton Main Line / WCML Trent Valley Class 350 units with AP enhanced versions
-* Replace Class 350 sets - Tick to enable replacing of Portsmouth Direct / Brighton Main Line / WCML Trent Valley Class 350 units with AP enhanced versions
+* Replace Class 350 sets - Tick to enable replacing of Portsmouth Direct / Brighton Main Line / WCML Trent Valley / WCML South Class 350 units with AP enhanced versions
 * Replace Class 365 sets - Tick to enable replacing of ECMLS London-Peterborough / Class 365 pack Class 365 units with AP enhanced version
-* Replace Class 375, 377 sets - Tick to enable replacing of Class 375 Pack / London-Gillingham / Portsmouth Direct / Brighton Main Line Class 375 units with AP enhanced versions
+* Replace Class 375, 377 sets - Tick to enable replacing of Class 375 Pack / London-Gillingham / Portsmouth Direct / Brighton Main Line / WCML-South Class 375-377 units with AP enhanced versions
 * Replace Class 444, 450 sets - Tick to enable replacing of Portsmouth Direct / Class 444 Pack / Brighton Main Line / Guildford Disrict Class 444/450 units with AP enhanced versions
 * Replace Class 456 sets - Tick to enable replacing of South London Lines Class 456 units with AP/Waggonz versions
 * Replace Class 465 sets - Tick to enable replacing of South London Lines / London-Gillingham / RSC Class 465 Pack Class 465 units with AP enhanced versions
