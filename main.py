@@ -27,7 +27,7 @@ import configparser
 import PySimpleGUI as sg
 import webbrowser
 from pathlib import Path
-from data_file import haa_e_wagons, haa_l_wagons, hha_e_wagons, hha_l_wagons, hto_e_wagons, hto_l_wagons, \
+from data_file import hha_e_wagons, hha_l_wagons, hto_e_wagons, hto_l_wagons, \
     htv_e_wagons, htv_l_wagons, vda_e_wagons, vda_l_wagons, HTO_141_numbers, HTO_143_numbers, HTO_146_numbers, \
     HTO_rebodied_numbers, HTV_146_numbers, HTV_rebodied_numbers, c158_s9bl_rr, c158_s9bl_nr, c158_s9bl_fgw, \
     c158_s9bl_tpe, c158_s9bl_swt, c158_nwc, c158_dtg_fc, c158_livman_rr, ap40headcodes_69_77, ap40headcodes_62_69, \
@@ -49,6 +49,13 @@ mso_num = ''
 railworks_path = ''
 c56_opts = ['Use nearest numbered AP enhanced loco', 'Retain original loco if no matching AP plaque / sector available']
 c86_opts = ['Use VP headcode blinds', 'Use AP plated box with markers', 'Do not swap this loco']
+fsafta_opts = ['RFD / 2000 era', 'FL / 2000 era', 'FL / 2010 era', 'FL / 2020 era']
+fsafta_cube = ['No high cube containers', 'Allow high cube containers']
+mgr_types = ['HAA only', 'HCA (canopy) only', 'HFA (canopy) only', 'HAA and HCA (canopy) mixed',
+            'HAA, HCA (canopy) and HFA (canopy) mixed', 'HDA only', 'HBA (canopy) only', 'HDA and HBA (canopy) mixed', 
+            'HMA only', 'HNA (canopy) only', 'HMA and HNA (canopy) mixed', 'Completely random']
+mgr_liveries = ['Maroon only',  'Blue only', 'Maroon and Blue', 'Sectors only', 'Sectors and Maroon',
+                'Sectors and Blue', 'Completely random']
 sg.LOOK_AND_FEEL_TABLE['Railish'] = {'BACKGROUND': '#00384F',
                                      'TEXT': '#FFFFFF',
                                      'INPUT': '#FFFFFF',
@@ -68,7 +75,7 @@ else:
     loclayout = [[sg.T('')],
                  [sg.Text('Please locate your RailWorks folder:'), sg.Input(key='-IN2-', change_submits=False,
                                                                             readonly=True),
-                  sg.FolderBrowse(key='RWloc')], [sg.Button('Submit')]]
+                  sg.FolderBrowse(key='RWloc')], [sg.Button('Save')]]
     locwindow = sg.Window('Configure path to RailWorks folder', loclayout, size=(640, 150))
     while True:
         event, values = locwindow.read()
@@ -80,7 +87,7 @@ else:
                 sg.Popup('You must specify the path to your RailWorks folder for this application to work. '
                          'The application will now close.')
                 sys.exit()
-        elif event == 'Submit':
+        elif event == 'Save':
             if values['RWloc'] is not None and len(values['RWloc']) > 1:
                 railworks_path = values['RWloc']
             else:
@@ -137,6 +144,10 @@ if not config.has_section('defaults'):
     config.set('defaults', 'save_report', 'False')
     config.set('defaults', 'c56_rf', c56_opts[0])
     config.set('defaults', 'c86_hc', c86_opts[0])
+    config.set('defaults', 'fsafta_variant', fsafta_opts[0])
+    config.set('defaults', 'fsafta_hc', fsafta_cube[0])
+    config.set('defaults', 'mgr_type', mgr_types[0])
+    config.set('defaults', 'mgr_livery', mgr_liveries[0])
     with open(path_to_config, 'w') as iconfigfile:
         config.write(iconfigfile)
         iconfigfile.close()
@@ -637,18 +648,52 @@ def haa_replace(provider, product, blueprint, name, number, loaded, flipped, fol
                 if bp:
                     provider.text = 'AP'
                     product.text = 'HAAWagonPack01'
-                    # Replace a loaded wagon
+                    weathering = [('', ''), ('2', ' W1'), ('2', ' W1'), ('3', ' W2'), ('3', ' W2')][
+                        random.randrange(0, 5)]
                     if 'eTrue' in loaded.text:
-                        idx = random.randrange(0, len(haa_l_wagons))
-                        # Select at random one of the wagons in the list of HAA loaded wagons to swap in
-                        this_blueprint = haa_l_wagons[idx][0]
-                        this_name = haa_l_wagons[idx][1]
-                    # Replace an empty wagon
+                        load = ['_LD', 'Loaded']
                     else:
-                        idx = random.randrange(0, len(haa_e_wagons))
-                        # Select at random one of the wagons in the list of HAA empty wagons to swap in
-                        this_blueprint = haa_e_wagons[idx][0]
-                        this_name = haa_e_wagons[idx][1]
+                        load = ['', 'Empty']
+                    variant = config.get('defaults', 'mgr_variant', fallback='HAA')
+                    livery = config.get('defaults', 'mgr_livery', fallback='Maroon Only')
+                    if variant == 'HAA only':
+                        bp = 'HAA'
+                    elif variant == 'HCA (canopy) only':
+                        bp = 'HCA'
+                    elif variant == 'HFA (canopy) only':
+                        bp = 'HFA'
+                    elif variant == 'HAA and HCA (canopy) mixed':
+                        bp = ['HAA', 'HCA'][random.randrange(0, 2)]
+                    elif variant == 'HAA, HCA (canopy) and HFA (canopy) mixed':
+                        bp = ['HAA', 'HCA', 'HFA'][random.randrange(0, 3)]
+                    elif variant == 'HDA only':
+                        bp = 'HDA'
+                    elif variant == 'HBA (canopy) only':
+                        bp = 'HBA'
+                    elif variant == 'HDA and HBA (canopy) mixed':
+                        bp = ['HDA', 'HBA'][random.randrange(0, 2)]
+                    elif variant == 'HMA only':
+                        bp = 'HMA'
+                    elif variant == 'HNA (canopy) only':
+                        bp = 'HNA'
+                    elif variant == 'HMA and HNA (canopy) mixed':
+                        bp = ['HMA', 'HNA'][random.randrange(0, 2)]
+                    elif variant == 'Completely random':
+                        bp = ['HAA', 'HBA', 'HCA', 'HDA', 'HFA', 'HMA', 'HNA'][random.randrange(0, 7)]
+                    if livery == 'Maroon only':
+                        lv = ['EWS', ' Red ']
+                    elif livery == 'Blue only':
+                        lv = ['Blue', ' Blue ']
+                    elif livery == 'Maroon and Blue':
+                        lv = [('EWS', ' Red '), ('Blue', ' Blue ')][random.randrange(0, 2)]
+                    elif livery == 'Sectors and Maroon':
+                        lv = [('Sector', ' Sector '), ('EWS', ' Red ')][random.randrange(0, 2)]
+                    elif livery == 'Sectors and Blue':
+                        lv = [('Sector', ' Sector '), ('Blue', ' Blue ')][random.randrange(0, 2)]
+                    elif livery == 'Completely random':
+                        lv = [('EWS', ' Red '), ('Blue', ' Blue '), ('Sector', ' Sector ')][random.randrange(0, 3)]
+                    this_name = 'AP ' + bp + lv[1] + load[1] + weathering[1]
+                    this_blueprint = 'RailVehicles\\Freight\\HAA\\' + lv[0] + weathering[0] + '\\' + bp + load[0] + '.xml'
                     if not tailmarker == 1:
                         # The vehicle is at one end of the consist and should have a red tail light
                         this_blueprint = re.sub('\.xml', '_TL.xml', this_blueprint, flags=re.IGNORECASE)
@@ -712,10 +757,21 @@ def fsa_replace(provider, product, blueprint, name, number, loaded):
             if this_vehicle[1] in product.text:
                 bp = re.search(this_vehicle[2], blueprint.text, flags=re.IGNORECASE)
                 if bp:
+                    era = config.get('defaults', 'fsafta_variant', fallback='FL / 2000 era')
+                    if era == 'RFD / 2000 era':
+                        w = ['RfD', '', '']
+                    elif era == 'FL / 2000 era':
+                        w = ['FL', '_2000', '(2000)']
+                    elif era == 'FL / 2010 era':
+                        w = ['FL', '_2010', '(2010)']
+                    elif era == 'FL / 2020 era':
+                        w = ['FL', '_2020', '(2020)']
                     provider.text = this_vehicle[3]
                     product.text = this_vehicle[4]
-                    blueprint.text = this_vehicle[5]
-                    name.text = this_vehicle[6]
+                    blueprint.text = re.sub('RFD|FL', w[0].upper(), re.sub('_20[0-2]0', w[1], this_vehicle[5]),
+                                            flags=re.IGNORECASE)
+                    name.text = re.sub('RFD|FL', w[0], re.sub('\(20[0-2]0\)', w[2], this_vehicle[6]),
+                                       flags=re.IGNORECASE)
                     rv_orig = number.text
                     if 'eFalse' in loaded.text:
                         # Wagon is unloaded
@@ -724,11 +780,17 @@ def fsa_replace(provider, product, blueprint, name, number, loaded):
                             number.text,
                             '([0-9]{6})(.*)')
                         # Change the blueprint and name to the unloaded wagon
-                        blueprint.text = re.sub('FSA[a-zA-Z0-9_]*.xml', 'FSA.xml', this_vehicle[5], flags=re.IGNORECASE)
-                        name.text = re.sub('AP.FSA.([a-zA-Z]*).*', r'AP FSA \1', this_vehicle[6], flags=re.IGNORECASE)
+                        blueprint.text = re.sub('FSA[a-zA-Z0-9_]*.xml', 'FSA.xml', blueprint.text, flags=re.IGNORECASE)
+                        name.text = re.sub('AP.FSA.([a-zA-Z]*).*', r'AP FSA \1', name.text, flags=re.IGNORECASE)
                     else:
+                        # Check if high cube containers are allowed
+                        if config.get('defaults', 'fsafta_hc',
+                                      fallback='No high cube containers') == 'Allow high cube containers':
+                            dcsv = re.sub('_No_HC', '', this_vehicle[7])
+                        else:
+                            dcsv = this_vehicle[7]
                         number.text = dcsv_get_num(
-                            Path(railworks_path, 'Assets/AP/FSAWagonPack', this_vehicle[7]), number.text,
+                            Path(railworks_path, 'Assets/AP/FSAWagonPack', dcsv), number.text,
                             '([0-9]{6})(.*)')
                     rv_pairs.append([rv_orig, number.text])
                     rv_list.append(number.text)
@@ -743,10 +805,21 @@ def fta_replace(provider, product, blueprint, name, number, loaded):
             if this_vehicle[1] in product.text:
                 bp = re.search(this_vehicle[2], blueprint.text, flags=re.IGNORECASE)
                 if bp:
+                    era = config.get('defaults', 'fsafta_variant', fallback='FL / 2000 era')
+                    if era == 'RFD / 2000 era':
+                        w = ['RfD', '', '']
+                    elif era == 'FL / 2000 era':
+                        w = ['FL', '_2000', '(2000)']
+                    elif era == 'FL / 2010 era':
+                        w = ['FL', '_2010', '(2010)']
+                    elif era == 'FL / 2020 era':
+                        w = ['FL', '_2020', '(2020)']
                     provider.text = this_vehicle[3]
                     product.text = this_vehicle[4]
-                    blueprint.text = this_vehicle[5]
-                    name.text = this_vehicle[6]
+                    blueprint.text = re.sub('RFD|FL', w[0].upper(), re.sub('_20[0-2]0', w[1], this_vehicle[5]),
+                                            flags=re.IGNORECASE)
+                    name.text = re.sub('RFD|FL', w[0], re.sub('\(20[0-2]0\)', w[2], this_vehicle[6]),
+                                       flags=re.IGNORECASE)
                     rv_orig = number.text
                     if 'eFalse' in loaded.text:
                         # Wagon is unloaded
@@ -755,11 +828,17 @@ def fta_replace(provider, product, blueprint, name, number, loaded):
                             number.text,
                             '([0-9]{6})(.*)')
                         # Change the blueprint and name to the unloaded wagon
-                        blueprint.text = re.sub('FTA[a-zA-Z0-9_]*.xml', 'FTA.xml', this_vehicle[5], flags=re.IGNORECASE)
-                        name.text = re.sub('AP.FTA.([a-zA-Z]*).*', r'AP FTA \1', this_vehicle[6], flags=re.IGNORECASE)
+                        blueprint.text = re.sub('FTA[a-zA-Z0-9_]*.xml', 'FTA.xml', blueprint.text, flags=re.IGNORECASE)
+                        name.text = re.sub('AP.FTA.([a-zA-Z]*).*', r'AP FTA \1', name.text, flags=re.IGNORECASE)
                     else:
+                        # Check if high cube containers are allowed
+                        if config.get('defaults', 'fsafta_hc',
+                                      fallback='No high cube containers') == 'Allow high cube containers':
+                            dcsv = re.sub('_No_HC', '', this_vehicle[7])
+                        else:
+                            dcsv = this_vehicle[7]
                         number.text = dcsv_get_num(
-                            Path(railworks_path, 'Assets/AP/FSAWagonPack', this_vehicle[7]), number.text,
+                            Path(railworks_path, 'Assets/AP/FSAWagonPack', dcsv), number.text,
                             '([0-9]{6})(.*)')
                     rv_pairs.append([rv_orig, number.text])
                     rv_list.append(number.text)
@@ -2670,9 +2749,18 @@ if __name__ == "__main__":
         elif event == 'About':
             sg.Popup('About RSSwapTool',
                      'Tool for swapping rolling stock in Train Simulator (Dovetail Games) scenarios',
-                     'Issued under the GNU General Public License - see https://www.gnu.org/licenses/',
-                     'Version 0.1b',
-                     'Copyright 2021 JR McKenzie (jrmknz@yahoo.co.uk)', 'https://github.com/jrmckenzie/RSSwapTool')
+                     'Version 0.2b / 5 April 2021',
+                     'Copyright 2021 JR McKenzie (jrmknz@yahoo.co.uk)', 'https://github.com/jrmckenzie/RSSwapTool',
+                     'This program is free software: you can redistribute it and / or modify '
+                     'it under the terms of the GNU General Public License as published by '
+                     'the Free Software Foundation, either version 3 of the License, or '
+                     '(at your option) any later version.',
+                     'This program is distributed in the hope that it will be useful, '
+                     'but WITHOUT ANY WARRANTY; without even the implied warranty of '
+                     'MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the '
+                     'GNU General Public License for more details.',
+                     'You should have received a copy of the GNU General Public License '
+                     'along with this program.  If not, see <https://www.gnu.org/licenses/>.')
         elif event == 'Settings':
             if not config.has_section('defaults'):
                 config.add_section('defaults')
@@ -2717,11 +2805,15 @@ if __name__ == "__main__":
             with open(path_to_config, 'w') as configfile:
                 config.write(configfile)
                 configfile.close()
-            c86_hc = config.get('defaults', 'c86_hc')
-            c56_rf = config.get('defaults', 'c56_rf')
+            c86_hc = config.get('defaults', 'c86_hc', fallback=c86_opts[0])
+            c56_rf = config.get('defaults', 'c56_rf', fallback=c56_opts[0])
+            fsafta_variant = config.get('defaults', 'fsafta_variant', fallback=fsafta_opts[0])
+            fsafta_hc = config.get('defaults', 'fsafta_hc', fallback=fsafta_cube[0])
+            mgr_variant = config.get('defaults', 'mgr_variant', fallback=mgr_types[0])
+            mgr_livery = config.get('defaults', 'mgr_livery', fallback=mgr_liveries[0])
             # The settings button has been pressed, so allow the user to change the RailWorks folder setting
             loclayout = [
-                [sg.Text('Settings', justification='c')],
+                [sg.Text('Settings', font='Helvetica 14')],
                 [sg.Text('Path to RailWorks folder:'),
                  sg.Input(default_text=str(railworks_path), key='RWloc', readonly=True),
                  sg.FolderBrowse(key='RWloc')],
@@ -2741,6 +2833,18 @@ if __name__ == "__main__":
                     'and keep the original RSC Railfreight Sectors Class 56.',
                     size=(72, 0))],
                 [sg.Combo(c56_opts, auto_size_text=True, default_value=c56_rf, key='c56_rf', readonly=True)],
+                [sg.HSeparator(color='#aaaaaa')],
+                [sg.Text(
+                    'If FSA/FTA wagons are found, replace them with the following types:',
+                    size=(72, 0))],
+                [sg.Combo(fsafta_opts, auto_size_text=True, default_value=fsafta_variant, key='fsafta_variant', readonly=True)],
+                [sg.Combo(fsafta_cube, auto_size_text=True, default_value=fsafta_hc, key='fsafta_hc', readonly=True)],
+                [sg.HSeparator(color='#aaaaaa')],
+                [sg.Text(
+                    'If HAA wagons are found, replace them with the following type(s):',
+                    size=(72, 0))],
+                [sg.Combo(mgr_types, auto_size_text=True, default_value=mgr_variant, key='mgr_variant', readonly=True)],
+                [sg.Combo(mgr_liveries, auto_size_text=True, default_value=mgr_livery, key='mgr_livery', readonly=True)],
                 [sg.HSeparator(color='#aaaaaa')],
                 [sg.Checkbox('Save a list of all vehicles in the scenario (useful for debugging)', key='save_report',
                              default=get_my_config_boolean('defaults', 'save_report'), enable_events=True,
@@ -2762,6 +2866,10 @@ if __name__ == "__main__":
                         config.add_section('defaults')
                     config.set('defaults', 'c86_hc', str(lvalues['c86_hc']))
                     config.set('defaults', 'c56_rf', str(lvalues['c56_rf']))
+                    config.set('defaults', 'fsafta_variant', str(lvalues['fsafta_variant']))
+                    config.set('defaults', 'fsafta_hc', str(lvalues['fsafta_hc']))
+                    config.set('defaults', 'mgr_variant', str(lvalues['mgr_variant']))
+                    config.set('defaults', 'mgr_livery', str(lvalues['mgr_livery']))
                     config.set('defaults', 'save_report', str(lvalues['save_report']))
                     with open(path_to_config, 'w') as configfile:
                         config.write(configfile)

@@ -1,6 +1,6 @@
 #     RSSwapTool - A script to swap in up to date or enhanced rolling stock
 #     for older versions of stock in Train Simulator scenarios.
-#     Copyright (C) 2021 James McKenzie jrmckenzie @ gmail . com
+#     Copyright (C) 2021 James McKenzie jrmknz@yahoo.co.uk
 #
 #     This program is free software: you can redistribute it and/or modify
 #     it under the terms of the GNU General Public License as published by
@@ -14,30 +14,6 @@
 #
 #     You should have received a copy of the GNU General Public License
 #     along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
-##################################################################################
-#  The file contains data for the wagons where multiple different swaps are
-#  possible plus other data on railvehicle numbers etc.
-##################################################################################
-# List of AP HAA Loaded Wagons to randomise and replace the above.
-# Edit or append new wagons to suit the scenario. To double the probability of any
-# particular wagon appearing, enter it twice.
-haa_l_wagons = [[r'RailVehicles\Freight\HAA\EWS\HAA_LD.xml', 'AP HAA Red Loaded'],
-                [r'RailVehicles\Freight\HAA\EWS2\HAA_LD.xml', 'AP HAA Red Loaded W1'],
-                [r'RailVehicles\Freight\HAA\EWS2\HMA_LD.xml', 'AP HMA Red Loaded W1'],
-                [r'RailVehicles\Freight\HAA\EWS3\HAA_LD.xml', 'AP HAA Red Loaded W2'],
-                [r'RailVehicles\Freight\HAA\Sector3\HAA_LD.xml', 'AP HAA Sector Loaded W2']]
-
-##################################################################################
-# List of AP HAA Empty Wagons to randomise and replace the above.
-# Edit or append new wagons to suit the scenario. To double the probability of any
-# particular wagon appearing, enter it twice.
-haa_e_wagons = [[r'RailVehicles\Freight\HAA\EWS\HAA.xml', 'AP HAA Red Empty'],
-                [r'RailVehicles\Freight\HAA\EWS2\HAA.xml', 'AP HAA Red Empty W1'],
-                [r'RailVehicles\Freight\HAA\EWS2\HAA.xml', 'AP HAA Red Empty W1'],
-                [r'RailVehicles\Freight\HAA\EWS3\HAA.xml', 'AP HAA Red Empty W2'],
-                [r'RailVehicles\Freight\HAA\Sector3\HAA.xml', 'AP HAA Sector Empty W2'],
-                [r'RailVehicles\Freight\HAA\EWS2\HMA.xml', 'AP HMA Red Empty W1']]
 
 ##################################################################################
 # List of AP HHA Loaded Wagons to randomise and replace.

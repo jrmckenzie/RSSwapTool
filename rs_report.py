@@ -242,9 +242,18 @@ if __name__ == "__main__":
             sg.Popup('About RSReportTool',
                      'Tool for listing rolling stock in Train Simulator (Dovetail Games) scenarios, bundled with '
                      'RSSwapTool to provide a standalone tool to examine scenarios and list rolling stock.',
-                     'Issued under the GNU General Public License - see https://www.gnu.org/licenses/',
-                     'Version 0.1b',
-                     'Copyright 2021 JR McKenzie', 'https://github.com/jrmckenzie/RSSwapTool')
+                     'Version 0.2b / 5 April 2021',
+                     'Copyright 2021 JR McKenzie (jrmknz@yahoo.co.uk)', 'https://github.com/jrmckenzie/RSSwapTool',
+                     'This program is free software: you can redistribute it and / or modify '
+                     'it under the terms of the GNU General Public License as published by '
+                     'the Free Software Foundation, either version 3 of the License, or '
+                     '(at your option) any later version.',
+                     'This program is distributed in the hope that it will be useful, '
+                     'but WITHOUT ANY WARRANTY; without even the implied warranty of '
+                     'MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the '
+                     'GNU General Public License for more details.',
+                     'You should have received a copy of the GNU General Public License '
+                     'along with this program.  If not, see <https://www.gnu.org/licenses/>.')
         elif event == 'Settings':
             # The settings button has been pressed, so allow the user to change the RailWorks folder setting
             loclayout = [
