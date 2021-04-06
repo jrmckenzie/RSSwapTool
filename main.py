@@ -1034,7 +1034,7 @@ def vda_replace(provider, product, blueprint, name, number, loaded, flipped, fol
                 else:
                     lot = '3908'
                     m = 9450 + rv_num % 300
-                rv_num = m + 200650
+                rv_num = str(m + 200650) + '#####'
                 product.text = 'VDA Vans lot ' + lot
                 this_blueprint = 'RailVehicles\\Freight\\VDA Vans\\VDA_' + lot + '_' + lv + white + '_' + load + weathering + '.xml'
                 this_name = 'VDA: ' + lv + white + ' ' + lot + ' - ' + load + '.' + weathering
