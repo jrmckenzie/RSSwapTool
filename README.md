@@ -77,11 +77,11 @@ The following substitutions are available:
 * Replace Class 456 sets - Tick to enable replacing of South London Lines Class 456 units with AP/Waggonz versions
 * Replace Class 465 sets - Tick to enable replacing of South London Lines / London-Gillingham / RSC Class 465 Pack Class 465 units with AP enhanced versions
 
-####Settings
+#### Settings
 
 Pressing the 'Settings' button allows you to update the location of RailWorks folder, and change the substitution policy with Class 56, 86, MGR wagons and FSA/FTA wagons. You can choose how to replace a Class 56 where the AP enhancement pack doesn’t include the sector / depot plate of the original. You can choose to replace any Class 86s with headcode blinds with the Vulcan Productions headcode blinds add-on or with plated over headcode box and marker lights. You can choose whether to replace HAA wagons with AP HAA, HBA, HCA, HDA, HFA, HMA & HNA in Blue, Red, or Sector livery. You can choose whether you want Railfreight Distribution or Freightliner FSA/FTA wagons, and whether the containers should be appropriate for 2000s, 2010s, or 2020s era. You can also enable or disable the saving of a report listing all rail vehicles in the scenario and their key details.
 
-####Notes
+#### Notes
 
 Note that in some cases the replacement loco, coach or wagon might come in a variety of different weathering options. The application will choose a random weathering. The HHA, HTO, HTV and VDA wagon replacements will also be slightly randomised within the consist to give a bit of variety - not too many clean new ones though! 
 
