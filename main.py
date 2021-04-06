@@ -56,6 +56,9 @@ mgr_types = ['HAA only', 'HCA (canopy) only', 'HFA (canopy) only', 'HAA and HCA 
             'HMA only', 'HNA (canopy) only', 'HMA and HNA (canopy) mixed', 'Completely random']
 mgr_liveries = ['Maroon only',  'Blue only', 'Maroon and Blue', 'Sectors only', 'Sectors and Maroon',
                 'Sectors and Blue', 'Completely random']
+vda_liveries = ['Maroon only', 'Railfreight only', 'Mostly Maroon', 'Mostly Railfreight', 'Evenly Mixed']
+vda_whiteroof_probabilities = ['0', '1', '5', '10', '20', '30', '40', '50', '60', '70', '80', '90', '100']
+vda_dirty_probabilities = ['0', '10', '20', '30', '40', '50', '60', '70', '80', '90', '100']
 sg.LOOK_AND_FEEL_TABLE['Railish'] = {'BACKGROUND': '#00384F',
                                      'TEXT': '#FFFFFF',
                                      'INPUT': '#FFFFFF',
@@ -148,6 +151,9 @@ if not config.has_section('defaults'):
     config.set('defaults', 'fsafta_hc', fsafta_cube[0])
     config.set('defaults', 'mgr_type', mgr_types[0])
     config.set('defaults', 'mgr_livery', mgr_liveries[0])
+    config.set('vda_livery', vda_liveries[0])
+    config.set('vda_whiteroof_probability', vda_whiteroof_probabilities[0])
+    config.set('vda_dirty_probability', vda_dirty_probabilities[0])
     with open(path_to_config, 'w') as iconfigfile:
         config.write(iconfigfile)
         iconfigfile.close()
@@ -985,17 +991,53 @@ def vda_replace(provider, product, blueprint, name, number, loaded, flipped, fol
                 provider.text = 'FastlineSimulation'
                 rv_orig = number.text
                 if 'eTrue' in loaded.text:
-                    # Replace a loaded wagon
-                    idx = random.randrange(0, len(vda_l_wagons))
-                    product.text = vda_l_wagons[idx][1]
-                    this_blueprint = vda_l_wagons[idx][2]
-                    this_name = vda_l_wagons[idx][3]
+                    load = 'L'  # Replace a loaded wagon
                 else:
-                    # Replace an empty wagon
-                    idx = random.randrange(0, len(vda_e_wagons))
-                    product.text = vda_e_wagons[idx][1]
-                    this_blueprint = vda_e_wagons[idx][2]
-                    this_name = vda_e_wagons[idx][3]
+                    load = 'E'  # Replace an empty wagon
+                livery = config.get('defaults', 'vda_livery', fallback='Maroon only')
+                if livery == 'Maroon only':
+                    lv = 'M'
+                elif livery == 'Railfreight only':
+                    lv = 'RF'
+                elif livery == 'Mostly Maroon':
+                    lv = ['M', 'M', 'M', 'RF'][random.randrange(0, 4)]      # 25% probability of Railfreight
+                elif livery == 'Mostly Railfreight':
+                    lv = ['RF', 'RF', 'RF', 'M'][random.randrange(0, 4)]    # 75% probability of Railfreight
+                elif livery == 'Evenly Mixed':
+                    lv = ['M', 'RF'][random.randrange(0, 2)]                # 50% probability of Railfreight
+                white_probability = int(config.get('defaults', 'vda_whiteroof_probability', fallback='0'))
+                white_dicethrow = random.randrange(1, 101)
+                dirty_probability = int(config.get('defaults', 'vda_dirty_probability', fallback='90'))
+                dirty_dicethrow = random.randrange(1, 101)
+                if white_dicethrow <= white_probability:
+                    white = 'W'
+                else:
+                    white = ''
+                if dirty_dicethrow <= dirty_probability:
+                    weathering = 'D'
+                else:
+                    weathering = 'C'
+                # Choose a random VDA lot and remap the vehicle number to somewhere within the numbers this lot was
+                # allocated. 750 vehicles were constructed, 330 in lot 3855, 20 in lot 3890, 100 in lot 3856 and 300
+                # in lot 3908.
+                x = random.randrange(0, 750)
+                rv_num = int(number.text)
+                if 0 <= x < 330:
+                    lot = '3855'
+                    m = rv_num % 330
+                elif 330 <= x < 350:
+                    lot = '3890'
+                    m = 330 + rv_num % 20
+                elif 350 <= x < 450:
+                    lot = '3856'
+                    m = 350 + rv_num % 100
+                else:
+                    lot = '3908'
+                    m = 9450 + rv_num % 300
+                rv_num = m + 200650
+                product.text = 'VDA Vans lot ' + lot
+                this_blueprint = 'RailVehicles\\Freight\\VDA Vans\\VDA_' + lot + '_' + lv + white + '_' + load + weathering + '.xml'
+                this_name = 'VDA: ' + lv + white + ' ' + lot + ' - ' + load + '.' + weathering
                 if not tailmarker == 1:
                     # The vehicle is at one end of the consist and should have a red tail light
                     this_blueprint = re.sub('\.xml', 'R.xml', this_blueprint, flags=re.IGNORECASE)
@@ -1009,13 +1051,12 @@ def vda_replace(provider, product, blueprint, name, number, loaded, flipped, fol
                         if flipped.text == '1':
                             direction_flip(flipped, followers)
                 # Now process the vehicle number
-                rv_num = rv_orig + "#####"
-                rv_list.append(rv_num)
-                rv_pairs.append([rv_orig, rv_num])
+                rv_list.append(str(rv_num))
+                rv_pairs.append([rv_orig, str(rv_num)])
                 # Set Fastline wagon number
                 blueprint.text = this_blueprint
                 name.text = this_name
-                number.text = rv_num
+                number.text = str(rv_num)
                 return True
     return False
 
@@ -2749,7 +2790,7 @@ if __name__ == "__main__":
         elif event == 'About':
             sg.Popup('About RSSwapTool',
                      'Tool for swapping rolling stock in Train Simulator (Dovetail Games) scenarios',
-                     'Version 0.2b / 5 April 2021',
+                     'Version 0.3b / 7 April 2021',
                      'Copyright 2021 JR McKenzie (jrmknz@yahoo.co.uk)', 'https://github.com/jrmckenzie/RSSwapTool',
                      'This program is free software: you can redistribute it and / or modify '
                      'it under the terms of the GNU General Public License as published by '
@@ -2811,6 +2852,11 @@ if __name__ == "__main__":
             fsafta_hc = config.get('defaults', 'fsafta_hc', fallback=fsafta_cube[0])
             mgr_variant = config.get('defaults', 'mgr_variant', fallback=mgr_types[0])
             mgr_livery = config.get('defaults', 'mgr_livery', fallback=mgr_liveries[0])
+            vda_livery = config.get('defaults', 'vda_livery', fallback=vda_liveries[0])
+            vda_whiteroof_probability = config.get('defaults', 'vda_whiteroof_probability',
+                                                   fallback=vda_whiteroof_probabilities[0])
+            vda_dirty_probability = config.get('defaults', 'vda_dirty_probability',
+                                               fallback=vda_dirty_probabilities[0])
             # The settings button has been pressed, so allow the user to change the RailWorks folder setting
             loclayout = [
                 [sg.Text('Settings', font='Helvetica 14')],
@@ -2837,14 +2883,27 @@ if __name__ == "__main__":
                 [sg.Text(
                     'If FSA/FTA wagons are found, replace them with the following types:',
                     size=(72, 0))],
-                [sg.Combo(fsafta_opts, auto_size_text=True, default_value=fsafta_variant, key='fsafta_variant', readonly=True)],
-                [sg.Combo(fsafta_cube, auto_size_text=True, default_value=fsafta_hc, key='fsafta_hc', readonly=True)],
+                [sg.Combo(fsafta_opts, auto_size_text=True, default_value=fsafta_variant, key='fsafta_variant',
+                          readonly=True),
+                sg.Combo(fsafta_cube, auto_size_text=True, default_value=fsafta_hc, key='fsafta_hc', readonly=True)],
                 [sg.HSeparator(color='#aaaaaa')],
                 [sg.Text(
                     'If HAA wagons are found, replace them with the following type(s):',
                     size=(72, 0))],
-                [sg.Combo(mgr_types, auto_size_text=True, default_value=mgr_variant, key='mgr_variant', readonly=True)],
-                [sg.Combo(mgr_liveries, auto_size_text=True, default_value=mgr_livery, key='mgr_livery', readonly=True)],
+                [sg.Combo(mgr_types, auto_size_text=True, default_value=mgr_variant, key='mgr_variant', readonly=True),
+                sg.Text('Livery:'), sg.Combo(mgr_liveries, auto_size_text=True, default_value=mgr_livery,
+                                             key='mgr_livery', readonly=True)],
+                [sg.HSeparator(color='#aaaaaa')],
+                [sg.Text(
+                    'If VDA wagons are found, replace them with the following livery, and choose the percentage '
+                    'probability that a swapped wagon will have a white painted roof:',
+                    size=(72, 0))],
+                [sg.Text('Livery:'), sg.Combo(vda_liveries, auto_size_text=True, default_value=vda_livery, 
+                        key='vda_livery', readonly=True), sg.Text('% chance roof is white:'), 
+                        sg.Combo(vda_whiteroof_probabilities, auto_size_text=True,
+                        default_value=vda_whiteroof_probability, key='vda_whiteroof_probability', readonly=True),
+                        sg.Text('% chance van is dirty:'), sg.Combo(vda_dirty_probabilities, auto_size_text=True,
+                        default_value=vda_dirty_probability, key='vda_dirty_probability', readonly=True)],
                 [sg.HSeparator(color='#aaaaaa')],
                 [sg.Checkbox('Save a list of all vehicles in the scenario (useful for debugging)', key='save_report',
                              default=get_my_config_boolean('defaults', 'save_report'), enable_events=True,
@@ -2870,6 +2929,9 @@ if __name__ == "__main__":
                     config.set('defaults', 'fsafta_hc', str(lvalues['fsafta_hc']))
                     config.set('defaults', 'mgr_variant', str(lvalues['mgr_variant']))
                     config.set('defaults', 'mgr_livery', str(lvalues['mgr_livery']))
+                    config.set('defaults', 'vda_livery', str(lvalues['vda_livery']))
+                    config.set('defaults', 'vda_whiteroof_probability', str(lvalues['vda_whiteroof_probability']))
+                    config.set('defaults', 'vda_dirty_probability', str(lvalues['vda_dirty_probability']))
                     config.set('defaults', 'save_report', str(lvalues['save_report']))
                     with open(path_to_config, 'w') as configfile:
                         config.write(configfile)

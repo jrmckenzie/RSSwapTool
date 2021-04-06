@@ -242,7 +242,7 @@ if __name__ == "__main__":
             sg.Popup('About RSReportTool',
                      'Tool for listing rolling stock in Train Simulator (Dovetail Games) scenarios, bundled with '
                      'RSSwapTool to provide a standalone tool to examine scenarios and list rolling stock.',
-                     'Version 0.2b / 5 April 2021',
+                     'Version 0.3b / 7 April 2021',
                      'Copyright 2021 JR McKenzie (jrmknz@yahoo.co.uk)', 'https://github.com/jrmckenzie/RSSwapTool',
                      'This program is free software: you can redistribute it and / or modify '
                      'it under the terms of the GNU General Public License as published by '
