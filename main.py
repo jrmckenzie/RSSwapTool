@@ -27,11 +27,10 @@ import configparser
 import PySimpleGUI as sg
 import webbrowser
 from pathlib import Path
-from data_file import hha_e_wagons, hha_l_wagons, hto_e_wagons, hto_l_wagons, \
-    htv_e_wagons, htv_l_wagons, vda_e_wagons, vda_l_wagons, HTO_141_numbers, HTO_143_numbers, HTO_146_numbers, \
-    HTO_rebodied_numbers, HTV_146_numbers, HTV_rebodied_numbers, c158_s9bl_rr, c158_s9bl_nr, c158_s9bl_fgw, \
-    c158_s9bl_tpe, c158_s9bl_swt, c158_nwc, c158_dtg_fc, c158_livman_rr, ap40headcodes_69_77, ap40headcodes_62_69, \
-    rsc20headcodes_62_69, rsc20headcodes_69_77, c168_chiltern, c170_ex_ar_aga_ap, c170_lm, c170_ct_xc, c170_ar23, \
+from data_file import hha_e_wagons, hha_l_wagons, HTO_141_numbers, HTO_143_numbers, \
+    HTO_146_numbers, HTO_rebodied_numbers, HTV_146_numbers, HTV_rebodied_numbers, c158_s9bl_rr, c158_s9bl_nr, \
+    c158_s9bl_fgw, c158_s9bl_tpe, c158_s9bl_swt, c158_nwc, c158_dtg_fc, c158_livman_rr, ap40headcodes_69_77, \
+    ap40headcodes_62_69, rsc20headcodes_62_69, c168_chiltern, c170_ex_ar_aga_ap, c170_lm, c170_ct_xc, c170_ar23, \
     c170_scotrail, c170_ftpe, c170_ga_hull, c170_mml, c171_southern, c350_lb_ftpe, c365_ecmls_nse, c365_apcxse, \
     c450_gu_swt, c465_se, c375_dtg_pack, c377_lb_se, c377_lg_sn, c377_fcc, c170_bp_name_lookup, c375_dmos_lookup, \
     c456_nse, c456_southern, c319_dest, c350_lm_wcmls, c375_southern_wcmls
@@ -58,7 +57,8 @@ mgr_liveries = ['Maroon only',  'Blue only', 'Maroon and Blue', 'Sectors only', 
                 'Sectors and Blue', 'Completely random']
 vda_liveries = ['Maroon only', 'Railfreight only', 'Mostly Maroon', 'Mostly Railfreight', 'Evenly Mixed']
 vda_whiteroof_probabilities = ['0', '1', '5', '10', '20', '30', '40', '50', '60', '70', '80', '90', '100']
-vda_dirty_probabilities = ['0', '10', '20', '30', '40', '50', '60', '70', '80', '90', '100']
+dirty_probabilities = ['0', '10', '20', '30', '40', '50', '60', '70', '80', '90', '100']
+htx_eras = ['Pre-TOPS only', 'Mixed', 'TOPS only']
 sg.LOOK_AND_FEEL_TABLE['Railish'] = {'BACKGROUND': '#00384F',
                                      'TEXT': '#FFFFFF',
                                      'INPUT': '#FFFFFF',
@@ -153,7 +153,9 @@ if not config.has_section('defaults'):
     config.set('defaults', 'mgr_livery', mgr_liveries[0])
     config.set('vda_livery', vda_liveries[0])
     config.set('vda_whiteroof_probability', vda_whiteroof_probabilities[0])
-    config.set('vda_dirty_probability', vda_dirty_probabilities[0])
+    config.set('vda_dirty_probability', dirty_probabilities[8])
+    config.set('htx_dirty_probability', dirty_probabilities[8])
+    config.set('htx_era', htx_eras[1])
     with open(path_to_config, 'w') as iconfigfile:
         config.write(iconfigfile)
         iconfigfile.close()
@@ -654,8 +656,7 @@ def haa_replace(provider, product, blueprint, name, number, loaded, flipped, fol
                 if bp:
                     provider.text = 'AP'
                     product.text = 'HAAWagonPack01'
-                    weathering = [('', ''), ('2', ' W1'), ('2', ' W1'), ('3', ' W2'), ('3', ' W2')][
-                        random.randrange(0, 5)]
+                    weathering = random.choice([('', ''), ('2', ' W1'), ('2', ' W1'), ('3', ' W2'), ('3', ' W2')])
                     if 'eTrue' in loaded.text:
                         load = ['_LD', 'Loaded']
                     else:
@@ -669,35 +670,37 @@ def haa_replace(provider, product, blueprint, name, number, loaded, flipped, fol
                     elif variant == 'HFA (canopy) only':
                         bp = 'HFA'
                     elif variant == 'HAA and HCA (canopy) mixed':
-                        bp = ['HAA', 'HCA'][random.randrange(0, 2)]
+                        bp = random.choice(['HAA', 'HCA'])
                     elif variant == 'HAA, HCA (canopy) and HFA (canopy) mixed':
-                        bp = ['HAA', 'HCA', 'HFA'][random.randrange(0, 3)]
+                        bp = random.choice(['HAA', 'HCA', 'HFA'])
                     elif variant == 'HDA only':
                         bp = 'HDA'
                     elif variant == 'HBA (canopy) only':
                         bp = 'HBA'
                     elif variant == 'HDA and HBA (canopy) mixed':
-                        bp = ['HDA', 'HBA'][random.randrange(0, 2)]
+                        bp = random.choice(['HDA', 'HBA'])
                     elif variant == 'HMA only':
                         bp = 'HMA'
                     elif variant == 'HNA (canopy) only':
                         bp = 'HNA'
                     elif variant == 'HMA and HNA (canopy) mixed':
-                        bp = ['HMA', 'HNA'][random.randrange(0, 2)]
-                    elif variant == 'Completely random':
-                        bp = ['HAA', 'HBA', 'HCA', 'HDA', 'HFA', 'HMA', 'HNA'][random.randrange(0, 7)]
+                        bp = random.choice(['HMA', 'HNA'])
+                    else:
+                        # Completely random MGR wagon
+                        bp = random.choice(['HAA', 'HBA', 'HCA', 'HDA', 'HFA', 'HMA', 'HNA'])
                     if livery == 'Maroon only':
                         lv = ['EWS', ' Red ']
                     elif livery == 'Blue only':
                         lv = ['Blue', ' Blue ']
                     elif livery == 'Maroon and Blue':
-                        lv = [('EWS', ' Red '), ('Blue', ' Blue ')][random.randrange(0, 2)]
+                        lv = random.choice([('EWS', ' Red '), ('Blue', ' Blue ')])
                     elif livery == 'Sectors and Maroon':
-                        lv = [('Sector', ' Sector '), ('EWS', ' Red ')][random.randrange(0, 2)]
+                        lv = random.choice([('Sector', ' Sector '), ('EWS', ' Red ')])
                     elif livery == 'Sectors and Blue':
-                        lv = [('Sector', ' Sector '), ('Blue', ' Blue ')][random.randrange(0, 2)]
-                    elif livery == 'Completely random':
-                        lv = [('EWS', ' Red '), ('Blue', ' Blue '), ('Sector', ' Sector ')][random.randrange(0, 3)]
+                        lv = random.choice([('Sector', ' Sector '), ('Blue', ' Blue ')])
+                    else:
+                        # Completely random livery
+                        lv = random.choice([('EWS', ' Red '), ('Blue', ' Blue '), ('Sector', ' Sector ')])
                     this_name = 'AP ' + bp + lv[1] + load[1] + weathering[1]
                     this_blueprint = 'RailVehicles\\Freight\\HAA\\' + lv[0] + weathering[0] + '\\' + bp + load[0] + '.xml'
                     if not tailmarker == 1:
@@ -770,7 +773,8 @@ def fsa_replace(provider, product, blueprint, name, number, loaded):
                         w = ['FL', '_2000', '(2000)']
                     elif era == 'FL / 2010 era':
                         w = ['FL', '_2010', '(2010)']
-                    elif era == 'FL / 2020 era':
+                    else:
+                        # FL / 2020 era
                         w = ['FL', '_2020', '(2020)']
                     provider.text = this_vehicle[3]
                     product.text = this_vehicle[4]
@@ -818,7 +822,8 @@ def fta_replace(provider, product, blueprint, name, number, loaded):
                         w = ['FL', '_2000', '(2000)']
                     elif era == 'FL / 2010 era':
                         w = ['FL', '_2010', '(2010)']
-                    elif era == 'FL / 2020 era':
+                    else:
+                        # FL / 2020 era
                         w = ['FL', '_2020', '(2020)']
                     provider.text = this_vehicle[3]
                     product.text = this_vehicle[4]
@@ -1000,11 +1005,12 @@ def vda_replace(provider, product, blueprint, name, number, loaded, flipped, fol
                 elif livery == 'Railfreight only':
                     lv = 'RF'
                 elif livery == 'Mostly Maroon':
-                    lv = ['M', 'M', 'M', 'RF'][random.randrange(0, 4)]      # 25% probability of Railfreight
+                    lv = random.choice(['M', 'M', 'M', 'RF'])      # 25% probability of Railfreight
                 elif livery == 'Mostly Railfreight':
-                    lv = ['RF', 'RF', 'RF', 'M'][random.randrange(0, 4)]    # 75% probability of Railfreight
-                elif livery == 'Evenly Mixed':
-                    lv = ['M', 'RF'][random.randrange(0, 2)]                # 50% probability of Railfreight
+                    lv = random.choice(['RF', 'RF', 'RF', 'M'])    # 75% probability of Railfreight
+                else:
+                    # Evenly mixed Maroon and Railfreight vans
+                    lv = random.choice(['M', 'RF'])                # 50% probability of Railfreight
                 white_probability = int(config.get('defaults', 'vda_whiteroof_probability', fallback='0'))
                 white_dicethrow = random.randrange(1, 101)
                 dirty_probability = int(config.get('defaults', 'vda_dirty_probability', fallback='90'))
@@ -1070,31 +1076,61 @@ def coal21_t_hto_replace(provider, product, blueprint, name, number, loaded):
                 if bp:
                     provider.text = 'FastlineSimulation'
                     rv_orig = number.text
+                    rv_num = int(number.text.replace('B', ''))
                     if 'eTrue' in loaded.text:
-                        # Replace a loaded wagon
-                        idx = random.randrange(0, len(hto_l_wagons))
-                        product.text = hto_l_wagons[idx][1]
-                        blueprint.text = hto_l_wagons[idx][2]
-                        name.text = hto_l_wagons[idx][3]
-                        # Now process the vehicle number
-                        rv_num = dcsv_21t_hopper_number(rv_orig, get_coal21t_db(hto_l_wagons[idx][1]))
-                        rv_list.append(rv_num)
-                        rv_pairs.append([rv_orig, rv_num])
-                        # Set Fastline wagon number
-                        number.text = str(rv_num)
-                        return True
+                        load = 'L'  # Replace a loaded wagon
                     else:
-                        # Replace an empty wagon
-                        idx = random.randrange(0, len(hto_e_wagons))
-                        product.text = hto_e_wagons[idx][1]
-                        blueprint.text = hto_e_wagons[idx][2]
-                        name.text = hto_e_wagons[idx][3]
-                        # Now process the vehicle number
-                        rv_num = dcsv_21t_hopper_number(rv_orig, get_coal21t_db(hto_e_wagons[idx][1]))
-                        rv_list.append(rv_num)
-                        rv_pairs.append([rv_orig, rv_num])
-                        # Set Fastline wagon number
-                        number.text = str(rv_num)
+                        load = 'E'  # Replace an empty wagon
+                    # Choose a random HTO lot and remap the vehicle number to somewhere within the numbers this lot was
+                    # allocated. 11708 vehicle numbers are possible: 1200 in lot 141, 2750 in lot 143, 6050 in lot 146,
+                    # and 1708 rebodied.
+                    x = random.randrange(0, 11708)
+                    pretops_only = random.choice(['a', 'b', 'c'])
+                    no_pretops = 'd'
+                    if 0 <= x < 1200:
+                        lot = ['Dia 141', '01']
+                        m = HTO_141_numbers[rv_num % 1200]
+                        dirty_w = random.choice([('W2_', 'W2.'), ('W_', 'W1.')])
+                        clean_w = random.choice([('C2_', 'C2.'), ('C_', 'C1.')])
+                    elif 1200 <= x < 3950:
+                        lot = ['Dia 143', '02']
+                        m = HTO_143_numbers[rv_num % 2750]
+                        dirty_w = random.choice([('02_W_', 'W2.'), ('W_', 'W1.')])
+                        clean_w = random.choice([('02_C_', 'C2.'), ('C_', 'C1.')])
+                    elif 3950 <= x < 10000:
+                        lot = ['Dia 146', '04']
+                        m = HTO_146_numbers[rv_num % 6050]
+                        dirty_w = random.choice([('W2_', 'W2.'), ('W_', 'W.')])
+                        clean_w = random.choice([('C2_', 'C2.'), ('C_', 'C.')])
+                    else:
+                        lot = ['Rebodied', '18']
+                        m = HTO_rebodied_numbers[rv_num % 1708]
+                        dirty_w = random.choice([('B_W_', 'B.W.'), ('G_W_', 'G.W.')])
+                        clean_w = random.choice([('B_C_', 'B.C.'), ('G_C_', 'G.C.')])
+                        pretops_only = 'c'
+                        no_pretops = random.choice(['a', 'b', 'd'])
+                    dirty_probability = int(config.get('defaults', 'htx_dirty_probability', fallback='90'))
+                    dirty_dicethrow = random.randrange(1, 101)
+                    if dirty_dicethrow <= dirty_probability:
+                        weathering = dirty_w
+                    else:
+                        weathering = clean_w
+                    data_paneltypes = config.get('defaults', 'htx_era', fallback='Mixed')
+                    if data_paneltypes == 'Pre-TOPS only':
+                        rv_prefix = pretops_only
+                    elif data_paneltypes == 'TOPS only':
+                        rv_prefix = no_pretops
+                    else:
+                        rv_prefix = ''
+                    this_blueprint = 'RailVehicles\\Freight\\HTO\\FS_HT0' + lot[1] + 'A_' + weathering[0] + load + '.xml'
+                    this_name = 'HTO 21t Hopper - ' + lot[0] + ': ' + weathering[1] + load
+                    rv_num = rv_prefix + 'B' + str(m)
+                    product.text = 'HTO 21t Hoppers - ' + lot[0]
+                    blueprint.text = this_blueprint
+                    name.text = this_name
+                    number.text = rv_num
+                    rv_list.append(rv_num)
+                    rv_pairs.append([rv_orig, rv_num])
                     return True
     return False
 
@@ -1109,31 +1145,52 @@ def coal21_t_htv_replace(provider, product, blueprint, name, number, loaded):
                 if bp:
                     provider.text = 'FastlineSimulation'
                     rv_orig = number.text
+                    rv_num = int(number.text.replace('B', ''))
                     if 'eTrue' in loaded.text:
-                        # Replace a loaded wagon
-                        idx = random.randrange(0, len(htv_l_wagons))
-                        product.text = htv_l_wagons[idx][1]
-                        blueprint.text = htv_l_wagons[idx][2]
-                        name.text = htv_l_wagons[idx][3]
-                        # Now process the vehicle number
-                        rv_num = dcsv_21t_hopper_number(rv_orig, get_coal21t_db(htv_l_wagons[idx][1]))
-                        rv_list.append(rv_num)
-                        rv_pairs.append([rv_orig, rv_num])
-                        # Set Fastline wagon number
-                        number.text = str(rv_num)
-                        return True
+                        load = 'L'  # Replace a loaded wagon
                     else:
-                        # Replace an empty wagon
-                        idx = random.randrange(0, len(htv_e_wagons))
-                        product.text = htv_e_wagons[idx][1]
-                        blueprint.text = htv_e_wagons[idx][2]
-                        name.text = htv_e_wagons[idx][3]
-                        # Now process the vehicle number
-                        rv_num = dcsv_21t_hopper_number(rv_orig, get_coal21t_db(htv_e_wagons[idx][1]))
-                        rv_list.append(rv_num)
-                        rv_pairs.append([rv_orig, rv_num])
-                        # Set Fastline wagon number
-                        number.text = str(rv_num)
+                        load = 'E'  # Replace an empty wagon
+                    # Choose a random HTV lot and remap the vehicle number to somewhere within the numbers this lot was
+                    # allocated. 2579 vehicle numbers are possible: 441 in lot 146, 2138 rebodied.
+                    x = random.randrange(0, 2579)
+                    if 0 <= x < 441:
+                        lot = 'Dia 146'
+                        m = HTV_146_numbers[rv_num % 441]
+                        dirty_w = random.choice([('FS_HT004D_01_W_', 'B1.W.'), ('FS_HT004D_02_W_', 'B2.W.')])
+                        clean_w = random.choice([('FS_HT004D_01_C_', 'B1.C.'), ('FS_HT004D_02_C_', 'B2.C.')])
+                        pretops_only = random.choice(['a', 'b', 'c'])
+                        no_pretops = 'd'
+                    else:
+                        lot = 'Rebodied'
+                        m = HTV_rebodied_numbers[rv_num % 2138]
+                        dirty_w = random.choice([('Dirty\\HTV_B1_W_', 'B1.W.'), ('Dirty 2\\HTV_B2_W_', 'B2.W.'),
+                                                 ('Dirty 3\\HTV_M_W_', 'M.W.')])
+                        clean_w = random.choice([('Clean\\HTV_B1_C_', 'B1.C.'), ('Clean 2\\HTV_B2_C_', 'B2.C.'),
+                                                 ('Clean 3\\HTV_M_C_', 'M.C.')])
+                        pretops_only = '4'
+                        no_pretops = random.choice(['1', '2', '3'])
+                    dirty_probability = int(config.get('defaults', 'htx_dirty_probability', fallback='90'))
+                    dirty_dicethrow = random.randrange(1, 101)
+                    if dirty_dicethrow <= dirty_probability:
+                        weathering = dirty_w
+                    else:
+                        weathering = clean_w
+                    data_paneltypes = config.get('defaults', 'htx_era', fallback='Mixed')
+                    if data_paneltypes == 'Pre-TOPS only':
+                        rv_prefix = pretops_only
+                    elif data_paneltypes == 'TOPS only':
+                        rv_prefix = no_pretops
+                    else:
+                        rv_prefix = ''
+                    this_blueprint = 'RailVehicles\\Freight\\HTV\\' + weathering[0] + load + '.xml'
+                    this_name = 'HTV 21t ' + lot + ': ' + weathering[1] + load
+                    rv_num = rv_prefix + 'B' + str(m)
+                    product.text = 'HTV 21t Hoppers - ' + lot
+                    blueprint.text = this_blueprint
+                    name.text = this_name
+                    number.text = rv_num
+                    rv_list.append(rv_num)
+                    rv_pairs.append([rv_orig, rv_num])
                     return True
     return False
 
@@ -2790,7 +2847,7 @@ if __name__ == "__main__":
         elif event == 'About':
             sg.Popup('About RSSwapTool',
                      'Tool for swapping rolling stock in Train Simulator (Dovetail Games) scenarios',
-                     'Version 0.3b / 7 April 2021',
+                     'Version 0.4b / 14 April 2021',
                      'Copyright 2021 JR McKenzie (jrmknz@yahoo.co.uk)', 'https://github.com/jrmckenzie/RSSwapTool',
                      'This program is free software: you can redistribute it and / or modify '
                      'it under the terms of the GNU General Public License as published by '
@@ -2801,7 +2858,7 @@ if __name__ == "__main__":
                      'MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the '
                      'GNU General Public License for more details.',
                      'You should have received a copy of the GNU General Public License '
-                     'along with this program.  If not, see <https://www.gnu.org/licenses/>.')
+                     'along with this program.  If not, see https://www.gnu.org/licenses/.')
         elif event == 'Settings':
             if not config.has_section('defaults'):
                 config.add_section('defaults')
@@ -2856,7 +2913,10 @@ if __name__ == "__main__":
             vda_whiteroof_probability = config.get('defaults', 'vda_whiteroof_probability',
                                                    fallback=vda_whiteroof_probabilities[0])
             vda_dirty_probability = config.get('defaults', 'vda_dirty_probability',
-                                               fallback=vda_dirty_probabilities[0])
+                                               fallback=dirty_probabilities[8])
+            htx_dirty_probability = config.get('defaults', 'htx_dirty_probability',
+                                               fallback=dirty_probabilities[8])
+            htx_era = config.get('defaults', 'htx_era', fallback=htx_eras[1])
             # The settings button has been pressed, so allow the user to change the RailWorks folder setting
             loclayout = [
                 [sg.Text('Settings', font='Helvetica 14')],
@@ -2865,18 +2925,11 @@ if __name__ == "__main__":
                  sg.FolderBrowse(key='RWloc')],
                 [sg.HSeparator(color='#aaaaaa')],
                 [sg.Text(
-                    'If a BR Blue Class 86 with headcode blinds from the RSC Class 86 Pack is found, you can have it '
-                    'replaced with the Vulcan Productions headcode blinds addition to the AP Enhancement Pack if you '
-                    'like, or you can replace it with the AP loco with plated over headcode box and marker lights, '
-                    'or you can leave the original RSC Class 86 pack in place.',
-                    size=(72, 0))],
+                    'Swap behaviour for RSC Class 86 Pack locos with headcode blinds:', size=(72, 0))],
                 [sg.Combo(c86_opts, auto_size_text=True, default_value=c86_hc, key='c86_hc', readonly=True)],
                 [sg.HSeparator(color='#aaaaaa')],
                 [sg.Text(
-                    'If a Railfreight Sectors Class 56 Pack is found, and the depot plaque and/or sector logo of the '
-                    'original is not available in the AP Enhancement Pack, you can either replace it with the nearest '
-                    'numbered loco in the AP numbering database (depot / sectors will be different) or skip swapping '
-                    'and keep the original RSC Railfreight Sectors Class 56.',
+                    'Railfreight Sectors Class 56: if depot plaque / sectors logo not present in AP Enhancement Pack:',
                     size=(72, 0))],
                 [sg.Combo(c56_opts, auto_size_text=True, default_value=c56_rf, key='c56_rf', readonly=True)],
                 [sg.HSeparator(color='#aaaaaa')],
@@ -2886,6 +2939,14 @@ if __name__ == "__main__":
                 [sg.Combo(fsafta_opts, auto_size_text=True, default_value=fsafta_variant, key='fsafta_variant',
                           readonly=True),
                 sg.Combo(fsafta_cube, auto_size_text=True, default_value=fsafta_hc, key='fsafta_hc', readonly=True)],
+                [sg.HSeparator(color='#aaaaaa')],
+                [sg.Text(
+                    'If HTO/HTV wagons are found, use data panels: pre-TOPS only, TOPS only, or mixed:',
+                    size=(72, 0))],
+                [sg.Combo(htx_eras, auto_size_text=True, default_value=htx_era, key='htx_era', readonly=True),
+                 sg.Text('% chance wagon is dirty:'), sg.Combo(dirty_probabilities, auto_size_text=True,
+                                                             default_value=htx_dirty_probability,
+                                                             key='htx_dirty_probability', readonly=True)],
                 [sg.HSeparator(color='#aaaaaa')],
                 [sg.Text(
                     'If HAA wagons are found, replace them with the following type(s):',
@@ -2902,7 +2963,7 @@ if __name__ == "__main__":
                         key='vda_livery', readonly=True), sg.Text('% chance roof is white:'), 
                         sg.Combo(vda_whiteroof_probabilities, auto_size_text=True,
                         default_value=vda_whiteroof_probability, key='vda_whiteroof_probability', readonly=True),
-                        sg.Text('% chance van is dirty:'), sg.Combo(vda_dirty_probabilities, auto_size_text=True,
+                        sg.Text('% chance van is dirty:'), sg.Combo(dirty_probabilities, auto_size_text=True,
                         default_value=vda_dirty_probability, key='vda_dirty_probability', readonly=True)],
                 [sg.HSeparator(color='#aaaaaa')],
                 [sg.Checkbox('Save a list of all vehicles in the scenario (useful for debugging)', key='save_report',
@@ -2932,6 +2993,8 @@ if __name__ == "__main__":
                     config.set('defaults', 'vda_livery', str(lvalues['vda_livery']))
                     config.set('defaults', 'vda_whiteroof_probability', str(lvalues['vda_whiteroof_probability']))
                     config.set('defaults', 'vda_dirty_probability', str(lvalues['vda_dirty_probability']))
+                    config.set('defaults', 'htx_dirty_probability', str(lvalues['htx_dirty_probability']))
+                    config.set('defaults', 'htx_era', str(lvalues['htx_era']))
                     config.set('defaults', 'save_report', str(lvalues['save_report']))
                     with open(path_to_config, 'w') as configfile:
                         config.write(configfile)
@@ -3041,6 +3104,6 @@ if __name__ == "__main__":
                     browser = sg.popup_yes_no(output_message, html_report_status_text,
                                               'Do you want to open the report in your web browser now?')
                     if browser == 'Yes':
-                        webbrowser.open(html_report_file)
+                        webbrowser.open(html_report_file.as_uri())
                 else:
                     sg.popup(output_message)

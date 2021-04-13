@@ -242,7 +242,7 @@ if __name__ == "__main__":
             sg.Popup('About RSReportTool',
                      'Tool for listing rolling stock in Train Simulator (Dovetail Games) scenarios, bundled with '
                      'RSSwapTool to provide a standalone tool to examine scenarios and list rolling stock.',
-                     'Version 0.3b / 7 April 2021',
+                     'Version 0.4b / 14 April 2021',
                      'Copyright 2021 JR McKenzie (jrmknz@yahoo.co.uk)', 'https://github.com/jrmckenzie/RSSwapTool',
                      'This program is free software: you can redistribute it and / or modify '
                      'it under the terms of the GNU General Public License as published by '
@@ -253,7 +253,7 @@ if __name__ == "__main__":
                      'MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the '
                      'GNU General Public License for more details.',
                      'You should have received a copy of the GNU General Public License '
-                     'along with this program.  If not, see <https://www.gnu.org/licenses/>.')
+                     'along with this program.  If not, see https://www.gnu.org/licenses/.')
         elif event == 'Settings':
             # The settings button has been pressed, so allow the user to change the RailWorks folder setting
             loclayout = [
@@ -317,4 +317,4 @@ if __name__ == "__main__":
                 browser = sg.popup_yes_no(html_report_status_text,
                                           'Do you want to open the report in your web browser now?')
                 if browser == 'Yes':
-                    webbrowser.open(html_report_file)
+                    webbrowser.open(html_report_file.as_uri())
