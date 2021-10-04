@@ -19,14 +19,20 @@ import xml.etree.ElementTree as ET
 import sys
 import os
 import subprocess
+import platform
 import configparser
 import PySimpleGUI as sg
 import webbrowser
 from pathlib import Path
+from pathlib import PureWindowsPath
 
-vehicle_list = []
+# If you want to run this script on Linux you must configure the path to the wine executable. You need wine in order to
+# run the serz.exe utility which converts between .bin and .xml scenario files.
+# If you're not running this script on Linux this line can be ignored.
+wine_executable = '/usr/bin/wine'
 
 # Initialise the script, set the look and feel and get the configuration
+vehicle_list = []
 railworks_path = ''
 sg.LOOK_AND_FEEL_TABLE['Railish'] = {'BACKGROUND': '#00384F', 'TEXT': '#FFFFFF', 'INPUT': '#FFFFFF',
                                      'TEXT_INPUT': '#000000', 'SCROLL': '#99CC99', 'BUTTON': ('#FFFFFF', '#002A3C'),
@@ -55,7 +61,7 @@ else:
                  [sg.Text('Please locate your RailWorks folder:'), sg.Input(key='-IN2-',
                                                                             change_submits=False, readonly=True),
                   sg.FolderBrowse(key='RWloc')], [sg.Button('Submit')]]
-    locwindow = sg.Window('Configure path to RailWorks folder', loclayout, size=(640, 150))
+    locwindow = sg.Window('Configure path to RailWorks folder', loclayout)
     while True:
         event, values = locwindow.read()
         if event == sg.WIN_CLOSED:
@@ -108,7 +114,7 @@ def parse_xml(xml_file):
         [sg.ProgressBar(1, orientation='h', key='progress', size=(25, 15))]
     ]
     progress_win = sg.Window('Processing...', progress_layout, disable_close=True).Finalize()
-    progress_bar = progress_win.FindElement('progress')
+    progress_bar = progress_win.find_element('progress')
     consist_nr = 0
     for citem in consists:
         # Find the service name of the consist, if there is one, otherwise call it a loose consist.
@@ -198,7 +204,8 @@ h3,thead {
             rowspan = 0
         col_htm = ''
         row[3] = row[3].replace('.xml', '.bin')
-        if Path(railworks_path, 'Assets', row[1], row[2], row[3]).is_file():
+        my_path = Path(railworks_path, 'Assets', row[1], row[2], row[3].replace('\\','/'))
+        if os.path.isfile(str(my_path)):
             tdstyle = ''
         else:
             tdstyle = ' class="missing"'
@@ -234,6 +241,7 @@ h3,thead {
 
 if __name__ == "__main__":
     window = sg.Window('RSReportTool - Rolling stock report tool', layout)
+    os.chdir(Path(railworks_path, 'Content', 'Routes'))
     while True:
         event, values = window.read()
         if event == 'Exit' or event == sg.WIN_CLOSED:
@@ -242,7 +250,7 @@ if __name__ == "__main__":
             sg.Popup('About RSReportTool',
                      'Tool for listing rolling stock in Train Simulator (Dovetail Games) scenarios, bundled with '
                      'RSSwapTool to provide a standalone tool to examine scenarios and list rolling stock.',
-                     'Version 0.4b / 14 April 2021',
+                     'Version 0.5 / 4 October 2021',
                      'Copyright 2021 JR McKenzie (jrmknz@yahoo.co.uk)', 'https://github.com/jrmckenzie/RSSwapTool',
                      'This program is free software: you can redistribute it and / or modify '
                      'it under the terms of the GNU General Public License as published by '
@@ -297,7 +305,16 @@ if __name__ == "__main__":
                                  'RailWorks folder?', 'This application will now exit.')
                         sys.exit()
                     inFile = scenarioPath.parent / Path(str(scenarioPath.stem) + '-railvehicle_examination_report.xml')
-                    p1 = subprocess.Popen([str(cmd), str(scenarioPath), '/xml:' + str(inFile)], stdout=subprocess.PIPE)
+                    if platform.system() == 'Windows':
+                        p1 = subprocess.Popen([str(cmd), str(PureWindowsPath(scenarioPath)), '/xml:' +
+                                               str(PureWindowsPath(inFile))], stdout=subprocess.PIPE)
+                    else:
+                        try:
+                            wine_executable
+                        except NameError:
+                            wine_executable = '/usr/bin/wine'
+                        p1 = subprocess.Popen([wine_executable, str(cmd), str(PureWindowsPath(scenarioPath)), '/xml:' +
+                                               str(PureWindowsPath(inFile))], stdout=subprocess.PIPE)
                     p1.wait()
                     serz_output = 'serz.exe ' + p1.communicate()[0].decode('ascii')
                     # Now the intermediate .xml has been created by serz.exe, read it in to this script and do the

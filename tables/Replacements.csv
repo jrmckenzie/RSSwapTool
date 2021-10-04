@@ -2614,6 +2614,52 @@ EMU375-7_set,DTG,WCML-South,RailVehicles\Electric\Class377\Engine\Class377_DMOC_
 EMU375-7_set,DTG,WCML-South,RailVehicles\Electric\Class377\Engine\Class377_MOSL.xml,DTG,LondonGillingham,RailVehicles\Electric\Class375\SN_AP\375_MOSL.xml,APEP 377 SN1 MOSL,
 EMU375-7_set,DTG,WCML-South,RailVehicles\Electric\Class377\Engine\Class377_PTOSL.xml,DTG,LondonGillingham,RailVehicles\Electric\Class375\SN_AP\375_PTOSL.xml,APEP 377/2 SN1 PTOSL,
 EMU375-7_set,DTG,WCML-South,RailVehicles\Electric\Class377\Engine\Class377_TOSL.xml,DTG,LondonGillingham,RailVehicles\Electric\Class375\SN_AP\375_TOSL.xml,APEP 377 SN1 TOSL,
+EMU377-9_set,RSC,BrightonMainLine,RailVehicles\Electric\Class377\GreaterAnglia-F\Class377_DMOC_nd.xml,DTG,LondonGillingham,RailVehicles\Electric\Class375\NXEA_379_AP\375_DMOSB_2.xml,APEP 379 GA DMOCB,
+EMU377-9_set,RSC,BrightonMainLine,RailVehicles\Electric\Class377\GreaterAnglia-F\Class377_DMOC.xml,DTG,LondonGillingham,RailVehicles\Electric\Class375\NXEA_379_AP\375_DMOSB_2.xml,APEP 379 GA DMOCB,
+EMU377-9_set,RSC,BrightonMainLine,RailVehicles\Electric\Class377\GreaterAnglia\Class377_DMOC_nd.xml,DTG,LondonGillingham,RailVehicles\Electric\Class375\NXEA_379_AP\375_DMOSA_2.xml,APEP 379 GA DMOCA,
+EMU377-9_set,RSC,BrightonMainLine,RailVehicles\Electric\Class377\GreaterAnglia\Class377_DMOC.xml,DTG,LondonGillingham,RailVehicles\Electric\Class375\NXEA_379_AP\375_DMOSA_2.xml,APEP 379 GA DMOCA,
+EMU377-9_set,RSC,BrightonMainLine,RailVehicles\Electric\Class377\GreaterAnglia\Class377_MOSL.xml,DTG,LondonGillingham,RailVehicles\Electric\Class375\NXEA_379_AP\375_MOSL_2.xml,APEP 379 GA MOSL,
+EMU377-9_set,RSC,BrightonMainLine,RailVehicles\Electric\Class377\GreaterAnglia\Class377_PTOSL_pantolow.xml,DTG,LondonGillingham,RailVehicles\Electric\Class375\NXEA_379_AP\375_PTOSL_2.xml,APEP 379 GA PTOSL,
+EMU377-9_set,RSC,BrightonMainLine,RailVehicles\Electric\Class377\GreaterAnglia\Class377_PTOSL.xml,DTG,LondonGillingham,RailVehicles\Electric\Class375\NXEA_379_AP\375_PTOSL_2.xml,APEP 379 GA PTOSL,
+EMU377-9_set,RSC,BrightonMainLine,RailVehicles\Electric\Class377\TLWhite_AP\Class377_DMOC_AC.xml,DTG,LondonGillingham,RailVehicles\Electric\Class375\TL_387_AP\375_DMOSA_AC.xml,APEP 387 TL DMOCA (AC),
+EMU377-9_set,RSC,BrightonMainLine,RailVehicles\Electric\Class377\TLWhite_AP\Class377_DMOC_nd.xml,DTG,LondonGillingham,RailVehicles\Electric\Class375\TL_387_AP\375_DMOSA.xml,APEP 387 TL DMOCA (DC),
+EMU377-9_set,RSC,BrightonMainLine,RailVehicles\Electric\Class377\TLWhite_AP\Class377_DMOC.xml,DTG,LondonGillingham,RailVehicles\Electric\Class375\TL_387_AP\375_DMOSA.xml,APEP 387 TL DMOCA (DC),
+EMU377-9_set,RSC,BrightonMainLine,RailVehicles\Electric\Class377\TLWhite_AP\Class377_DMOS_AC.xml,DTG,LondonGillingham,RailVehicles\Electric\Class375\TL_387_AP\375_DMOSB.xml,APEP 387 TL DMOCB,
+EMU377-9_set,RSC,BrightonMainLine,RailVehicles\Electric\Class377\TLWhite_AP\Class377_DMOS_nd.xml,DTG,LondonGillingham,RailVehicles\Electric\Class375\TL_387_AP\375_DMOSB.xml,APEP 387 TL DMOCB,
+EMU377-9_set,RSC,BrightonMainLine,RailVehicles\Electric\Class377\TLWhite_AP\Class377_DMOS.xml,DTG,LondonGillingham,RailVehicles\Electric\Class375\TL_387_AP\375_DMOSB.xml,APEP 387 TL DMOCB,
+EMU377-9_set,RSC,BrightonMainLine,RailVehicles\Electric\Class377\TLWhite_AP\Class377_MOSL.xml,DTG,LondonGillingham,RailVehicles\Electric\Class375\TL_387_AP\375_MOSL.xml,APEP 387 TL MOSL,
+EMU377-9_set,RSC,BrightonMainLine,RailVehicles\Electric\Class377\TLWhite_AP\Class377_PTOSL_AC.xml,DTG,LondonGillingham,RailVehicles\Electric\Class375\TL_387_AP\375_PTOSL.xml,APEP 387 TL PTOSL,
+EMU377-9_set,RSC,BrightonMainLine,RailVehicles\Electric\Class377\TLWhite_AP\Class377_PTOSL.xml,DTG,LondonGillingham,RailVehicles\Electric\Class375\TL_387_AP\375_PTOSL.xml,APEP 387 TL PTOSL,
+EMU455_set,DTG,Class455Pack02,RailVehicles\Class455_8\Default\455_DTSO_nd.xml,Class 455/8 DTSO Southern ND
+EMU455_set,DTG,Class455Pack02,RailVehicles\Class455_8\Default\455_DTSO.xml,Class 455/8 DTSO Southern
+EMU455_set,DTG,Class455Pack02,RailVehicles\Class455_8\Default\455_MSO.xml,Class 455/8 MSO Southern
+EMU455_set,DTG,Class455Pack02,RailVehicles\Class455_8\Default\455_TSO.xml,Class 455/8 TSO Southern
+EMU455_set,DTG,PortsmouthDirect,RailVehicles\Class455_8\Default\455_DTSO_nd.xml,Class 455/8 DTSO SWT ND
+EMU455_set,DTG,PortsmouthDirect,RailVehicles\Class455_8\Default\455_DTSO.xml,Class 455/8 DTSO SWT
+EMU455_set,DTG,PortsmouthDirect,RailVehicles\Class455_8\Default\455_MSO.xml,Class 455/8 MSO SWT
+EMU455_set,DTG,PortsmouthDirect,RailVehicles\Class455_8\Default\455_TSO.xml,Class 455/8 TSO SWT
+EMU455_set,Thomson,Class455Pack01,RailVehicles\Class455_9\BR\455_DTSO.xml,Class 455/9 DTSO BR
+EMU455_set,Thomson,Class455Pack01,RailVehicles\Class455_9\BR\455_MSO.xml,Class 455/9 MSO BR
+EMU455_set,Thomson,Class455Pack01,RailVehicles\Class455_9\BR\455_TSO.xml,Class 455/9 TSO BR
+EMU455_set,Thomson,Class455Pack01,RailVehicles\Class455_9\Connex-U\455_DTSO.xml,Class 455/9 DTSO Connex-U
+EMU455_set,Thomson,Class455Pack01,RailVehicles\Class455_9\Connex-U\455_MSO.xml,Class 455/9 MSO Connex-U
+EMU455_set,Thomson,Class455Pack01,RailVehicles\Class455_9\Connex-U\455_TSO.xml,Class 455/9 TSO Connex-U
+EMU455_set,Thomson,Class455Pack01,RailVehicles\Class455_9\Connex\455_DTSO.xml,Class 455/9 DTSO Connex
+EMU455_set,Thomson,Class455Pack01,RailVehicles\Class455_9\Connex\455_MSO.xml,Class 455/9 MSO Connex
+EMU455_set,Thomson,Class455Pack01,RailVehicles\Class455_9\Connex\455_TSO.xml,Class 455/9 TSO Connex
+EMU455_set,Thomson,Class455Pack01,RailVehicles\Class455_9\Default\455_DTSO.xml,Class 455/9 DTSO SWT
+EMU455_set,Thomson,Class455Pack01,RailVehicles\Class455_9\Default\455_MSO.xml,Class 455/9 MSO SWT
+EMU455_set,Thomson,Class455Pack01,RailVehicles\Class455_9\Default\455_TSO.xml,Class 455/9 TSO SWT
+EMU455_set,Thomson,Class455Pack01,RailVehicles\Class455_9\NSE\455_DTSO.xml,Class 455/9 DTSO NSE
+EMU455_set,Thomson,Class455Pack01,RailVehicles\Class455_9\NSE\455_MSO.xml,Class 455/9 MSO NSE
+EMU455_set,Thomson,Class455Pack01,RailVehicles\Class455_9\NSE\455_TSO.xml,Class 455/9 TSO NSE
+EMU455_set,Thomson,Class455Pack01,RailVehicles\Class455_9\NSE\4558_DTSO.xml,Class 455/9 DTSO NSESC/8
+EMU455_set,Thomson,Class455Pack01,RailVehicles\Class455_9\Southern\455_DTSO.xml,Class 455/9 DTSO Southern
+EMU455_set,Thomson,Class455Pack01,RailVehicles\Class455_9\Southern\455_MSO.xml,Class 455/9 MSO Southern
+EMU455_set,Thomson,Class455Pack01,RailVehicles\Class455_9\Southern\455_TSO.xml,Class 455/9 TSO Southern
+EMU455_set,Thomson,Class455Pack01,RailVehicles\Class455_9\SWT\455_DTSO.xml,Class 455/9 DTSO SWT Old
+EMU455_set,Thomson,Class455Pack01,RailVehicles\Class455_9\SWT\455_MSO.xml,Class 455/9 MSO SWT Old
+EMU455_set,Thomson,Class455Pack01,RailVehicles\Class455_9\SWT\455_TSO.xml,Class 455/9 TSO SWT Old
 EMU456_set,RSC,SouthLondonLines,RailVehicles\Class456\Default\Engine\Class456_DMSO_nd.xml,AP_Waggonz,Class456Pack01,RailVehicles\Class456\Southern\DMSO\Class_456_DMSO.xml,APW Class 456 Southern DMSO,
 EMU456_set,RSC,SouthLondonLines,RailVehicles\Class456\Default\Engine\Class456_DMSO.xml,AP_Waggonz,Class456Pack01,RailVehicles\Class456\Southern\DMSO\Class_456_DMSO.xml,APW Class 456 Southern DMSO,
 EMU456_set,RSC,SouthLondonLines,RailVehicles\Class456\Default\Engine\Class456_DTSO_nd.xml,AP_Waggonz,Class456Pack01,RailVehicles\Class456\Southern\DTSO\Class_456_DTSO.xml,APW Class 456 Southern DTSO,
@@ -2628,6 +2674,12 @@ EMU465_set,DTG,LondonGillingham,RailVehicles\Electric\Class465-0\Engine\Class465
 EMU465_set,DTG,LondonGillingham,RailVehicles\Electric\Class465-0\Engine\Class465-0_DMOC_B.xml,RSC,Class465Pack01,RailVehicles\Electric\Class465\SE1_AP\Class465_DMOC_B_SE2.xml,APEP 465 SE1(2) DMSOB,
 EMU465_set,DTG,LondonGillingham,RailVehicles\Electric\Class465-0\Engine\Class465-0_TSO.xml,RSC,Class465Pack01,RailVehicles\Electric\Class465\SE1_AP\Class465_PTOSL_SE2.xml,APEP 465 SE1(2) TSO,
 EMU465_set,DTG,LondonGillingham,RailVehicles\Electric\Class465-0\Engine\Class465-0_TSOL.xml,RSC,Class465Pack01,RailVehicles\Electric\Class465\SE1_AP\Class465_TOSL_SE2.xml,APEP 465 SE1(2) TSOL,
+EMU465_set,DTG,LondonGillingham,RailVehicles\Electric\Class465-1\Engine\Class465-1_DMOC_A_ND.xml,RSC,Class465Pack01,RailVehicles\Electric\Class465\SE4_AP\Class465H_DMOC_A.xml,APEP 465 SE4 DMSOA,
+EMU465_set,DTG,LondonGillingham,RailVehicles\Electric\Class465-1\Engine\Class465-1_DMOC_A.xml,RSC,Class465Pack01,RailVehicles\Electric\Class465\SE4_AP\Class465H_DMOC_A.xml,APEP 465 SE4 DMSOA,
+EMU465_set,DTG,LondonGillingham,RailVehicles\Electric\Class465-1\Engine\Class465-1_DMOC_B_ND.xml,RSC,Class465Pack01,RailVehicles\Electric\Class465\SE4_AP\Class465H_DMOC_B.xml,APEP 465 SE4 DMSOB,
+EMU465_set,DTG,LondonGillingham,RailVehicles\Electric\Class465-1\Engine\Class465-1_DMOC_B.xml,RSC,Class465Pack01,RailVehicles\Electric\Class465\SE4_AP\Class465H_DMOC_B.xml,APEP 465 SE4 DMSOB,
+EMU465_set,DTG,LondonGillingham,RailVehicles\Electric\Class465-1\Engine\Class465-1_TSO.xml,RSC,Class465Pack01,RailVehicles\Electric\Class465\SE4_AP\Class465H_PTOSL.xml,APEP 465 SE4 TSO,
+EMU465_set,DTG,LondonGillingham,RailVehicles\Electric\Class465-1\Engine\Class465-1_TSOL.xml,RSC,Class465Pack01,RailVehicles\Electric\Class465\SE4_AP\Class465H_DMOC_A.xml,APEP 465 SE4 DMSOA,
 EMU465_set,RSC,Class465Pack01,RailVehicles\Electric\Class465\Default\DMSO\class465_dmsoa.xml,RSC,Class465Pack01,RailVehicles\Electric\Class465\SE1-2_AP\Class465_DMOC_A_SE2.xml,APEP 465/2 SE1(2) DMSOA,
 EMU465_set,RSC,Class465Pack01,RailVehicles\Electric\Class465\Default\DMSO\class465_dmsob.xml,RSC,Class465Pack01,RailVehicles\Electric\Class465\SE1-2_AP\Class465_DMOC_B_SE2.xml,APEP 465/2 SE1(2) DMSOB,
 EMU465_set,RSC,Class465Pack01,RailVehicles\Electric\Class465\Default\TSO\class465_TSO.xml,RSC,Class465Pack01,RailVehicles\Electric\Class465\SE1-2_AP\Class465_PTOSL_SE2.xml,APEP 465/2 SE1(2) TSO,

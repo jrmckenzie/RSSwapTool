@@ -14,7 +14,6 @@
 #
 #     You should have received a copy of the GNU General Public License
 #     along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
 import re
 import random
 import csv
@@ -23,10 +22,12 @@ import time
 import sys
 import os
 import subprocess
+import platform
 import configparser
 import PySimpleGUI as sg
 import webbrowser
 from pathlib import Path
+from pathlib import PureWindowsPath
 from data_file import hha_e_wagons, hha_l_wagons, HTO_141_numbers, HTO_143_numbers, \
     HTO_146_numbers, HTO_rebodied_numbers, HTV_146_numbers, HTV_rebodied_numbers, c158_s9bl_rr, c158_s9bl_nr, \
     c158_s9bl_fgw, c158_s9bl_tpe, c158_s9bl_swt, c158_nwc, c158_dtg_fc, c158_livman_rr, ap40headcodes_69_77, \
@@ -35,6 +36,12 @@ from data_file import hha_e_wagons, hha_l_wagons, HTO_141_numbers, HTO_143_numbe
     c450_gu_swt, c465_se, c375_dtg_pack, c377_lb_se, c377_lg_sn, c377_fcc, c170_bp_name_lookup, c375_dmos_lookup, \
     c456_nse, c456_southern, c319_dest, c350_lm_wcmls, c375_southern_wcmls
 
+# If you want to run this script on Linux you must enter the path to the wine executable. You need wine in order to
+# run the serz.exe utility which converts between .bin and .xml scenario files.
+# If you're not running this script on Linux this line should be left as the default.
+wine_executable = '/usr/bin/wine'
+
+# Initialise the script, set the look and feel and get the configuration
 rv_list = []
 rv_pairs = []
 layout = []
@@ -51,7 +58,7 @@ c86_opts = ['Use VP headcode blinds', 'Use AP plated box with markers', 'Do not 
 fsafta_opts = ['RFD / 2000 era', 'FL / 2000 era', 'FL / 2010 era', 'FL / 2020 era']
 fsafta_cube = ['No high cube containers', 'Allow high cube containers']
 mgr_types = ['HAA only', 'HCA (canopy) only', 'HFA (canopy) only', 'HAA and HCA (canopy) mixed',
-            'HAA, HCA (canopy) and HFA (canopy) mixed', 'HDA only', 'HBA (canopy) only', 'HDA and HBA (canopy) mixed', 
+            'HAA, HCA (canopy) and HFA (canopy) mixed', 'HDA only', 'HBA (canopy) only', 'HDA and HBA (canopy) mixed',
             'HMA only', 'HNA (canopy) only', 'HMA and HNA (canopy) mixed', 'Completely random']
 mgr_liveries = ['Maroon only',  'Blue only', 'Maroon and Blue', 'Sectors only', 'Sectors and Maroon',
                 'Sectors and Blue', 'Completely random']
@@ -79,7 +86,7 @@ else:
                  [sg.Text('Please locate your RailWorks folder:'), sg.Input(key='-IN2-', change_submits=False,
                                                                             readonly=True),
                   sg.FolderBrowse(key='RWloc')], [sg.Button('Save')]]
-    locwindow = sg.Window('Configure path to RailWorks folder', loclayout, size=(640, 150))
+    locwindow = sg.Window('Configure path to RailWorks folder', loclayout)
     while True:
         event, values = locwindow.read()
         if event == sg.WIN_CLOSED:
@@ -104,6 +111,7 @@ else:
                 iconfigfile.close()
             break
     locwindow.close()
+os.chdir(Path(railworks_path, 'Content', 'Routes'))
 if not config.has_section('defaults'):
     config.add_section('defaults')
     config.set('defaults', 'replace_mk1', 'True')
@@ -151,11 +159,11 @@ if not config.has_section('defaults'):
     config.set('defaults', 'fsafta_hc', fsafta_cube[0])
     config.set('defaults', 'mgr_type', mgr_types[0])
     config.set('defaults', 'mgr_livery', mgr_liveries[0])
-    config.set('vda_livery', vda_liveries[0])
-    config.set('vda_whiteroof_probability', vda_whiteroof_probabilities[0])
-    config.set('vda_dirty_probability', dirty_probabilities[8])
-    config.set('htx_dirty_probability', dirty_probabilities[8])
-    config.set('htx_era', htx_eras[1])
+    config.set('defaults', 'vda_livery', vda_liveries[0])
+    config.set('defaults', 'vda_whiteroof_probability', vda_whiteroof_probabilities[0])
+    config.set('defaults', 'vda_dirty_probability', dirty_probabilities[8])
+    config.set('defaults', 'htx_dirty_probability', dirty_probabilities[8])
+    config.set('defaults', 'htx_era', htx_eras[1])
     with open(path_to_config, 'w') as iconfigfile:
         config.write(iconfigfile)
         iconfigfile.close()
@@ -221,7 +229,7 @@ left_column = [
     [sg.Text('RSSwapTool', font='Helvetica 16')],
     [sg.Text('© 2021 JR McKenzie', font='Helvetica 7')],
     [sg.FileBrowse('Select scenario file to process', key='Scenario_xml', tooltip='Locate the scenario .bin or .xml '
-                                                                                  'file you wish to process')],
+                    'file you wish to process')],
     [sg.Text('Tick the boxes below to choose the\nsubstitutions you would like to make.')],
     [sg.Checkbox('Replace Mk1 coaches', default=get_my_config_boolean('defaults', 'replace_mk1'), enable_events=True,
                  tooltip='Tick to enable replacing of Mk1 coaches with AP Mk1 Coach Pack Vol. 1',
@@ -796,9 +804,9 @@ def fsa_replace(provider, product, blueprint, name, number, loaded):
                         # Check if high cube containers are allowed
                         if config.get('defaults', 'fsafta_hc',
                                       fallback='No high cube containers') == 'Allow high cube containers':
-                            dcsv = re.sub('_No_HC', '', this_vehicle[7])
+                            dcsv = re.sub('_No_HC', '', this_vehicle[7].replace('\\', '/'))
                         else:
-                            dcsv = this_vehicle[7]
+                            dcsv = this_vehicle[7].replace('\\', '/')
                         number.text = dcsv_get_num(
                             Path(railworks_path, 'Assets/AP/FSAWagonPack', dcsv), number.text,
                             '([0-9]{6})(.*)')
@@ -845,9 +853,9 @@ def fta_replace(provider, product, blueprint, name, number, loaded):
                         # Check if high cube containers are allowed
                         if config.get('defaults', 'fsafta_hc',
                                       fallback='No high cube containers') == 'Allow high cube containers':
-                            dcsv = re.sub('_No_HC', '', this_vehicle[7])
+                            dcsv = re.sub('_No_HC', '', this_vehicle[7].replace('\\', '/'))
                         else:
-                            dcsv = this_vehicle[7]
+                            dcsv = this_vehicle[7].replace('\\', '/')
                         number.text = dcsv_get_num(
                             Path(railworks_path, 'Assets/AP/FSAWagonPack', dcsv), number.text,
                             '([0-9]{6})(.*)')
@@ -883,8 +891,8 @@ def mk1_replace(provider, product, blueprint, name, number):
                         else:
                             ap_suffix = ''
                         num = dcsv_get_num(
-                            Path(railworks_path, 'Assets', this_vehicle[3], this_vehicle[4], this_vehicle[7]),
-                            num, '([0-9]{4,5})(.*)')
+                            Path(railworks_path, 'Assets', this_vehicle[3], this_vehicle[4],
+                                 this_vehicle[7].replace('\\', '/')), num, '([0-9]{4,5})(.*)')
                         if ' (Newspapers)' in name.text:
                             # Add the AP coach number suffix to display the Newspapers branding on BG coaches
                             ap_suffix = ap_suffix + ";L=6"
@@ -1411,17 +1419,16 @@ def ihh_c40_replace(provider, product, blueprint, name, number):
                         if tops_disc:
                             rv_tops = '1111' + tops_disc.group(1)
                             ap_num = dcsv_get_num(
-                                Path(railworks_path, 'Assets', this_vehicle[3], this_vehicle[4], this_vehicle[7]),
-                                rv_tops,
-                                '([0-9]{9})(.*)')
+                                Path(railworks_path, 'Assets', this_vehicle[3], this_vehicle[4],
+                                     this_vehicle[7].replace('\\', '/')), rv_tops, '([0-9]{9})(.*)')
                             rv_num = ap_num[0:9] + '2222'
                     else:
                         tops_headcode = re.search('^(40[0-9]{3})(....).*', number.text)
                         if tops_headcode:
                             rv_tops = '11111' + tops_headcode.group(1)
                             ap_num = dcsv_get_num(
-                                Path(railworks_path, 'Assets', this_vehicle[3], this_vehicle[4], this_vehicle[7]),
-                                rv_tops, '([0-9]{10})(.*)')
+                                Path(railworks_path, 'Assets', this_vehicle[3], this_vehicle[4],
+                                     this_vehicle[7].replace('\\', '/')), rv_tops, '([0-9]{10})(.*)')
                             hc_search = re.search('([0-9][A-Z][0-9]{2})', tops_headcode.group(2))
                             if hc_search:
                                 rv_num = '110' + ap_num[3:10] + hc_search.group(0)
@@ -1434,9 +1441,7 @@ def ihh_c40_replace(provider, product, blueprint, name, number):
                         headcode = ap40headcodes_62_69[pretops_num.group(2)[0:1]]
                         ap_num = dcsv_get_num(
                             Path(railworks_path, 'Assets', this_vehicle[3], this_vehicle[4],
-                                 this_vehicle[7]),
-                            rv_dnum,
-                            '([0-9]{4})(.*)')
+                                 this_vehicle[7].replace('\\', '/')), rv_dnum, '([0-9]{4})(.*)')
                         hy = re.search('panel', this_vehicle[2], flags=re.IGNORECASE)
                         if hy:
                             # Number the loco as a Half Yellow front class 40
@@ -1492,8 +1497,8 @@ def hst_replace(provider, product, blueprint, name, number):
                         nm = re.search('(.?43[0-9]{3}.*)', number.text)
                         if nm:
                             rv_num = dcsv_gethstloco(
-                                Path(railworks_path, 'Assets', this_vehicle[3], this_vehicle[4], this_vehicle[7]),
-                                number.text)
+                                Path(railworks_path, 'Assets', this_vehicle[3], this_vehicle[4],
+                                     this_vehicle[7].replace('\\', '/')), number.text)
                             number.text = str(rv_num)
                             rv_list.append(number.text)
                             rv_pairs.append([rv_orig, number.text])
@@ -1521,8 +1526,8 @@ def c31_replace(provider, product, blueprint, name, number):
                     if nm:
                         rv_found = nm.group(1)
                         rv_num = dcsv_get_num(
-                            Path(railworks_path, 'Assets', this_vehicle[3], this_vehicle[4], this_vehicle[7]), rv_found,
-                            '([0-9]{5})(.*)')
+                            Path(railworks_path, 'Assets', this_vehicle[3], this_vehicle[4],
+                                 this_vehicle[7].replace('\\', '/')), rv_found, '([0-9]{5})(.*)')
                         # Set number
                         number.text = str(rv_num)
                         rv_list.append(number.text)
@@ -1556,8 +1561,8 @@ def c37_replace(provider, product, blueprint, name, number):
                                 rv_dnum = str(6700 + int(rv_dnum) % 300)
                         headcode = pretops.group(2)
                         rv_num = dcsv_get_num(
-                            Path(railworks_path, 'Assets', this_vehicle[3], this_vehicle[4], this_vehicle[7]), rv_dnum,
-                            '([0-9]{5})(.*)')
+                            Path(railworks_path, 'Assets', this_vehicle[3], this_vehicle[4],
+                                 this_vehicle[7].replace('\\', '/')), rv_dnum, '([0-9]{5})(.*)')
                         rv_num = rv_num.replace('____', headcode)
                     # Check if the loco has a tops number
                     tops = re.search('(37[0-9]{3})(.*)', number.text)
@@ -1566,18 +1571,16 @@ def c37_replace(provider, product, blueprint, name, number):
                         rv_num = this_vehicle[7]
                         if 'dcsv' in rv_num:
                             rv_num = dcsv_get_num(
-                                Path(railworks_path, 'Assets', this_vehicle[3], this_vehicle[4], this_vehicle[7]),
-                                rv_tops,
-                                '([0-9]{5})(.*)')
+                                Path(railworks_path, 'Assets', this_vehicle[3], this_vehicle[4],
+                                     this_vehicle[7].replace('\\', '/')), rv_tops, '([0-9]{5})(.*)')
                     if '_wp' in this_vehicle[2]:
                         add_ploughs(rv_num)
                     if this_vehicle[1] == 'WHL' or this_vehicle[1] == 'FortWilliamMallaig':
                         if 'Large' in this_vehicle[2]:
                             # Look for a loco with the 'Westie' logo for the WHL LL replacements
                             rv_num = dcsv_get_num(
-                                Path(railworks_path, 'Assets', this_vehicle[3], this_vehicle[4], this_vehicle[7]),
-                                rv_tops,
-                                '(37[0-9]{3})(.*L=1.*)')
+                                Path(railworks_path, 'Assets', this_vehicle[3], this_vehicle[4],
+                                     this_vehicle[7].replace('\\', '/')), rv_tops, '(37[0-9]{3})(.*L=1.*)')
                         # Add ploughs and RETB to West Highland locos
                         add_retb(rv_num)
                         add_ploughs(rv_num)
@@ -1612,9 +1615,8 @@ def c40_replace(provider, product, blueprint, name, number):
                         rv_dnum = '0' + pretops_disc.group(2)
                         headcode = ap40headcodes_62_69[pretops_disc.group(1)]
                         ap_num = dcsv_get_num(
-                            Path(railworks_path, 'Assets', this_vehicle[3], this_vehicle[4], this_vehicle[7]),
-                            rv_dnum,
-                            '([0-9]{4})(.*)')
+                            Path(railworks_path, 'Assets', this_vehicle[3], this_vehicle[4],
+                                 this_vehicle[7].replace('\\', '/')), rv_dnum, '([0-9]{4})(.*)')
                         hy = re.search('halfyellow', blueprint.text, flags=re.IGNORECASE)
                         if hy:
                             # Number the loco as a Half Yellow front class 40
@@ -1627,9 +1629,8 @@ def c40_replace(provider, product, blueprint, name, number):
                         rv_dnum = '0' + pretops_headcode.group(2)
                         headcode = pretops_headcode.group(1).upper()
                         ap_num = dcsv_get_num(
-                            Path(railworks_path, 'Assets', this_vehicle[3], this_vehicle[4], this_vehicle[7]),
-                            rv_dnum,
-                            '([0-9]{4})(.*)')
+                            Path(railworks_path, 'Assets', this_vehicle[3], this_vehicle[4],
+                                 this_vehicle[7].replace('\\', '/')), rv_dnum, '([0-9]{4})(.*)')
                         hy = re.search('halfyellow', blueprint.text, flags=re.IGNORECASE)
                         if hy:
                             # Number the loco as a Half Yellow front class 40
@@ -1642,17 +1643,15 @@ def c40_replace(provider, product, blueprint, name, number):
                     if tops_domino:
                         rv_tops = '11111' + tops_domino.group(1)
                         rv_num = dcsv_get_num(
-                            Path(railworks_path, 'Assets', this_vehicle[3], this_vehicle[4], this_vehicle[7]),
-                            rv_tops,
-                            '([0-9]{10})(.*)')
+                            Path(railworks_path, 'Assets', this_vehicle[3], this_vehicle[4],
+                                 this_vehicle[7].replace('\\', '/')), rv_tops, '([0-9]{10})(.*)')
                     tops_disc = re.search('^([0-9])(40[0-9]{3})$', number.text)
                     if tops_disc:
                         rv_tops = '1111' + tops_disc.group(2)
                         headcode = ap40headcodes_69_77[tops_disc.group(1)]
                         ap_num = dcsv_get_num(
-                            Path(railworks_path, 'Assets', this_vehicle[3], this_vehicle[4], this_vehicle[7]),
-                            rv_tops,
-                            '([0-9]{9})(.*)')
+                            Path(railworks_path, 'Assets', this_vehicle[3], this_vehicle[4],
+                                 this_vehicle[7].replace('\\', '/')), rv_tops, '([0-9]{9})(.*)')
                         rv_num = ap_num[0:9] + headcode
                     # Set AP Class 40 number
                     number.text = str(rv_num)
@@ -1769,8 +1768,8 @@ def c66_replace(provider, product, blueprint, name, number):
                     if nm:
                         rv_found = nm.group(1)
                         rv_num = dcsv_get_num(
-                            Path(railworks_path, 'Assets', this_vehicle[3], this_vehicle[4], this_vehicle[7]), rv_found,
-                            '([0-9]{5})(.*)')
+                            Path(railworks_path, 'Assets', this_vehicle[3], this_vehicle[4],
+                                 this_vehicle[7].replace('\\', '/')), rv_found, '([0-9]{5})(.*)')
                     # Set number
                     if len(rv_num) < 6:
                         rv_num = rv_num + 'x'
@@ -1799,8 +1798,8 @@ def c67_replace(provider, product, blueprint, name, number):
                     rv_num = this_vehicle[7]
                     if 'dcsv' in rv_num:
                         rv_num = dcsv_get_num(
-                            Path(railworks_path, 'Assets', this_vehicle[3], this_vehicle[4], this_vehicle[7]), rv_found,
-                            '([0-9]{5})(.*)')
+                            Path(railworks_path, 'Assets', this_vehicle[3], this_vehicle[4],
+                                 this_vehicle[7].replace('\\', '/')), rv_found, '([0-9]{5})(.*)')
                     # Set number
                     number.text = str(rv_num)
                     rv_list.append(number.text)
@@ -1824,8 +1823,8 @@ def c68_replace(provider, product, blueprint, name, number):
                 if nm:
                     rv_found = nm.group(1)
                     rv_num = dcsv_get_num(
-                        Path(railworks_path, 'Assets', this_vehicle[3], this_vehicle[4], this_vehicle[7]), rv_found,
-                        '([0-9]{5})(.*)')
+                        Path(railworks_path, 'Assets', this_vehicle[3], this_vehicle[4],
+                             this_vehicle[7].replace('\\', '/')), rv_found, '([0-9]{5})(.*)')
                     # Set number
                     number.text = str(rv_num)
                     rv_list.append(number.text)
@@ -1854,9 +1853,8 @@ def c86_replace(provider, product, blueprint, name, number):
                         rv_num = this_vehicle[7]
                         if 'dcsv' in rv_num:
                             rv_num = dcsv_get_num(
-                                Path(railworks_path, 'Assets', this_vehicle[3], this_vehicle[4], this_vehicle[7]),
-                                rv_found,
-                                '([0-9]{5})(.*)')
+                                Path(railworks_path, 'Assets', this_vehicle[3], this_vehicle[4],
+                                     this_vehicle[7].replace('\\', '/')), rv_found, '([0-9]{5})(.*)')
                         # Set number
                         number.text = str(rv_num)
                         rv_list.append(number.text)
@@ -1878,7 +1876,7 @@ def c86_replace(provider, product, blueprint, name, number):
                             name.text = vehicle_db['Class86'][0][6]
                             rv_num = dcsv_get_num(
                                 Path(railworks_path, 'Assets', vehicle_db['Class86'][0][3], vehicle_db['Class86'][0][4],
-                                     vehicle_db['Class86'][0][7]), nm.group(2), '([0-9]{5})(.*)')
+                                     vehicle_db['Class86'][0][7].replace('\\', '/')), nm.group(2), '([0-9]{5})(.*)')
                             # Set the headcode into the VP number
                             rv_num = rv_num.replace('0O00', nm.group(1))
                             # Set number
@@ -1896,7 +1894,7 @@ def c86_replace(provider, product, blueprint, name, number):
                             name.text = w_name
                             rv_num = dcsv_get_num(
                                 Path(railworks_path, 'Assets', vehicle_db['Class86'][4][3], vehicle_db['Class86'][4][4],
-                                     vehicle_db['Class86'][4][7]), nm.group(2), '([0-9]{5})(.*)')
+                                     vehicle_db['Class86'][4][7].replace('\\', '/')), nm.group(2), '([0-9]{5})(.*)')
                             # Set number
                             number.text = str(rv_num)
                             rv_list.append(number.text)
@@ -2015,7 +2013,7 @@ def c158_replace(provider, product, blueprint, name, number):
                             if (provider.text == 'DTG' and product.text == 'Class158Pack01' and bool(
                                     re.search('Default', blueprint.text, flags=re.IGNORECASE))) or (
                                     provider.text == 'DTG' and product.text == 'NorthWalesCoast' and bool(
-                                re.search('Default', blueprint.text, flags=re.IGNORECASE))):
+                                    re.search('Default', blueprint.text, flags=re.IGNORECASE))):
                                 # Arriva Trains Wales liveried stock
                                 destination = get_destination(c158_nwc, nm.group(1), 'a')
                             elif provider.text == 'DTG' and product.text == 'FifeCircle' and bool(
@@ -2194,8 +2192,8 @@ def c319_replace(provider, product, blueprint, name, number):
                     if v_type:
                         if v_type.group(1).upper() == 'MSO':
                             rv_num = dcsv_get_num(
-                            Path(railworks_path, 'Assets', this_vehicle[3], this_vehicle[4], this_vehicle[7]),
-                                mso_num[0:6], 'Z([0-9]{6})(.*)')
+                            Path(railworks_path, 'Assets', this_vehicle[3], this_vehicle[4],
+                                 this_vehicle[7].replace('\\', '/')), mso_num[0:6], 'Z([0-9]{6})(.*)')
                             rv_num = c319_dest[mso_num[6:]] + rv_num
                     # Swap vehicle and set number / destination (where possible)
                     provider.text = this_vehicle[3]
@@ -2581,7 +2579,7 @@ def parse_xml(xml_file):
         [sg.ProgressBar(1, orientation='h', key='progress', size=(25, 15))]
     ]
     progress_win = sg.Window('Processing...', progress_layout, disable_close=True).Finalize()
-    progress_bar = progress_win.FindElement('progress')
+    progress_bar = progress_win.find_element('progress')
     consist_nr = 0
     for citem in consists:
         service = citem.find('Driver/cDriver/ServiceName/Localisation-cUserLocalisedString/English')
@@ -2804,7 +2802,7 @@ h3,thead {
             rowspan = 0
         col_htm = ''
         row[3] = row[3].replace('.xml', '.bin')
-        if Path(railworks_path, 'Assets', row[1], row[2], row[3]).is_file():
+        if Path(railworks_path, 'Assets', row[1], row[2], row[3].replace('\\', '/')).is_file():
             tdstyle = ''
         else:
             tdstyle = ' class="missing"'
@@ -2847,7 +2845,7 @@ if __name__ == "__main__":
         elif event == 'About':
             sg.Popup('About RSSwapTool',
                      'Tool for swapping rolling stock in Train Simulator (Dovetail Games) scenarios',
-                     'Version 0.4b / 14 April 2021',
+                     'Version 0.5 / 4 October 2021',
                      'Copyright 2021 JR McKenzie (jrmknz@yahoo.co.uk)', 'https://github.com/jrmckenzie/RSSwapTool',
                      'This program is free software: you can redistribute it and / or modify '
                      'it under the terms of the GNU General Public License as published by '
@@ -2959,8 +2957,8 @@ if __name__ == "__main__":
                     'If VDA wagons are found, replace them with the following livery, and choose the percentage '
                     'probability that a swapped wagon will have a white painted roof:',
                     size=(72, 0))],
-                [sg.Text('Livery:'), sg.Combo(vda_liveries, auto_size_text=True, default_value=vda_livery, 
-                        key='vda_livery', readonly=True), sg.Text('% chance roof is white:'), 
+                [sg.Text('Livery:'), sg.Combo(vda_liveries, auto_size_text=True, default_value=vda_livery,
+                        key='vda_livery', readonly=True), sg.Text('% chance roof is white:'),
                         sg.Combo(vda_whiteroof_probabilities, auto_size_text=True,
                         default_value=vda_whiteroof_probability, key='vda_whiteroof_probability', readonly=True),
                         sg.Text('% chance van is dirty:'), sg.Combo(dirty_probabilities, auto_size_text=True,
@@ -3051,6 +3049,7 @@ if __name__ == "__main__":
                 sg.popup('No scenario selected!')
             else:
                 scenarioPath = Path(values['Scenario_xml'])
+                os.chdir(scenarioPath.parent)
                 outPathStem = scenarioPath.parent / Path(str(scenarioPath.stem) + '-' + time.strftime('%Y%m%d-%H%M%S'))
                 inFile = scenarioPath
                 cmd = railworks_path / Path('serz.exe')
@@ -3066,7 +3065,16 @@ if __name__ == "__main__":
                                  'This application will now exit.')
                         sys.exit()
                     inFile = scenarioPath.parent / Path(str(scenarioPath.stem) + '.xml')
-                    p1 = subprocess.Popen([str(cmd), str(scenarioPath), '/xml:' + str(inFile)], stdout=subprocess.PIPE)
+                    if platform.system() == 'Windows':
+                        p1 = subprocess.Popen([str(cmd), str(PureWindowsPath(scenarioPath)), '/xml:' +
+                                               str(PureWindowsPath(inFile))], stdout=subprocess.PIPE)
+                    else:
+                        try:
+                            wine_executable
+                        except NameError:
+                            wine_executable = '/usr/bin/wine'
+                        p1 = subprocess.Popen([wine_executable, str(cmd), str(PureWindowsPath(scenarioPath)), '/xml:' +
+                                               str(PureWindowsPath(inFile))], stdout=subprocess.PIPE)
                     p1.wait()
                     # Uncomment the line below to see the output of the serz.exe command
                     # serz_output = 'serz.exe ' + p1.communicate()[0].decode('ascii')
@@ -3090,7 +3098,16 @@ if __name__ == "__main__":
                 if str(scenarioPath.suffix) == '.bin':
                     # Run the serz.exe command again to generate the output scenario .bin file
                     binFile = scenarioPath.parent / Path(str(scenarioPath.stem) + '.bin')
-                    p2 = subprocess.Popen([str(cmd), str(xmlFile), '/bin:' + str(binFile)], stdout=subprocess.PIPE)
+                    if platform.system() == 'Windows':
+                        p2 = subprocess.Popen([str(cmd), str(PureWindowsPath(xmlFile)), '/bin:' +
+                                               str(PureWindowsPath(binFile))], stdout=subprocess.PIPE)
+                    else:
+                        try:
+                            wine_executable
+                        except NameError:
+                            wine_executable = '/usr/bin/wine'
+                        p2 = subprocess.Popen([wine_executable, str(cmd), str(PureWindowsPath(xmlFile)), '/bin:' +
+                                               str(PureWindowsPath(binFile))], stdout=subprocess.PIPE)
                     p2.wait()
                     inFile.unlink()
                     # Uncomment the following line to see the output of the serz.exe command
