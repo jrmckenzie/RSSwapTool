@@ -52,7 +52,8 @@ layout = [
 
 # Read configuration and find location of RailWorks folder, or ask user to set it
 config = configparser.ConfigParser()
-path_to_config = Path(os.path.realpath(__file__)).parent / 'config.ini'
+script_path = Path(os.path.abspath(os.path.dirname(sys.argv[0])))
+path_to_config = script_path / 'config.ini'
 config.read(path_to_config)
 if config.has_option('RailWorks', 'path'):
     railworks_path = config.get('RailWorks', 'path')
@@ -250,7 +251,7 @@ if __name__ == "__main__":
             sg.Popup('About RSReportTool',
                      'Tool for listing rolling stock in Train Simulator (Dovetail Games) scenarios, bundled with '
                      'RSSwapTool to provide a standalone tool to examine scenarios and list rolling stock.',
-                     'Version 0.5 / 4 October 2021',
+                     'Version 0.6 / 5 October 2021',
                      'Copyright 2021 JR McKenzie (jrmknz@yahoo.co.uk)', 'https://github.com/jrmckenzie/RSSwapTool',
                      'This program is free software: you can redistribute it and / or modify '
                      'it under the terms of the GNU General Public License as published by '

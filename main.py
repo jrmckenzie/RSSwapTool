@@ -76,7 +76,8 @@ sg.LOOK_AND_FEEL_TABLE['Railish'] = {'BACKGROUND': '#00384F',
                                      'BORDER': 2, 'SLIDER_DEPTH': 0, 'PROGRESS_DEPTH': 2, }
 sg.theme('Railish')
 config = configparser.ConfigParser()
-path_to_config = Path(os.path.realpath(__file__)).parent / 'config.ini'
+script_path = Path(os.path.abspath(os.path.dirname(sys.argv[0])))
+path_to_config = script_path / 'config.ini'
 config.read(path_to_config)
 # Read configuration and find location of RailWorks folder, or ask user to set it
 if config.has_option('RailWorks', 'path'):
@@ -111,7 +112,6 @@ else:
                 iconfigfile.close()
             break
     locwindow.close()
-os.chdir(Path(railworks_path, 'Content', 'Routes'))
 if not config.has_section('defaults'):
     config.add_section('defaults')
     config.set('defaults', 'replace_mk1', 'True')
@@ -189,7 +189,7 @@ def get_destination(this_dict, this_key, this_blank):
 
 def import_data_from_csv(csv_filename):
     try:
-        with open((Path(os.path.realpath(__file__)).parent / csv_filename), 'r') as csv_file:
+        with open((script_path / csv_filename), 'r') as csv_file:
             reader = csv.reader(csv_file)
             seen = ''
             for row in reader:
@@ -215,7 +215,7 @@ def import_data_from_csv(csv_filename):
 
 
 # Read in the csv database of vehicles, substitutes and swap datal, store in VehicleDB dictionary
-user_db_path = Path(os.path.realpath(__file__)).parent / 'tables/User.csv'
+user_db_path = script_path / 'tables/User.csv'
 if not user_db_path.is_file():
     head = 'Label,Provider,Product,Blueprint,ReplaceProvider,ReplaceProduct,ReplaceBlueprint,ReplaceName,NumbersDcsv\n'
     user_db_path.touch()
@@ -2845,7 +2845,7 @@ if __name__ == "__main__":
         elif event == 'About':
             sg.Popup('About RSSwapTool',
                      'Tool for swapping rolling stock in Train Simulator (Dovetail Games) scenarios',
-                     'Version 0.5 / 4 October 2021',
+                     'Version 0.6 / 5 October 2021',
                      'Copyright 2021 JR McKenzie (jrmknz@yahoo.co.uk)', 'https://github.com/jrmckenzie/RSSwapTool',
                      'This program is free software: you can redistribute it and / or modify '
                      'it under the terms of the GNU General Public License as published by '
