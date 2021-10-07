@@ -2630,14 +2630,14 @@ EMU375-7_set,RSC,BrightonMainLine,RailVehicles\Electric\Class377\TLWhite_AP\Clas
 EMU375-7_set,RSC,BrightonMainLine,RailVehicles\Electric\Class377\TLWhite_AP\Class377_MOSL.xml,DTG,LondonGillingham,RailVehicles\Electric\Class375\TL_387_AP\375_MOSL.xml,APEP 387 TL MOSL,
 EMU375-7_set,RSC,BrightonMainLine,RailVehicles\Electric\Class377\TLWhite_AP\Class377_PTOSL_AC.xml,DTG,LondonGillingham,RailVehicles\Electric\Class375\TL_387_AP\375_PTOSL.xml,APEP 387 TL PTOSL,
 EMU375-7_set,RSC,BrightonMainLine,RailVehicles\Electric\Class377\TLWhite_AP\Class377_PTOSL.xml,DTG,LondonGillingham,RailVehicles\Electric\Class375\TL_387_AP\375_PTOSL.xml,APEP 387 TL PTOSL,
-EMU455_set,DTG,Class455Pack02,RailVehicles\Class455_8\Default\455_DTSO_nd.xml,DTG,Class455Pack02,RailVehicles\Class455_8\SN_AP\455_DTSOB-8.xml,APEP 455/8 SC DTSOB,
-EMU455_set,DTG,Class455Pack02,RailVehicles\Class455_8\Default\455_DTSO.xml,DTG,Class455Pack02,RailVehicles\Class455_8\SN_AP\455_DTSOA-8.xml,APEP 455/8 SC DTSOA,
-EMU455_set,DTG,Class455Pack02,RailVehicles\Class455_8\Default\455_MSO.xml,DTG,Class455Pack02,RailVehicles\Class455_8\SN_AP\455_MSO-8.xml,APEP 455/8 SC MSO,
-EMU455_set,DTG,Class455Pack02,RailVehicles\Class455_8\Default\455_TSO.xml,DTG,Class455Pack02,RailVehicles\Class455_8\SN_AP\455_TSO-8.xml,APEP 455/8 SC TSO,
-EMU455_set,DTG,PortsmouthDirect,RailVehicles\Class455_8\Default\455_DTSO_nd.xml,Class 455/8 DTSO SWT ND
-EMU455_set,DTG,PortsmouthDirect,RailVehicles\Class455_8\Default\455_DTSO.xml,Class 455/8 DTSO SWT
-EMU455_set,DTG,PortsmouthDirect,RailVehicles\Class455_8\Default\455_MSO.xml,Class 455/8 MSO SWT
-EMU455_set,DTG,PortsmouthDirect,RailVehicles\Class455_8\Default\455_TSO.xml,Class 455/8 TSO SWT
+EMU455_set,DTG,Class455Pack02,RailVehicles\Class455_8\Default\455_DTSO_nd.xml,DTG,Class455Pack02,RailVehicles\Class455_8\SN2_AP\455_DTSOB-8.xml,APEP 455/8 SN DTSOB,
+EMU455_set,DTG,Class455Pack02,RailVehicles\Class455_8\Default\455_DTSO.xml,DTG,Class455Pack02,RailVehicles\Class455_8\SN2_AP\455_DTSOA-8.xml,APEP 455/8 SN DTSOA,
+EMU455_set,DTG,Class455Pack02,RailVehicles\Class455_8\Default\455_MSO.xml,DTG,Class455Pack02,RailVehicles\Class455_8\SN2_AP\455_MSO-8.xml,APEP 455/8 SN MSO,
+EMU455_set,DTG,Class455Pack02,RailVehicles\Class455_8\Default\455_TSO.xml,DTG,Class455Pack02,RailVehicles\Class455_8\SN2_AP\455_TSO-8.xml,APEP 455/8 SN TSO,
+EMU455_set,DTG,PortsmouthDirect,RailVehicles\Class455_8\Default\455_DTSO_nd.xml,DTG,Class455Pack02,RailVehicles\Class455_8\SWT2_AP\455_DTSOB-8.xml,APEP 455/8 SWT2 DTSOB,
+EMU455_set,DTG,PortsmouthDirect,RailVehicles\Class455_8\Default\455_DTSO.xml,DTG,Class455Pack02,RailVehicles\Class455_8\SWT2_AP\455_DTSOA-8.xml,APEP 455/8 SWT2 DTSOA,
+EMU455_set,DTG,PortsmouthDirect,RailVehicles\Class455_8\Default\455_MSO.xml,DTG,Class455Pack02,RailVehicles\Class455_8\SWT2_AP\455_MSO-8.xml,APEP 455/8 SWT2 MSO,
+EMU455_set,DTG,PortsmouthDirect,RailVehicles\Class455_8\Default\455_TSO.xml,DTG,Class455Pack02,RailVehicles\Class455_8\SWT2_AP\455_MSO-8.xml,APEP 455/8 SWT2 MSO,
 EMU455_set,Thomson,Class455Pack01,RailVehicles\Class455_9\BR\455_DTSO.xml,DTG,Class455Pack02,RailVehicles\Class455_8\BR_AP\455_DTSOA.xml,APEP 455/9 BR DTSOA,
 EMU455_set,Thomson,Class455Pack01,RailVehicles\Class455_9\BR\455_MSO.xml,DTG,Class455Pack02,RailVehicles\Class455_8\BR_AP\455_MSO.xml,APEP 455/9 BR MSO,
 EMU455_set,Thomson,Class455Pack01,RailVehicles\Class455_9\BR\455_TSO.xml,DTG,Class455Pack02,RailVehicles\Class455_8\BR_AP\455_MSO.xml,APEP 455/9 BR MSO,
@@ -2647,19 +2647,19 @@ EMU455_set,Thomson,Class455Pack01,RailVehicles\Class455_9\Connex-U\455_TSO.xml,D
 EMU455_set,Thomson,Class455Pack01,RailVehicles\Class455_9\Connex\455_DTSO.xml,DTG,Class455Pack02,RailVehicles\Class455_8\CX_AP\455_DTSOA-8_2.xml,APEP 455/8 CX DTSOA,
 EMU455_set,Thomson,Class455Pack01,RailVehicles\Class455_9\Connex\455_MSO.xml,DTG,Class455Pack02,RailVehicles\Class455_8\CX_AP\455_MSO-8_2.xml,APEP 455/8 CX MSO,
 EMU455_set,Thomson,Class455Pack01,RailVehicles\Class455_9\Connex\455_TSO.xml,DTG,Class455Pack02,RailVehicles\Class455_8\CX_AP\455_MSO-8_2.xml,APEP 455/8 CX MSO,
-EMU455_set,Thomson,Class455Pack01,RailVehicles\Class455_9\Default\455_DTSO.xml,Class 455/9 DTSO SWT
-EMU455_set,Thomson,Class455Pack01,RailVehicles\Class455_9\Default\455_MSO.xml,Class 455/9 MSO SWT
-EMU455_set,Thomson,Class455Pack01,RailVehicles\Class455_9\Default\455_TSO.xml,Class 455/9 TSO SWT
-EMU455_set,Thomson,Class455Pack01,RailVehicles\Class455_9\NSE\455_DTSO.xml,Class 455/9 DTSO NSE
-EMU455_set,Thomson,Class455Pack01,RailVehicles\Class455_9\NSE\455_MSO.xml,Class 455/9 MSO NSE
-EMU455_set,Thomson,Class455Pack01,RailVehicles\Class455_9\NSE\455_TSO.xml,Class 455/9 TSO NSE
-EMU455_set,Thomson,Class455Pack01,RailVehicles\Class455_9\NSE\4558_DTSO.xml,Class 455/9 DTSO NSESC/8
-EMU455_set,Thomson,Class455Pack01,RailVehicles\Class455_9\Southern\455_DTSO.xml,Class 455/9 DTSO Southern
-EMU455_set,Thomson,Class455Pack01,RailVehicles\Class455_9\Southern\455_MSO.xml,Class 455/9 MSO Southern
-EMU455_set,Thomson,Class455Pack01,RailVehicles\Class455_9\Southern\455_TSO.xml,Class 455/9 TSO Southern
-EMU455_set,Thomson,Class455Pack01,RailVehicles\Class455_9\SWT\455_DTSO.xml,Class 455/9 DTSO SWT Old
-EMU455_set,Thomson,Class455Pack01,RailVehicles\Class455_9\SWT\455_MSO.xml,Class 455/9 MSO SWT Old
-EMU455_set,Thomson,Class455Pack01,RailVehicles\Class455_9\SWT\455_TSO.xml,Class 455/9 TSO SWT Old
+EMU455_set,Thomson,Class455Pack01,RailVehicles\Class455_9\Default\455_DTSO.xml,DTG,Class455Pack02,RailVehicles\Class455_8\SWT2_AP\455_DTSOA.xml,APEP 455/9 SWT2 DTSOA,
+EMU455_set,Thomson,Class455Pack01,RailVehicles\Class455_9\Default\455_MSO.xml,DTG,Class455Pack02,RailVehicles\Class455_8\SWT2_AP\455_MSO.xml,APEP 455/9 SWT2 MSO,
+EMU455_set,Thomson,Class455Pack01,RailVehicles\Class455_9\Default\455_TSO.xml,DTG,Class455Pack02,RailVehicles\Class455_8\SWT2_AP\455_MSO.xml,APEP 455/9 SWT2 MSO,
+EMU455_set,Thomson,Class455Pack01,RailVehicles\Class455_9\NSE\455_DTSO.xml,DTG,Class455Pack02,RailVehicles\Class455_8\NSE2_AP\455_DTSOA.xml,APEP 455/9 NSE2 (SWL) DTSOA,
+EMU455_set,Thomson,Class455Pack01,RailVehicles\Class455_9\NSE\455_MSO.xml,DTG,Class455Pack02,RailVehicles\Class455_8\NSE2_AP\455_MSO.xml,APEP 455/9 NSE2 (SWL) MSO,
+EMU455_set,Thomson,Class455Pack01,RailVehicles\Class455_9\NSE\455_TSO.xml,DTG,Class455Pack02,RailVehicles\Class455_8\NSE2_AP\455_MSO.xml,APEP 455/9 NSE2 (SWL) MSO,
+EMU455_set,Thomson,Class455Pack01,RailVehicles\Class455_9\NSE\4558_DTSO.xml,DTG,Class455Pack02,RailVehicles\Class455_8\NSE2_AP\455_DTSOA.xml,APEP 455/9 NSE2 (SWL) DTSOA,
+EMU455_set,Thomson,Class455Pack01,RailVehicles\Class455_9\Southern\455_DTSO.xml,DTG,Class455Pack02,RailVehicles\Class455_8\SN2_AP\455_DTSOA-8.xml,APEP 455/8 SN DTSOA,
+EMU455_set,Thomson,Class455Pack01,RailVehicles\Class455_9\Southern\455_MSO.xml,DTG,Class455Pack02,RailVehicles\Class455_8\SN2_AP\455_MSO-8.xml,APEP 455/8 SN MSO,
+EMU455_set,Thomson,Class455Pack01,RailVehicles\Class455_9\Southern\455_TSO.xml,DTG,Class455Pack02,RailVehicles\Class455_8\SN2_AP\455_TSO-8.xml,APEP 455/8 SN TSO,
+EMU455_set,Thomson,Class455Pack01,RailVehicles\Class455_9\SWT\455_DTSO.xml,DTG,Class455Pack02,RailVehicles\Class455_8\SWT1_AP\455_DTSOA.xml,APEP 455/9 SWT1 DTSOA,
+EMU455_set,Thomson,Class455Pack01,RailVehicles\Class455_9\SWT\455_MSO.xml,DTG,Class455Pack02,RailVehicles\Class455_8\SWT1_AP\455_MSO.xml,APEP 455/9 SWT1 MSO,
+EMU455_set,Thomson,Class455Pack01,RailVehicles\Class455_9\SWT\455_TSO.xml,DTG,Class455Pack02,RailVehicles\Class455_8\SWT1_AP\455_MSO.xml,APEP 455/9 SWT1 MSO,
 EMU456_set,RSC,SouthLondonLines,RailVehicles\Class456\Default\Engine\Class456_DMSO_nd.xml,AP_Waggonz,Class456Pack01,RailVehicles\Class456\Southern\DMSO\Class_456_DMSO.xml,APW Class 456 Southern DMSO,
 EMU456_set,RSC,SouthLondonLines,RailVehicles\Class456\Default\Engine\Class456_DMSO.xml,AP_Waggonz,Class456Pack01,RailVehicles\Class456\Southern\DMSO\Class_456_DMSO.xml,APW Class 456 Southern DMSO,
 EMU456_set,RSC,SouthLondonLines,RailVehicles\Class456\Default\Engine\Class456_DTSO_nd.xml,AP_Waggonz,Class456Pack01,RailVehicles\Class456\Southern\DTSO\Class_456_DTSO.xml,APW Class 456 Southern DTSO,
