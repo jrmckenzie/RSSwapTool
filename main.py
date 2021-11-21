@@ -1251,7 +1251,7 @@ def ihh_bonus_replace(provider, product, blueprint, name, number):
                             # It's a pre-tops number - select a 47/0 TOPS number instead
                             rv_num = str(47001 + ((int(nm_pretops.group(1)) - 1) % 298))
                         # look up the TOPS number and retrieve details for VP blueprints and number
-                        loco = csv_get_blue47num(this_vehicle[3], rv_num)
+                        loco = csv_get_blue47num('Class47_dom', rv_num)
                         this_vehicle[3] = 'Kuju'
                         this_vehicle[4] = 'RailSimulator'
                         this_vehicle[5] = loco[4]
