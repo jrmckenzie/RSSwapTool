@@ -1,4 +1,12 @@
 Label,Provider,Product,Blueprint,ReplaceProvider,ReplaceProduct,ReplaceBlueprint,ReplaceName,NumbersDcsv
+User,RSC,Class37Pack01,RailVehicles\Freight\PGA\Default\PGA_01_wagon.xml,keithmross,WCML2,RailVehicles\Freight\PGA\Default\PGA01.xml,WCML2 PGA 01 Grey,
+User,RSC,Class37Pack01,RailVehicles\Freight\OCA\default\OCA_01_empty.xml,JL,WHL,RailVehicles\Freight\OCA\default\OCA_01_empty.xml,WHL OCA Empty,
+User,RSC,Class37Pack01,RailVehicles\Freight\OCA\default\OCA_01_loaded.xml,JL,WHL,RailVehicles\Freight\OCA\default\OCA_01_loaded.xml,WHL OCA Loaded,
+User,RSC,Class37Pack01,RailVehicles\Freight\PCA\Default\PCA_01_empty.xml,RSC,SettleCarlisle,RailVehicles\Freight\PCA\Default\PCA_01_empty.xml,SC PCA Straight Empty,
+User,RSC,Class37Pack01,RailVehicles\Freight\PCA\Default\PCA_01_loaded.xml,RSC,SettleCarlisle,RailVehicles\Freight\PCA\Default\PCA_01_loaded.xml,SC PCA Straight Loaded,
+User,RSC,Class37Pack01,RailVehicles\Freight\PCA2\Default\PCA_01_empty.xml,RSC,SettleCarlisle,RailVehicles\Freight\PCA\Default\PCA_01_empty.xml,SC PCA Straight Empty,
+User,RSC,Class37Pack01,RailVehicles\Freight\PCA2\Default\PCA_01_loaded.xml,RSC,SettleCarlisle,RailVehicles\Freight\PCA\Default\PCA_01_loaded.xml,SC PCA Straight Loaded,
+User,RSC,Class37Pack01,RailVehicles\Freight\PGA\Default\PGA_01_wagon.xml,keithmross,WCML2,RailVehicles\Freight\PGA\Variant3\PGA04.xml,WCML2 PGA 04 Brown,
 User,RSDL,RailSimulator,railvehicles\diesel\class08\default\engine\class 08.xml,RSC,Class08Pack01,RailVehicles\Diesel\Class08\Default\Engine\Class 08.xml,Class 08 BR Blue,
 User,RSDL,RailSimulator,RailVehicles\Diesel\Class08\BlueDirty\Engine\Class 08_BlueDirty.xml,RSC,Class08Pack01,RailVehicles\Diesel\Class08\Default\Engine\Class 08.xml,Class 08 BR Blue,
 User,Kuju,RailSimulator,RailVehicles\Freight\StandardVan\bauxite dirt\Wagon\standard_van.xml,Kuju,RailSimulator,RailVehicles\Freight\StandardVan\Standard_Van_Bauxite_06\Wagon\standard_van.xml,FP StanVan Bxite 6 (BY),

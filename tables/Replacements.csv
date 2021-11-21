@@ -1007,9 +1007,13 @@ HST_set,Thomson,EandG,RailVehicles\Diesel\HST\EastCoast\Mk3TSO\mk3tso_ec_B.xml,K
 HST_set,Thomson,EandG,RailVehicles\Diesel\HST\EastCoast\Mk3TSO\mk3tso_ec_C.xml,Kuju,RailSimulator,RailVehicles\Diesel\HST\NXEC_AP\Mk3\1\2\Mk3TSO\mk3tso_ic.xml,Mk3 TS NXEC AP,RailVehicles\Diesel\HST\NXEC_AP\Mk3\1\2\Mk3TSO\mk3tso_numbers.dcsv
 HST_set,Thomson,EandG,RailVehicles\Diesel\HST\EastCoast\Mk3TSO\mk3tso_ec_D.xml,Kuju,RailSimulator,RailVehicles\Diesel\HST\NXEC_AP\Mk3\1\2\Mk3TSO\mk3tso_ic.xml,Mk3 TS NXEC AP,RailVehicles\Diesel\HST\NXEC_AP\Mk3\1\2\Mk3TSO\mk3tso_numbers.dcsv
 HST_set,Thomson,EandG,RailVehicles\Diesel\HST\EastCoast\Mk3TSO\mk3tso_ec_E.xml,Kuju,RailSimulator,RailVehicles\Diesel\HST\NXEC_AP\Mk3\1\2\Mk3TSO\mk3tso_ic.xml,Mk3 TS NXEC AP,RailVehicles\Diesel\HST\NXEC_AP\Mk3\1\2\Mk3TSO\mk3tso_numbers.dcsv
+IHH_Bonus,IHH,Bonus Content,railvehicles\freight\hea\default\wagon\hea railfreight.xml,FastlineSimulation,HBA HEA Hoppers,RailVehicles\Freight\HEA,,
 IHH_Bonus,IHH,Bonus Content,railvehicles\freight\20t br brake van\default\wagon\20t br brake van blueprint.xml,FastlineSimulation,CAO Brake Van,RailVehicles\Freight\CAO\CAO_BrakeVan_BW3.xml,CAO: Brake Van B - W.3,
-IHH_Bonus,IHH,Bonus Content,railvehicles\passenger\guv\default\guv_blue_blueprint.xml,DTG,BRBluePack02,RailVehicles\Passenger\GUV\Default\GUV_Blue_blueprint.xml,[BRB2] GUV Blue Express Parcels,
+IHH_Bonus,IHH,Bonus Content,railvehicles\passenger\guv\default\guv_blue_blueprint.xml,DTG,WoodheadBR,RailVehicles\Passenger\GUV\Default\GUV_Blue_blueprint.xml,[WHBR] GUV Blue Express Parcels,
+IHH_Bonus,IHH,Bonus Content,railvehicles\passenger\guv\default\guv_blue_newspapers.xml,DTG,WoodheadBR,RailVehicles\Passenger\GUV\Newspapers\GUV_Blue_news.xml,[WHBR] GUV Blue Newspapers,
 IHH_Bonus,IHH,Bonus Content,railvehicles\diesel\brush type 4\engine\brush_4_bue.xml,Kuju,RailSimulator,RailVehicles\Diesel\Class47_rf2\BlueNoHL\Engine\47_NoETH_Dom\class47_br0_Dom.xml,(VP-47) Class 47/0 BR Blue DO,RailVehicles\Diesel\Class47_rf2\BlueNoHL\Numbers\class47_brush0_numbers.dcsv
+IHH_Bonus,IHH,Bonus Content,railvehicles\freight\16tmineralwagon\default\16t mineral.xml,Kuju,RailSimulator,RailVehicles\Freight\16TMineralWagon\OLD BR 1\16tmineral.xml,FP 16tMin BR 1 Old (BRI),
+IHH_Bonus,IHH,Bonus Content,railvehicles\freight\iron ore tippler\default\tippler.xml,Kuju,RailSimulator,RailVehicles\Freight\16TMineralWagon\OLD BR 1\16tmineral.xml,FP 16tMin BR 1 Old (BRI),
 IHH_Class17,IHH,Class_17,RailVehicles\Diesel\Class_17\Default\Engine\class_17_Green_1.xml,RSC,Class20Pack01,RailVehicles\Diesel\Class_20\Default\Engine\Class_20_green_disk.xml,Class 20 Green Disk,
 IHH_Class20,IHH,Class 20,railvehicles\diesel\class_20\blue disk\engine\class_20_blue_disk.xml,DTG,Class20Pack02,RailVehicles\Diesel\Class_20_VP\Blue Disk\Engine\Class_20_green_disk.xml,[VP] Class 20 BR Blue Disk,
 IHH_Class20,IHH,Class 20,RailVehicles\Diesel\Class_20\Default\Engine\Class_20_blue_headcode.xml,DTG,Class20Pack02,RailVehicles\Diesel\Class_20_VP\Default\Engine\Class_20_blue_domino.xml,[VP] Class 20 BR Blue Domino,
@@ -1680,7 +1684,7 @@ HHA,BMG,WelshMarchesLine,RailVehicles\Freight\HHA Coal Hopper\HHACoalHopperDirty
 HHA,BMG,WelshMarchesLine,RailVehicles\Freight\HHA Coal Hopper\HHACoalHopperDirty_LOADED.xml,,,,,
 HTO,MichaelWhiteley,AusterityJ94,RailVehicles\Freight\21T Hopper\21THopper.xml,,,,,
 HTO,RSC,8FPack01,RailVehicles\Freight\21T Hopper\21THopper.xml,,,,,
-HTO,RSC,RobinsonO4Pack01,RailVehicles\Freight\21T Hopper\21THopper.xml,,,,,
+HTO,RSC,R.xmlsonO4Pack01,RailVehicles\Freight\21T Hopper\21THopper.xml,,,,,
 HTO,RSC,Woodhead,RailVehicles\Freight\21T Hopper\21THopper.xml,,,,,
 HTO,RSC,Woodhead,RailVehicles\Freight\21T Hopper W01\21THopper.xml,,,,,
 HTO,RSC,Woodhead,RailVehicles\Freight\21T Hopper W02\21THopper.xml,,,,,
@@ -1690,7 +1694,7 @@ HTO,RSC,WSDiesels,RailVehicles\Freight\21T Hopper\21THopper.xml,,,,,
 HTO,RSderek,WearValleyRailway,RailVehicles\Freight\21T Hopper\21THopper.xml,,,,,
 HTV,DTG,WoodheadBR,RailVehicles\Freight\21T Hopper\21THopper.xml,,,,,
 HTV,MichaelWhiteley,AusterityJ94,RailVehicles\Freight\21T Hopper_Fitted\21THopper.xml,,,,,
-HTV,RSC,RobinsonO4Pack01,RailVehicles\Freight\21T Hopper_Fitted\21THopper.xml,,,,,
+HTV,RSC,R.xmlsonO4Pack01,RailVehicles\Freight\21T Hopper_Fitted\21THopper.xml,,,,,
 HTV,RSC,ThompsonB1Pack01,RailVehicles\Freight\21T Hopper_Fitted\21THopper.xml,,,,,
 HTV,RSC,Woodhead,RailVehicles\Freight\21T Hopper_Fitted\21THopper.xml,,,,,
 HTV,RSC,Woodhead,RailVehicles\Freight\21T Hopper W01_F\21THopper_rear.xml,,,,,

@@ -1143,6 +1143,74 @@ def coal21_t_hto_replace(provider, product, blueprint, name, number, loaded):
     return False
 
 
+def coal21_t_hea_replace(provider, product, blueprint, name, number, loaded):
+    for i in range(0, len(vehicle_db['HEA'])):
+        this_vehicle = vehicle_db['HEA'][i]
+        if this_vehicle[0] in provider.text:
+            if this_vehicle[1] in product.text:
+                bp = re.search(this_vehicle[2], blueprint.text, flags=re.IGNORECASE)
+                if bp:
+                    provider.text = 'FastlineSimulation'
+                    rv_orig = number.text
+                    rv_num = int(number.text.replace('B', ''))
+                    if 'eTrue' in loaded.text:
+                        load = 'L'  # Replace a loaded wagon
+                    else:
+                        load = 'E'  # Replace an empty wagon
+                    # Choose a random HTO lot and remap the vehicle number to somewhere within the numbers this lot was
+                    # allocated. 11708 vehicle numbers are possible: 1200 in lot 141, 2750 in lot 143, 6050 in lot 146,
+                    # and 1708 rebodied.
+                    x = random.randrange(0, 11708)
+                    pretops_only = random.choice(['a', 'b', 'c'])
+                    no_pretops = 'd'
+                    if 0 <= x < 1200:
+                        lot = ['Dia 141', '01']
+                        m = HTO_141_numbers[rv_num % 1200]
+                        dirty_w = random.choice([('W2_', 'W2.'), ('W_', 'W1.')])
+                        clean_w = random.choice([('C2_', 'C2.'), ('C_', 'C1.')])
+                    elif 1200 <= x < 3950:
+                        lot = ['Dia 143', '02']
+                        m = HTO_143_numbers[rv_num % 2750]
+                        dirty_w = random.choice([('02_W_', 'W2.'), ('W_', 'W1.')])
+                        clean_w = random.choice([('02_C_', 'C2.'), ('C_', 'C1.')])
+                    elif 3950 <= x < 10000:
+                        lot = ['Dia 146', '04']
+                        m = HTO_146_numbers[rv_num % 6050]
+                        dirty_w = random.choice([('W2_', 'W2.'), ('W_', 'W.')])
+                        clean_w = random.choice([('C2_', 'C2.'), ('C_', 'C.')])
+                    else:
+                        lot = ['Rebodied', '18']
+                        m = HTO_rebodied_numbers[rv_num % 1708]
+                        dirty_w = random.choice([('B_W_', 'B.W.'), ('G_W_', 'G.W.')])
+                        clean_w = random.choice([('B_C_', 'B.C.'), ('G_C_', 'G.C.')])
+                        pretops_only = 'c'
+                        no_pretops = random.choice(['a', 'b', 'd'])
+                    dirty_probability = int(config.get('defaults', 'htx_dirty_probability', fallback='90'))
+                    dirty_dicethrow = random.randrange(1, 101)
+                    if dirty_dicethrow <= dirty_probability:
+                        weathering = dirty_w
+                    else:
+                        weathering = clean_w
+                    data_paneltypes = config.get('defaults', 'htx_era', fallback='Mixed')
+                    if data_paneltypes == 'Pre-TOPS only':
+                        rv_prefix = pretops_only
+                    elif data_paneltypes == 'TOPS only':
+                        rv_prefix = no_pretops
+                    else:
+                        rv_prefix = ''
+                    this_blueprint = 'RailVehicles\\Freight\\HTO\\FS_HT0' + lot[1] + 'A_' + weathering[0] + load + '.xml'
+                    this_name = 'HTO 21t Hopper - ' + lot[0] + ': ' + weathering[1] + load
+                    rv_num = rv_prefix + 'B' + str(m)
+                    product.text = 'HTO 21t Hoppers - ' + lot[0]
+                    blueprint.text = this_blueprint
+                    name.text = this_name
+                    number.text = rv_num
+                    rv_list.append(rv_num)
+                    rv_pairs.append([rv_orig, rv_num])
+                    return True
+    return False
+
+
 def coal21_t_htv_replace(provider, product, blueprint, name, number, loaded):
     for i in range(0, len(vehicle_db['HTV'])):
         # Replace fitted wagons
@@ -1203,8 +1271,8 @@ def coal21_t_htv_replace(provider, product, blueprint, name, number, loaded):
     return False
 
 
-def ihh_replace(provider, product, blueprint, name, number):
-    if bool(ihh_bonus_replace(provider, product, blueprint, name, number)):
+def ihh_replace(provider, product, blueprint, name, number, loaded):
+    if bool(ihh_bonus_replace(provider, product, blueprint, name, number, loaded)):
         return True
     if bool(ihh_c17_replace(provider, product, blueprint, name, number)):
         return True
@@ -1221,7 +1289,7 @@ def ihh_replace(provider, product, blueprint, name, number):
     return False
 
 
-def ihh_bonus_replace(provider, product, blueprint, name, number):
+def ihh_bonus_replace(provider, product, blueprint, name, number, loaded):
     for i in range(0, len(vehicle_db['IHH_Bonus'])):
         this_vehicle = vehicle_db['IHH_Bonus'][i]
         if this_vehicle[0] in provider.text:
@@ -1231,6 +1299,9 @@ def ihh_bonus_replace(provider, product, blueprint, name, number):
                     rv_orig = number.text
                     guv = re.search('guv', blueprint.text, flags=re.IGNORECASE)
                     cao = re.search('20t', blueprint.text, flags=re.IGNORECASE)
+                    hea = re.search('hea railfreight', blueprint.text, flags=re.IGNORECASE)
+                    mcv = re.search('16tmineralwagon', blueprint.text, flags=re.IGNORECASE)
+                    tip = re.search('iron ore tippler', blueprint.text, flags=re.IGNORECASE)
                     c47 = re.search('brush_4_bue', blueprint.text, flags=re.IGNORECASE)
                     if guv:
                         if not bool(re.match('[A-Z][0-9]{5}', number.text)):
@@ -1239,6 +1310,30 @@ def ihh_bonus_replace(provider, product, blueprint, name, number):
                     elif cao:
                         # As the IHH number format for 20t brake vans is not known, choose a random number.
                         number.text = '####B' + str(random.randint(953676, 954520)) + '#'
+                    elif hea:
+                        # Swap for a Fastline Simulations HEA wagon in railfreight livery
+                        rv_int = int(rv_orig[2:6])
+                        if 'eTrue' in loaded.text:
+                            load = 'L'  # Replace a loaded wagon
+                        else:
+                            load = 'E'  # Replace an empty wagon
+                        if rv_int < 231:
+                            blueprint.text = r'RailVehicles\Freight\HEA\HEA_RF_CL_C_' + load + '.xml'
+                            name.text = 'HEA_RF_CL_C_' + load
+                        else:
+                            blueprint.text = r'RailVehicles\Freight\HEA\HEA_RF_OL_C_' + load + '.xml'
+                            name.text = 'HEA_RF_OL_C_' + load
+                        HEA_RF_suffixes = ['£####(###', '#$###(###', '##%##(###', '###^##)##', '####&amp;#)##']
+                        provider.text = 'FastlineSimulation'
+                        product.text = 'HBA HEA Hoppers'
+                        number.text = 'HEA' + str(360000 + rv_int) + HEA_RF_suffixes[random.randrange(0, 5)]
+                        return True
+                    elif mcv or tip:
+                        provider.text = this_vehicle[3]
+                        product.text = this_vehicle[4]
+                        blueprint.text = this_vehicle[5].replace('BR 1','BR ' + str(random.randrange(1, 4)))
+                        name.text = this_vehicle[6].replace('BR 1','BR ' + str(random.randrange(1, 4)))
+                        number.text = str(550000 + int(rv_orig[2:6]))
                     elif c47:
                         # Initialise a random Class 47/0 number in case no valid number found
                         rv_num = str(random.randint(47001, 47298))
@@ -2676,7 +2771,7 @@ def vehicle_replacer(provider, product, blueprint, name, number, loaded, flipped
         return True
     if values['Replace_VDA'] and vda_replace(provider, product, blueprint, name, number, loaded, flipped, followers, tailmarker):
         return True
-    if values['Replace_IHH'] and ihh_replace(provider, product, blueprint, name, number):
+    if values['Replace_IHH'] and ihh_replace(provider, product, blueprint, name, number, loaded):
         return True
     if values['Replace_User'] and user_replace(provider, product, blueprint, name):
         return True
