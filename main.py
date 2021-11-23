@@ -66,6 +66,7 @@ vda_liveries = ['Maroon only', 'Railfreight only', 'Mostly Maroon', 'Mostly Rail
 vda_whiteroof_probabilities = ['0', '1', '5', '10', '20', '30', '40', '50', '60', '70', '80', '90', '100']
 dirty_probabilities = ['0', '10', '20', '30', '40', '50', '60', '70', '80', '90', '100']
 htx_eras = ['Pre-TOPS only', 'Mixed', 'TOPS only']
+tail_opts = ['Flashing', 'Steady']
 sg.LOOK_AND_FEEL_TABLE['Railish'] = {'BACKGROUND': '#00384F',
                                      'TEXT': '#FFFFFF',
                                      'INPUT': '#FFFFFF',
@@ -164,6 +165,7 @@ if not config.has_section('defaults'):
     config.set('defaults', 'vda_dirty_probability', dirty_probabilities[8])
     config.set('defaults', 'htx_dirty_probability', dirty_probabilities[8])
     config.set('defaults', 'htx_era', htx_eras[1])
+    config.set('defaults', 'tail_style', tail_opts[0])
     with open(path_to_config, 'w') as iconfigfile:
         config.write(iconfigfile)
         iconfigfile.close()
@@ -1339,8 +1341,14 @@ def ihh_bonus_replace(provider, product, blueprint, name, number, loaded, flippe
                         number.text = 'HEA' + str(360000 + rv_int) + HEA_RF_suffixes[random.randrange(0, 5)]
                         if not tailmarker == 1:
                             # change to a tail lamp carrying wagon and try to orient it with the lamp outward facing
-                            blueprint.text, name.text = add_taillamp(tailmarker, blueprint.text, '_Rb.xml', name.text,
-                                                                     '_Rb', flipped, followers)
+                            if tail_style == 'Flashing':
+                                tail_bp = '_Rb.xml'
+                                tail_name = '_Rb'
+                            else:
+                                tail_bp = '_Ro.xml'
+                                tail_name = '_Ro'
+                            blueprint.text, name.text = add_taillamp(tailmarker, blueprint.text, tail_bp, name.text,
+                                                                     tail_name, flipped, followers)
                         rv_list.append(number.text)
                         rv_pairs.append([rv_orig, number.text])
                         return True
@@ -3030,6 +3038,7 @@ if __name__ == "__main__":
             htx_dirty_probability = config.get('defaults', 'htx_dirty_probability',
                                                fallback=dirty_probabilities[8])
             htx_era = config.get('defaults', 'htx_era', fallback=htx_eras[1])
+            tail_style = config.get('defaults', 'tail_style', fallback=tail_opts[0])
             # The settings button has been pressed, so allow the user to change the RailWorks folder setting
             loclayout = [
                 [sg.Text('Settings', font='Helvetica 14')],
@@ -3079,6 +3088,10 @@ if __name__ == "__main__":
                         sg.Text('% chance van is dirty:'), sg.Combo(dirty_probabilities, auto_size_text=True,
                         default_value=vda_dirty_probability, key='vda_dirty_probability', readonly=True)],
                 [sg.HSeparator(color='#aaaaaa')],
+                [sg.Text('Some wagons can have either steady or flashing (1970s onwards) red tail lamp styles. \n'
+                         'In the event there is a choice, which type would you prefer to see:'),
+                 sg.Combo(tail_opts, auto_size_text=True, default_value=tail_style, key='tail_style', readonly=True)],
+                [sg.HSeparator(color='#aaaaaa')],
                 [sg.Checkbox('Save a list of all vehicles in the scenario (useful for debugging)', key='save_report',
                              default=get_my_config_boolean('defaults', 'save_report'), enable_events=True,
                              tooltip='This option will save a report listing all the rail vehicles (and their numbers)'
@@ -3108,6 +3121,7 @@ if __name__ == "__main__":
                     config.set('defaults', 'vda_dirty_probability', str(lvalues['vda_dirty_probability']))
                     config.set('defaults', 'htx_dirty_probability', str(lvalues['htx_dirty_probability']))
                     config.set('defaults', 'htx_era', str(lvalues['htx_era']))
+                    config.set('defaults', 'tail_style', str(lvalues['tail_style']))
                     config.set('defaults', 'save_report', str(lvalues['save_report']))
                     with open(path_to_config, 'w') as configfile:
                         config.write(configfile)
