@@ -654,6 +654,22 @@ def direction_flip(flipped, followers):
             dir.text = 'forwards'
     return True
 
+
+def add_taillamp(tailmarker, this_blueprint, bp_suffix, this_name, name_suffix, flipped, followers):
+    # The vehicle is at one end of the consist and should have a red tail light
+    this_blueprint = re.sub('\.xml', bp_suffix, this_blueprint, flags=re.IGNORECASE)
+    this_name = this_name + name_suffix
+    # If the vehicle is at the top of the consist it will need to be flipped to have the tail
+    # light facing the right direction
+    if tailmarker == 0:
+        if flipped.text == '0':
+            direction_flip(flipped, followers)
+    if tailmarker == 2:
+        if flipped.text == '1':
+            direction_flip(flipped, followers)
+    return this_blueprint, this_name
+
+
 def haa_replace(provider, product, blueprint, name, number, loaded, flipped, followers, tailmarker):
     # Replace HAA wagons
     for i in range(0, len(vehicle_db['HAA'])):
@@ -709,22 +725,12 @@ def haa_replace(provider, product, blueprint, name, number, loaded, flipped, fol
                     else:
                         # Completely random livery
                         lv = random.choice([('EWS', ' Red '), ('Blue', ' Blue '), ('Sector', ' Sector ')])
-                    this_name = 'AP ' + bp + lv[1] + load[1] + weathering[1]
-                    this_blueprint = 'RailVehicles\\Freight\\HAA\\' + lv[0] + weathering[0] + '\\' + bp + load[0] + '.xml'
+                    blueprint.text = 'RailVehicles\\Freight\\HAA\\' + lv[0] + weathering[0] + '\\' + bp + load[0] + '.xml'
+                    name.text = 'AP ' + bp + lv[1] + load[1] + weathering[1]
                     if not tailmarker == 1:
-                        # The vehicle is at one end of the consist and should have a red tail light
-                        this_blueprint = re.sub('\.xml', '_TL.xml', this_blueprint, flags=re.IGNORECASE)
-                        this_name = this_name + ' TL'
-                        # If the vehicle is it the top of the consist it will need to be flipped to have the tail
-                        # light facing the right direction
-                        if tailmarker == 0:
-                            if flipped.text == '0':
-                                direction_flip(flipped, followers)
-                        if tailmarker == 2:
-                            if flipped.text == '1':
-                                direction_flip(flipped, followers)
-                    blueprint.text = this_blueprint
-                    name.text = this_name
+                        # change to a tail lamp carrying wagon and try to orient it with the lamp outward facing
+                        blueprint.text, name.text = add_taillamp(tailmarker, blueprint.text, '_TL.xml', name.text,
+                                                                 ' TL', flipped, followers)
                     # Now extract the vehicle number
                     rv_list.append(number.text)
                     return True
@@ -759,15 +765,15 @@ def hha_replace(provider, product, blueprint, name, number, loaded):
     return False
 
 
-def fsafta_replace(provider, product, blueprint, name, number, loaded):
-    if bool(fsa_replace(provider, product, blueprint, name, number, loaded)):
+def fsafta_replace(provider, product, blueprint, name, number, loaded, flipped, followers, tailmarker):
+    if bool(fsa_replace(provider, product, blueprint, name, number, loaded, flipped, followers, tailmarker)):
         return True
     if bool(fta_replace(provider, product, blueprint, name, number, loaded)):
         return True
     return False
 
 
-def fsa_replace(provider, product, blueprint, name, number, loaded):
+def fsa_replace(provider, product, blueprint, name, number, loaded, flipped, followers, tailmarker):
     for i in range(0, len(vehicle_db['FSA'])):
         this_vehicle = vehicle_db['FSA'][i]
         if this_vehicle[0] in provider.text:
@@ -810,6 +816,10 @@ def fsa_replace(provider, product, blueprint, name, number, loaded):
                         number.text = dcsv_get_num(
                             Path(railworks_path, 'Assets/AP/FSAWagonPack', dcsv), number.text,
                             '([0-9]{6})(.*)')
+                    if not tailmarker == 1:
+                        # change to a tail lamp carrying wagon and try to orient it with the lamp outward facing
+                        blueprint.text, name.text = add_taillamp(tailmarker, blueprint.text, '.xml', name.text,
+                                                                 '', flipped, followers)
                     rv_pairs.append([rv_orig, number.text])
                     rv_list.append(number.text)
                     return True
@@ -1271,8 +1281,8 @@ def coal21_t_htv_replace(provider, product, blueprint, name, number, loaded):
     return False
 
 
-def ihh_replace(provider, product, blueprint, name, number, loaded):
-    if bool(ihh_bonus_replace(provider, product, blueprint, name, number, loaded)):
+def ihh_replace(provider, product, blueprint, name, number, loaded, flipped, followers, tailmarker):
+    if bool(ihh_bonus_replace(provider, product, blueprint, name, number, loaded, flipped, followers, tailmarker)):
         return True
     if bool(ihh_c17_replace(provider, product, blueprint, name, number)):
         return True
@@ -1289,7 +1299,7 @@ def ihh_replace(provider, product, blueprint, name, number, loaded):
     return False
 
 
-def ihh_bonus_replace(provider, product, blueprint, name, number, loaded):
+def ihh_bonus_replace(provider, product, blueprint, name, number, loaded, flipped, followers, tailmarker):
     for i in range(0, len(vehicle_db['IHH_Bonus'])):
         this_vehicle = vehicle_db['IHH_Bonus'][i]
         if this_vehicle[0] in provider.text:
@@ -1327,13 +1337,23 @@ def ihh_bonus_replace(provider, product, blueprint, name, number, loaded):
                         provider.text = 'FastlineSimulation'
                         product.text = 'HBA HEA Hoppers'
                         number.text = 'HEA' + str(360000 + rv_int) + HEA_RF_suffixes[random.randrange(0, 5)]
+                        if not tailmarker == 1:
+                            # change to a tail lamp carrying wagon and try to orient it with the lamp outward facing
+                            blueprint.text, name.text = add_taillamp(tailmarker, blueprint.text, '_Rb.xml', name.text,
+                                                                     '_Rb', flipped, followers)
+                        rv_list.append(number.text)
+                        rv_pairs.append([rv_orig, number.text])
                         return True
                     elif mcv or tip:
                         provider.text = this_vehicle[3]
                         product.text = this_vehicle[4]
-                        blueprint.text = this_vehicle[5].replace('BR 1','BR ' + str(random.randrange(1, 4)))
-                        name.text = this_vehicle[6].replace('BR 1','BR ' + str(random.randrange(1, 4)))
+                        random_variant = str(random.randrange(1, 4))
+                        blueprint.text = this_vehicle[5].replace('BR 1','BR ' + random_variant)
+                        name.text = this_vehicle[6].replace('BR 1','BR ' + random_variant)
                         number.text = str(550000 + int(rv_orig[2:6]))
+                        rv_list.append(number.text)
+                        rv_pairs.append([rv_orig, number.text])
+                        return True
                     elif c47:
                         # Initialise a random Class 47/0 number in case no valid number found
                         rv_num = str(random.randint(47001, 47298))
@@ -1516,7 +1536,7 @@ def ihh_c40_replace(provider, product, blueprint, name, number):
                             ap_num = dcsv_get_num(
                                 Path(railworks_path, 'Assets', this_vehicle[3], this_vehicle[4],
                                      this_vehicle[7].replace('\\', '/')), rv_tops, '([0-9]{9})(.*)')
-                            rv_num = ap_num[0:9] + '2222'
+                            rv_num = ap_num[0:9] + '2121'
                     else:
                         tops_headcode = re.search('^(40[0-9]{3})(....).*', number.text)
                         if tops_headcode:
@@ -2759,7 +2779,7 @@ def vehicle_replacer(provider, product, blueprint, name, number, loaded, flipped
         return True
     if values['Replace_Mk2df'] and mk2df_replace(provider, product, blueprint, name, number):
         return True
-    if values['Replace_FSA'] and fsafta_replace(provider, product, blueprint, name, number, loaded):
+    if values['Replace_FSA'] and fsafta_replace(provider, product, blueprint, name, number, loaded, flipped, followers, tailmarker):
         return True
     if values['Replace_HAA'] and haa_replace(provider, product, blueprint, name, number, loaded, flipped, followers, tailmarker):
         return True
@@ -2771,7 +2791,7 @@ def vehicle_replacer(provider, product, blueprint, name, number, loaded, flipped
         return True
     if values['Replace_VDA'] and vda_replace(provider, product, blueprint, name, number, loaded, flipped, followers, tailmarker):
         return True
-    if values['Replace_IHH'] and ihh_replace(provider, product, blueprint, name, number, loaded):
+    if values['Replace_IHH'] and ihh_replace(provider, product, blueprint, name, number, loaded, flipped, followers, tailmarker):
         return True
     if values['Replace_User'] and user_replace(provider, product, blueprint, name):
         return True
