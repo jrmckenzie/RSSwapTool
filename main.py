@@ -1062,12 +1062,20 @@ def vda_replace(provider, product, blueprint, name, number, loaded, flipped, fol
                     m = 9450 + rv_num % 300
                 rv_num = str(m + 200650) + '#####'
                 product.text = 'VDA Vans lot ' + lot
-                this_blueprint = 'RailVehicles\\Freight\\VDA Vans\\VDA_' + lot + '_' + lv + white + '_' + load + weathering + '.xml'
-                this_name = 'VDA: ' + lv + white + ' ' + lot + ' - ' + load + '.' + weathering
+                blueprint.text = 'RailVehicles\\Freight\\VDA Vans\\VDA_' + lot + '_' + lv + white + '_' + load + weathering + '.xml'
+                name.text = 'VDA: ' + lv + white + ' ' + lot + ' - ' + load + '.' + weathering
                 if not tailmarker == 1:
-                    # The vehicle is at one end of the consist and should have a red tail light
-                    this_blueprint = re.sub('\.xml', 'R.xml', this_blueprint, flags=re.IGNORECASE)
-                    this_name = this_name + '.R'
+                    # change to a tail lamp carrying wagon and try to orient it with the lamp outward facing
+                    tail_style = config.get('defaults', 'tail_style', fallback='Flashing')
+                    tail_bp = 'R.xml'
+                    tail_name = 'R'
+                    if tail_style == 'Flashing':
+                        # Only RailFreight or Dirty Maroon vans can have flashing tail lamps
+                        if lv == 'RF' or (lv == 'M' and weathering == 'D'):
+                            tail_bp = 'Rb.xml'
+                            tail_name = 'Rb'
+                    blueprint.text, name.text = add_taillamp(tailmarker, blueprint.text, tail_bp, name.text,
+                                                             tail_name, flipped, followers)
                     # If the vehicle is it the top of the consist it will need to be flipped to have the tail
                     # light facing the right direction
                     if tailmarker == 0:
@@ -1080,8 +1088,6 @@ def vda_replace(provider, product, blueprint, name, number, loaded, flipped, fol
                 rv_list.append(str(rv_num))
                 rv_pairs.append([rv_orig, str(rv_num)])
                 # Set Fastline wagon number
-                blueprint.text = this_blueprint
-                name.text = this_name
                 number.text = str(rv_num)
                 return True
     return False
@@ -1090,74 +1096,6 @@ def vda_replace(provider, product, blueprint, name, number, loaded, flipped, fol
 def coal21_t_hto_replace(provider, product, blueprint, name, number, loaded):
     for i in range(0, len(vehicle_db['HTO'])):
         this_vehicle = vehicle_db['HTO'][i]
-        if this_vehicle[0] in provider.text:
-            if this_vehicle[1] in product.text:
-                bp = re.search(this_vehicle[2], blueprint.text, flags=re.IGNORECASE)
-                if bp:
-                    provider.text = 'FastlineSimulation'
-                    rv_orig = number.text
-                    rv_num = int(number.text.replace('B', ''))
-                    if 'eTrue' in loaded.text:
-                        load = 'L'  # Replace a loaded wagon
-                    else:
-                        load = 'E'  # Replace an empty wagon
-                    # Choose a random HTO lot and remap the vehicle number to somewhere within the numbers this lot was
-                    # allocated. 11708 vehicle numbers are possible: 1200 in lot 141, 2750 in lot 143, 6050 in lot 146,
-                    # and 1708 rebodied.
-                    x = random.randrange(0, 11708)
-                    pretops_only = random.choice(['a', 'b', 'c'])
-                    no_pretops = 'd'
-                    if 0 <= x < 1200:
-                        lot = ['Dia 141', '01']
-                        m = HTO_141_numbers[rv_num % 1200]
-                        dirty_w = random.choice([('W2_', 'W2.'), ('W_', 'W1.')])
-                        clean_w = random.choice([('C2_', 'C2.'), ('C_', 'C1.')])
-                    elif 1200 <= x < 3950:
-                        lot = ['Dia 143', '02']
-                        m = HTO_143_numbers[rv_num % 2750]
-                        dirty_w = random.choice([('02_W_', 'W2.'), ('W_', 'W1.')])
-                        clean_w = random.choice([('02_C_', 'C2.'), ('C_', 'C1.')])
-                    elif 3950 <= x < 10000:
-                        lot = ['Dia 146', '04']
-                        m = HTO_146_numbers[rv_num % 6050]
-                        dirty_w = random.choice([('W2_', 'W2.'), ('W_', 'W.')])
-                        clean_w = random.choice([('C2_', 'C2.'), ('C_', 'C.')])
-                    else:
-                        lot = ['Rebodied', '18']
-                        m = HTO_rebodied_numbers[rv_num % 1708]
-                        dirty_w = random.choice([('B_W_', 'B.W.'), ('G_W_', 'G.W.')])
-                        clean_w = random.choice([('B_C_', 'B.C.'), ('G_C_', 'G.C.')])
-                        pretops_only = 'c'
-                        no_pretops = random.choice(['a', 'b', 'd'])
-                    dirty_probability = int(config.get('defaults', 'htx_dirty_probability', fallback='90'))
-                    dirty_dicethrow = random.randrange(1, 101)
-                    if dirty_dicethrow <= dirty_probability:
-                        weathering = dirty_w
-                    else:
-                        weathering = clean_w
-                    data_paneltypes = config.get('defaults', 'htx_era', fallback='Mixed')
-                    if data_paneltypes == 'Pre-TOPS only':
-                        rv_prefix = pretops_only
-                    elif data_paneltypes == 'TOPS only':
-                        rv_prefix = no_pretops
-                    else:
-                        rv_prefix = ''
-                    this_blueprint = 'RailVehicles\\Freight\\HTO\\FS_HT0' + lot[1] + 'A_' + weathering[0] + load + '.xml'
-                    this_name = 'HTO 21t Hopper - ' + lot[0] + ': ' + weathering[1] + load
-                    rv_num = rv_prefix + 'B' + str(m)
-                    product.text = 'HTO 21t Hoppers - ' + lot[0]
-                    blueprint.text = this_blueprint
-                    name.text = this_name
-                    number.text = rv_num
-                    rv_list.append(rv_num)
-                    rv_pairs.append([rv_orig, rv_num])
-                    return True
-    return False
-
-
-def coal21_t_hea_replace(provider, product, blueprint, name, number, loaded):
-    for i in range(0, len(vehicle_db['HEA'])):
-        this_vehicle = vehicle_db['HEA'][i]
         if this_vehicle[0] in provider.text:
             if this_vehicle[1] in product.text:
                 bp = re.search(this_vehicle[2], blueprint.text, flags=re.IGNORECASE)
@@ -1297,6 +1235,8 @@ def ihh_replace(provider, product, blueprint, name, number, loaded, flipped, fol
     if bool(ihh_c40_replace(provider, product, blueprint, name, number)):
         return True
     if bool(ihh_c45_replace(provider, product, blueprint, name, number)):
+        return True
+    if bool(ihh_c56_replace(provider, product, blueprint, name, number)):
         return True
     return False
 
@@ -1599,6 +1539,24 @@ def ihh_c45_replace(provider, product, blueprint, name, number):
                     number.text = rv_num
                     rv_list.append(number.text)
                     rv_pairs.append([rv_orig, number.text])
+                    return True
+    return False
+
+
+def ihh_c56_replace(provider, product, blueprint, name, number):
+    if 'IHH' in provider.text:
+        if 'Class_56' in product.text:
+            for i in range(0, len(vehicle_db['IHH_Class56'])):
+                this_vehicle = vehicle_db['IHH_Class56'][i]
+                bp = re.search(this_vehicle[2], blueprint.text, flags=re.IGNORECASE)
+                if bp:
+                    provider.text = this_vehicle[3]
+                    product.text = this_vehicle[4]
+                    blueprint.text = this_vehicle[5]
+                    name.text = this_vehicle[6]
+                    number.text = number.text[-5:]
+                    rv_list.append(number.text)
+                    rv_pairs.append([number.text, number.text])
                     return True
     return False
 
@@ -3088,8 +3046,8 @@ if __name__ == "__main__":
                         sg.Text('% chance van is dirty:'), sg.Combo(dirty_probabilities, auto_size_text=True,
                         default_value=vda_dirty_probability, key='vda_dirty_probability', readonly=True)],
                 [sg.HSeparator(color='#aaaaaa')],
-                [sg.Text('Some wagons can have either steady or flashing (1970s onwards) red tail lamp styles. \n'
-                         'In the event there is a choice, which type would you prefer to see:'),
+                [sg.Text('HEA and some VDA wagons can have either steady or flashing (1970s onwards) red tail lamp '
+                    'styles. \nIn the event there is a choice, which type would you prefer to see:'),
                  sg.Combo(tail_opts, auto_size_text=True, default_value=tail_style, key='tail_style', readonly=True)],
                 [sg.HSeparator(color='#aaaaaa')],
                 [sg.Checkbox('Save a list of all vehicles in the scenario (useful for debugging)', key='save_report',
