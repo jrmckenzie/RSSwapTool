@@ -2660,6 +2660,8 @@ def parse_xml(xml_file):
         [sg.ProgressBar(1, orientation='h', key='progress', size=(25, 15))]
     ]
     progress_win = sg.Window('Processing...', progress_layout, disable_close=True).Finalize()
+    progress_win.bring_to_front()
+    progress_win.force_focus()
     progress_bar = progress_win.find_element('progress')
     consist_nr = 0
     for citem in consists:
@@ -2926,7 +2928,7 @@ if __name__ == "__main__":
         elif event == 'About':
             sg.Popup('About RSSwapTool',
                      'Tool for swapping rolling stock in Train Simulator (Dovetail Games) scenarios',
-                     'Version 0.6 / 5 October 2021',
+                     'Version 1.0.0 / 24 November 2021',
                      'Copyright 2021 JR McKenzie (jrmknz@yahoo.co.uk)', 'https://github.com/jrmckenzie/RSSwapTool',
                      'This program is free software: you can redistribute it and / or modify '
                      'it under the terms of the GNU General Public License as published by '

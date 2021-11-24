@@ -61,7 +61,7 @@ else:
     loclayout = [[sg.T('')],
                  [sg.Text('Please locate your RailWorks folder:'), sg.Input(key='-IN2-',
                                                                             change_submits=False, readonly=True),
-                  sg.FolderBrowse(key='RWloc')], [sg.Button('Submit')]]
+                  sg.FolderBrowse(key='RWloc')], [sg.Button('Save')]]
     locwindow = sg.Window('Configure path to RailWorks folder', loclayout)
     while True:
         event, values = locwindow.read()
@@ -73,7 +73,7 @@ else:
                 sg.Popup('You must specify the path to your RailWorks folder for this application to work. '
                          'The application will now close.')
                 sys.exit()
-        elif event == 'Submit':
+        elif event == 'Save':
             if len(values['RWloc']) > 1:
                 railworks_path = values['RWloc']
             else:
@@ -251,7 +251,7 @@ if __name__ == "__main__":
             sg.Popup('About RSReportTool',
                      'Tool for listing rolling stock in Train Simulator (Dovetail Games) scenarios, bundled with '
                      'RSSwapTool to provide a standalone tool to examine scenarios and list rolling stock.',
-                     'Version 0.6 / 5 October 2021',
+                     'Version 1.0.0 / 24 November 2021',
                      'Copyright 2021 JR McKenzie (jrmknz@yahoo.co.uk)', 'https://github.com/jrmckenzie/RSSwapTool',
                      'This program is free software: you can redistribute it and / or modify '
                      'it under the terms of the GNU General Public License as published by '
