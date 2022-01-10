@@ -45,7 +45,8 @@ wine_executable = '/usr/bin/wine'
 rv_list = []
 rv_pairs = []
 layout = []
-vehicle_list = []
+output_vehicle_list = []
+input_vehicle_list = []
 values = {}
 vehicle_db = {}
 user_db = {}
@@ -67,6 +68,8 @@ vda_whiteroof_probabilities = ['0', '1', '5', '10', '20', '30', '40', '50', '60'
 dirty_probabilities = ['0', '10', '20', '30', '40', '50', '60', '70', '80', '90', '100']
 htx_eras = ['Pre-TOPS only', 'Mixed', 'TOPS only']
 tail_opts = ['Flashing', 'Steady']
+report_opts = ['Don\'t save a report', 'Save details of processed scenario',
+               'Save details of original and processed scenario']
 sg.LOOK_AND_FEEL_TABLE['Railish'] = {'BACKGROUND': '#00384F',
                                      'TEXT': '#FFFFFF',
                                      'INPUT': '#FFFFFF',
@@ -153,7 +156,7 @@ if not config.has_section('defaults'):
     config.set('defaults', 'replace_c450', 'False')
     config.set('defaults', 'replace_c456', 'False')
     config.set('defaults', 'replace_c465', 'False')
-    config.set('defaults', 'save_report', 'False')
+    config.set('defaults', 'save_report', report_opts[0])
     config.set('defaults', 'c56_rf', c56_opts[0])
     config.set('defaults', 'c86_hc', c86_opts[0])
     config.set('defaults', 'fsafta_variant', fsafta_opts[0])
@@ -2708,8 +2711,11 @@ def parse_xml(xml_file):
                         tailmarker = 0
                     elif consist_item_nr == consist_items_total:
                         tailmarker = 2
+                input_vehicle_list.append(
+                    [str(consist_nr), provider.text, product.text, blueprint.text, name.text, number.text, loaded.text,
+                     service, playerdriven])
                 vehicle_replacer(provider, product, blueprint, name, number, loaded, flipped, followers, tailmarker)
-                vehicle_list.append(
+                output_vehicle_list.append(
                     [str(consist_nr), provider.text, product.text, blueprint.text, name.text, number.text, loaded.text,
                      service, playerdriven])
             mu_last = 'none'
@@ -2853,6 +2859,10 @@ td.missing {
     color: #bb2222;
     font-style: italic;
 }
+td.input,th.input {
+    color: #2222bb;
+    font-style: italic;
+}
 h1 {
     font-family: 'Roboto';font-size: 24pt;
     font-style: bold;
@@ -2868,19 +2878,32 @@ h3,thead {
     border-width: 1px;
 }
 </style>\n</head>\n<body>\n'''
-    htmrv = "<h1>Rail vehicle list</h1>\n<table border=\"1\" class=\"dataframe\">\n  <thead>\n" \
-            "    <tr style=\"text-align: right;\">\n      <th>Consist</th>\n      <th>Provider</th>\n" \
-            "      <th>Product</th>\n      <th>Blueprint</th>\n      <th>Name</th>\n      <th>Number</th>\n" \
-            "      <th>Loaded</th>\n    </tr>\n  </thead>\n  <tbody>\n"
+    if config.get('defaults', 'save_report') == report_opts[1]:
+        # User wants a basic report just containing details of the vehicles in the processed scenario
+        htmrv = "<h1>Rail vehicle list</h1>\n<table border=\"1\" class=\"dataframe\">\n  <thead>\n" \
+                "    <tr style=\"text-align: right;\">\n      <th>Consist</th>\n      <th>Provider</th>\n" \
+                "      <th>Product</th>\n      <th>Blueprint</th>\n      <th>Name</th>\n      <th>Number</th>\n" \
+                "      <th>Loaded</th>\n    </tr>\n  </thead>\n  <tbody>\n"
+    else:
+        # Full report wanted containing details of the vehicles in the processed scenario as well as original vehicles
+        htmrv = "<h1>Rail vehicle swap list</h1>\n<table border=\"1\" class=\"dataframe\">\n  <thead>\n" \
+                "    <tr style=\"text-align: right;\">\n      <th>Consist</th>\n      <th>Provider</th>\n" \
+                "      <th>Product</th>\n      <th>Blueprint</th>\n      <th>Name</th>\n" \
+                "      <th>Number</th>\n      <th>Loaded</th>\n      <th class=\"input\">Original Provider</th>\n" \
+                "      <th class=\"input\">Original Product</th>\n      <th class=\"input\">Original Blueprint</th>\n" \
+                "      <th class=\"input\">Original Name</th>\n      <th class=\"input\">Original Number</th>\n" \
+                "      <th class=\"input\">Original Loaded</th>\n  </tr>\n  </thead>\n  <tbody>\n"
+    in_tdstyle = ' class="input"'
     unique_assets = []
     last_cons = -1
     col_no = 0
-    for row in vehicle_list:
+    row_no = 0
+    for row in output_vehicle_list:
         if row[1:3] not in unique_assets:
             unique_assets.append(row[1:3])
         if int(row[0]) > last_cons:
             # start of a new consist - count how many vehicles are in this consist
-            rowspan = (list(zip(*vehicle_list))[0]).count(row[0])
+            rowspan = (list(zip(*output_vehicle_list))[0]).count(row[0])
         else:
             rowspan = 0
         col_htm = ''
@@ -2900,12 +2923,20 @@ h3,thead {
             elif col_no > 1:
                 col_htm = col_htm + '      <td' + tdstyle + '>' + col + '</td>\n'
         col_no = 0
+        if config.get('defaults', 'save_report') == report_opts[2]:
+            # User wants a full report so add columns with details of original vehicles to right hand side of table
+            in_row = input_vehicle_list[row_no]
+            for col in in_row[1:7]:
+                in_row[4] = in_row[4].replace('.xml', '.bin')
+                print(in_row[4])
+                col_htm = col_htm + '      <td class="input">' + col + '</td>\n'
         if (int(row[0]) % 2) == 0:
             htmrv = htmrv + '    <tr>\n' + col_htm + '    </tr>\n'
         else:
             htmrv = htmrv + '    <tr class=\"shaded_row\">\n' + col_htm + '    </tr>\n'
         last_cons = int(row[0])
-    htmrv = htmrv + '  </tbody>\n</table>\n<h3>' + str(len(vehicle_list)) + ' vehicles in total in this scenario.</h3>'
+        row_no = row_no + 1
+    htmrv = htmrv + '  </tbody>\n</table>\n<h3>' + str(len(output_vehicle_list)) + ' vehicles in total in this scenario.</h3>'
     htmas = '\n<h1>List of rail vehicle assets used</h1>\n<table border=\"1\" class=\"dataframe\">\n  <thead>\n' \
             '    <tr style=\"text-align: right;\">\n      <th>Provider</th>\n      <th>Product</th>\n    </tr>\n' \
             '  </thead>\n  <tbody>\n'
@@ -2999,6 +3030,7 @@ if __name__ == "__main__":
                                                fallback=dirty_probabilities[8])
             htx_era = config.get('defaults', 'htx_era', fallback=htx_eras[1])
             tail_style = config.get('defaults', 'tail_style', fallback=tail_opts[0])
+            save_report = config.get('defaults', 'save_report', fallback=report_opts[0])
             # The settings button has been pressed, so allow the user to change the RailWorks folder setting
             loclayout = [
                 [sg.Text('Settings', font='Helvetica 14')],
@@ -3052,10 +3084,12 @@ if __name__ == "__main__":
                     'styles. \nIn the event there is a choice, which type would you prefer to see:'),
                  sg.Combo(tail_opts, auto_size_text=True, default_value=tail_style, key='tail_style', readonly=True)],
                 [sg.HSeparator(color='#aaaaaa')],
-                [sg.Checkbox('Save a list of all vehicles in the scenario (useful for debugging)', key='save_report',
-                             default=get_my_config_boolean('defaults', 'save_report'), enable_events=True,
-                             tooltip='This option will save a report listing all the rail vehicles (and their numbers)'
-                                     ' in the scenario, in .html format, alongside the scenario output file.')],
+                [sg.Text("Save a report of vehicles in the scenario"),
+                    sg.Combo(report_opts, auto_size_text=True, default_value=save_report, key='save_report', readonly=True,
+                             tooltip='You may choose to save a report listing all the rail vehicles (and their numbers)'
+                                     ' in the scenario, in .html format, alongside the scenario output file. Optionally,'
+                                     ' the report can include details of both the original vehicle and the vehicle after'
+                                     ' processing by this application.')],
                 [sg.Button('Save changes'), sg.Button('Cancel')]
             ]
             locwindow = sg.Window('RSSwapTool - Settings', loclayout)
@@ -3203,7 +3237,8 @@ if __name__ == "__main__":
                     # output_message = serz_output + '\nserz.exe ' + p2.communicate()[0].decode('ascii')
                 output_message = output_message + \
                                  '\nOriginal scenario backup located in ' + str(outPathStem) + str(scenarioPath.suffix)
-                if get_my_config_boolean('defaults', 'save_report'):
+                if not config.get('defaults', 'save_report') == report_opts[0]:
+                    # The user wants a report to be generated
                     html_report_file = scenarioPath.parent / Path(str(scenarioPath.stem) + '-railvehicle_report.html')
                     convert_vlist_to_html_table(html_report_file)
                     html_report_status_text = 'Report listing all rail vehicles located in ' + str(html_report_file)
