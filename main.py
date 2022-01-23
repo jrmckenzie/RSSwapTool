@@ -44,9 +44,9 @@ wine_executable = '/usr/bin/wine'
 # Initialise the script, set the look and feel and get the configuration
 rv_list = []
 rv_pairs = []
-layout = []
 output_vehicle_list = []
 input_vehicle_list = []
+layout = []
 values = {}
 vehicle_db = {}
 user_db = {}
@@ -2637,19 +2637,6 @@ def parse_xml(xml_file):
         return False
     ET.register_namespace("d", "http://www.kuju.com/TnT/2003/Delta")
     root = parser_tree.getroot()
-    # The following lines of code (commented out) should probably be removed. Specifying that the interim xml file
-    # should be written with utf-8 encoding appears to have fixed the issue with quote characters. See the line near
-    # the end of this file which reads -        xmlFile.write_text(xmlString, encoding='utf-8')
-    #
-    #for elem in root.iter():
-        #try:
-            # Replace quote characters in the text which may cause xml problems
-            #elem.text = elem.text.replace('‘', "'")
-            #elem.text = elem.text.replace('’', "'")
-            #elem.text = elem.text.replace('“', '"')
-            #elem.text = elem.text.replace('”', '"')
-        #except AttributeError:
-            #pass
     consists = root.findall('./Record/cConsist')
     if len(consists) == 0:
         sg.popup('The file you requested (' + str(Path(xml_file)) + ') does not appear to contain any rail vehicle '
@@ -3243,3 +3230,8 @@ if __name__ == "__main__":
                         webbrowser.open(html_report_file.as_uri())
                 else:
                     sg.popup(output_message)
+                # re-initialise all vehicle lists
+                rv_list = []
+                rv_pairs = []
+                output_vehicle_list = []
+                input_vehicle_list = []
