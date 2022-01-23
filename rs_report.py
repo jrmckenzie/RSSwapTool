@@ -251,8 +251,8 @@ if __name__ == "__main__":
             sg.Popup('About RSReportTool',
                      'Tool for listing rolling stock in Train Simulator (Dovetail Games) scenarios, bundled with '
                      'RSSwapTool to provide a standalone tool to examine scenarios and list rolling stock.',
-                     'Version 1.0.0 / 24 November 2021',
-                     'Copyright 2021 JR McKenzie (jrmknz@yahoo.co.uk)', 'https://github.com/jrmckenzie/RSSwapTool',
+                     'Version 1.0.1 / 23 January 2022',
+                     'Copyright 2022 JR McKenzie (jrmknz@yahoo.co.uk)', 'https://github.com/jrmckenzie/RSSwapTool',
                      'This program is free software: you can redistribute it and / or modify '
                      'it under the terms of the GNU General Public License as published by '
                      'the Free Software Foundation, either version 3 of the License, or '
@@ -336,3 +336,5 @@ if __name__ == "__main__":
                                           'Do you want to open the report in your web browser now?')
                 if browser == 'Yes':
                     webbrowser.open(html_report_file.as_uri())
+                # re-initialise vehicle list
+                vehicle_list = []
