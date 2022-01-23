@@ -68,8 +68,8 @@ vda_whiteroof_probabilities = ['0', '1', '5', '10', '20', '30', '40', '50', '60'
 dirty_probabilities = ['0', '10', '20', '30', '40', '50', '60', '70', '80', '90', '100']
 htx_eras = ['Pre-TOPS only', 'Mixed', 'TOPS only']
 tail_opts = ['Flashing', 'Steady']
-report_opts = ['Don\'t save a report', 'Save details of processed scenario',
-               'Save details of original and processed scenario']
+report_opts = ['Don\'t save a report', 'Save details of processed scenario only',
+               'Save details of original and processed scenarios']
 sg.LOOK_AND_FEEL_TABLE['Railish'] = {'BACKGROUND': '#00384F',
                                      'TEXT': '#FFFFFF',
                                      'INPUT': '#FFFFFF',
@@ -2887,16 +2887,15 @@ h3,thead {
     else:
         # Full report wanted containing details of the vehicles in the processed scenario as well as original vehicles
         htmrv = "<h1>Rail vehicle swap list</h1>\n<table border=\"1\" class=\"dataframe\">\n  <thead>\n" \
-                "    <tr style=\"text-align: right;\">\n      <th>Consist</th>\n      <th>Provider</th>\n" \
-                "      <th>Product</th>\n      <th>Blueprint</th>\n      <th>Name</th>\n" \
-                "      <th>Number</th>\n      <th>Loaded</th>\n      <th class=\"input\">Original Provider</th>\n" \
-                "      <th class=\"input\">Original Product</th>\n      <th class=\"input\">Original Blueprint</th>\n" \
-                "      <th class=\"input\">Original Name</th>\n      <th class=\"input\">Original Number</th>\n" \
-                "      <th class=\"input\">Original Loaded</th>\n  </tr>\n  </thead>\n  <tbody>\n"
-    in_tdstyle = ' class="input"'
+                "    <tr style=\"text-align: right;\">\n      <th>Consist</th>\n" \
+                "      <th class=\"input\">Original Provider</th>\n      <th class=\"input\">Original Product</th>\n" \
+                "      <th class=\"input\">Original Blueprint</th>\n      <th class=\"input\">Original Name</th>\n" \
+                "      <th class=\"input\">Original Number</th>\n      <th class=\"input\">Loaded</th>\n" \
+                "      <th>New Provider</th>\n      <th>New Product</th>\n      <th>New Blueprint</th>\n" \
+                "      <th>New Name</th>\n      <th>New Number</th>\n      <th>Loaded</th>\n    </tr>\n  </thead>\n" \
+                "  <tbody>\n"
     unique_assets = []
     last_cons = -1
-    col_no = 0
     row_no = 0
     for row in output_vehicle_list:
         if row[1:3] not in unique_assets:
@@ -2916,20 +2915,16 @@ h3,thead {
         if row[8] is True:
             # Consist is driven by the player - make the name bold and append (Player driven)
             cname = '<b>' + cname + '</b> (Player driven)'
-        for col in row[0:7]:
-            col_no += 1
-            if rowspan > 0 and col_no == 1:
-                col_htm = col_htm + '      <td rowspan=' + str(rowspan) + '>' + cname + '</td>\n'
-            elif col_no > 1:
-                col_htm = col_htm + '      <td' + tdstyle + '>' + col + '</td>\n'
-        col_no = 0
+        if rowspan > 0:
+            col_htm = col_htm + '      <td rowspan=' + str(rowspan) + '>' + cname + '</td>\n'
         if config.get('defaults', 'save_report') == report_opts[2]:
             # User wants a full report so add columns with details of original vehicles to right hand side of table
             in_row = input_vehicle_list[row_no]
+            in_row[3] = in_row[3].replace('.xml', '.bin')
             for col in in_row[1:7]:
-                in_row[4] = in_row[4].replace('.xml', '.bin')
-                print(in_row[4])
                 col_htm = col_htm + '      <td class="input">' + col + '</td>\n'
+        for col in row[1:7]:
+                col_htm = col_htm + '      <td' + tdstyle + '>' + col + '</td>\n'
         if (int(row[0]) % 2) == 0:
             htmrv = htmrv + '    <tr>\n' + col_htm + '    </tr>\n'
         else:
