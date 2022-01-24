@@ -1273,6 +1273,7 @@ Class50,MichaelWhiteley,Class 50,RailVehicles\Diesel\Class 50\NSE orginal\Engine
 Class50,MichaelWhiteley,Class 50,RailVehicles\Diesel\Class 50\NSE revised\Engine\engine.xml,AP,Class50Pack01,RailVehicles\Diesel\Class50\NSE_Revised_2\50_W1.xml,AP Class 50 NSE Rev 2 (W1),RailVehicles\Diesel\Class50\NSE_Revised_2\Engine\class50_numbers.dcsv
 Class56,RSC,Class56Pack01_RFSectors,RailVehicles\Diesel\Class_56\Default\Engine\Class56_rfd_nd.xml,RSC,Class56Pack01_RFSectors,RailVehicles\Diesel\Class_56\BR_Trainload_AP\Engine\Class56.xml,APEP 56 BR Trainload,RailVehicles\Diesel\Class_56\BR_Trainload_AP\Engine\Numbers.dcsv
 Class56,RSC,Class56Pack01_RFSectors,RailVehicles\Diesel\Class_56\Default\Engine\Class56_rfd.xml,RSC,Class56Pack01_RFSectors,RailVehicles\Diesel\Class_56\BR_Trainload_AP\Engine\Class56.xml,APEP 56 BR Trainload,RailVehicles\Diesel\Class_56\BR_Trainload_AP\Engine\Numbers.dcsv
+Class56,CreativeRail,EastMidlandsCoal,RailVehicles\Diesel\Class_56\Default\Engine\class_56_roman_blue.xml,RSC,Class56Pack01_RFSectors,RailVehicles\Diesel\Class_56\BR_Blue_AP\Engine\Class56.xml,APEP 56 BR Blue,RailVehicles\Diesel\Class_56\BR_Blue_AP\Engine\Numbers.dcsv
 Class66,BMG,WelshMarches,RailVehicles\Diesel\Class 66\EWS\emd_66_EWS.xml,RSC,Class66Pack03,RailVehicles\Diesel\Class 66\EWS_AP\emd_66.xml,APEP 66 EWS,RailVehicles\Diesel\Class 66\EWS_AP\emd_66_numbers.dcsv
 Class66,BMG,WelshMarchesLine,RailVehicles\Diesel\Class 66\EWS\emd_66_EWS.xml,RSC,Class66Pack03,RailVehicles\Diesel\Class 66\EWS_AP\emd_66.xml,APEP 66 EWS,RailVehicles\Diesel\Class 66\EWS_AP\emd_66_numbers.dcsv
 Class66,DTG,BedPanLine,RailVehicles\Diesel\Class 66\EWS\emd_66_EWS.xml,RSC,Class66Pack03,RailVehicles\Diesel\Class 66\EWS_AP\emd_66.xml,APEP 66 EWS,RailVehicles\Diesel\Class 66\EWS_AP\emd_66_numbers.dcsv
@@ -1658,6 +1659,8 @@ FTA,DTG,WCML-South,RailVehicles\Freight\FTA\default\fta_fl_lateWhitex2.xml,AP,FS
 FTA,DTG,WCML-South,RailVehicles\Freight\FTA\default\fta_fl_latewhitex3.xml,AP,FSAWagonPack,RailVehicles\Freight\FL\FTA_2020_20ft.xml,AP FTA FL (2020) (20ft) - 1,RailVehicles\Freight\FL\FTA_20ft_No_HC.dcsv
 HAA,Kuju,RailSimulator,RailVehicles\Freight\HAA\Default\Wagon\HAA.xml,,,,,
 HAA,CreativeRail,EastCoast,RailVehicles\Freight\HAA\Default\Wagon\HAA.xml,,,,,
+HAA,CreativeRail,EastMidlandsCoal,RailVehicles\Freight\HAA\Default\Wagon\LP HAA.xml,,,,,
+HAA,CreativeRail,EastMidlandsCoal,RailVehicles\Freight\HAA\Default\Wagon\HAA.xml,,,,,
 HAA,DTG,WoodheadBR,RailVehicles\Freight\HAA\Default\Wagon\HAA_Unbraked.xml,,,,,
 HAA,DTG,WoodheadBR,RailVehicles\Freight\HAA\Default\Wagon\HAA.xml,,,,,
 HAA,keithmross,WCML2,RailVehicles\Freight\HAA\Default\Wagon\HAA.xml,,,,,
