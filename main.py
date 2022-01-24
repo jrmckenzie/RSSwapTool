@@ -1,6 +1,6 @@
 #     RSSwapTool - A script to swap in up to date or enhanced rolling stock
 #     for older versions of stock in Train Simulator scenarios.
-#     Copyright (C) 2021 James McKenzie jrmknz@yahoo.co.uk
+#     Copyright (C) 2022 James McKenzie jrmknz@yahoo.co.uk
 #
 #     This program is free software: you can redistribute it and/or modify
 #     it under the terms of the GNU General Public License as published by
@@ -232,7 +232,7 @@ vp_blue_47_db = import_data_from_csv('tables/Class47BRBlue_numbers.csv')
 # Set the layout of the GUI
 left_column = [
     [sg.Text('RSSwapTool', font='Helvetica 16')],
-    [sg.Text('© 2021 JR McKenzie', font='Helvetica 7')],
+    [sg.Text('© 2022 JR McKenzie', font='Helvetica 7')],
     [sg.FileBrowse('Select scenario file to process', key='Scenario_xml', tooltip='Locate the scenario .bin or .xml '
                     'file you wish to process')],
     [sg.Text('Tick the boxes below to choose the\nsubstitutions you would like to make.')],
@@ -1658,7 +1658,7 @@ def c37_replace(provider, product, blueprint, name, number):
                                 Path(railworks_path, 'Assets', this_vehicle[3], this_vehicle[4],
                                      this_vehicle[7].replace('\\', '/')), rv_tops, '([0-9]{5})(.*)')
                     if '_wp' in this_vehicle[2]:
-                        add_ploughs(rv_num)
+                        rv_num = add_ploughs(rv_num)
                     if this_vehicle[1] == 'WHL' or this_vehicle[1] == 'FortWilliamMallaig':
                         if 'Large' in this_vehicle[2]:
                             # Look for a loco with the 'Westie' logo for the WHL LL replacements
@@ -1666,8 +1666,8 @@ def c37_replace(provider, product, blueprint, name, number):
                                 Path(railworks_path, 'Assets', this_vehicle[3], this_vehicle[4],
                                      this_vehicle[7].replace('\\', '/')), rv_tops, '(37[0-9]{3})(.*L=1.*)')
                         # Add ploughs and RETB to West Highland locos
-                        add_retb(rv_num)
-                        add_ploughs(rv_num)
+                        rv_num = add_retb(rv_num)
+                        rv_num = add_ploughs(rv_num)
                         if 'Default' in this_vehicle[2]:
                             # Black headcode box
                             rv_num = rv_num + ';no1front=bch;no2front=bch'
@@ -1809,30 +1809,30 @@ def c50_replace(provider, product, blueprint, name, number):
 
 
 def c56_replace(provider, product, blueprint, name, number):
-    # Replace RSC Class 56 with AP Enhanced version
-    if 'RSC' in provider.text:
-        if 'Class56Pack01' in product.text:
-            for i in range(0, len(vehicle_db['Class56'])):
-                this_vehicle = vehicle_db['Class56'][i]
-                bp = re.search(this_vehicle[2], blueprint.text, flags=re.IGNORECASE)
-                if bp:
-                    rv_num = cl56rsc_to_apsecdep_or_blanksecdep(number.text)
-                    rv_orig = number.text
-                    if config.get('defaults', 'c56_rf') == c56_opts[1]:
-                        # Skip swapping in AP loco unless it has both the sectors logo and depot plaque
-                        # of the loco it is to replace
-                        if rv_num[0:1] == '*':
-                            return False
-                        if rv_num[1:2] == '*':
-                            return False
-                    provider.text = this_vehicle[3]
-                    product.text = this_vehicle[4]
-                    blueprint.text = this_vehicle[5]
-                    name.text = this_vehicle[6]
-                    number.text = str(rv_num)
-                    rv_list.append(number.text)
-                    rv_pairs.append([rv_orig, number.text])
-                    return True
+    # Replace Class 56 with AP Enhanced version
+    for i in range(0, len(vehicle_db['Class56'])):
+        this_vehicle = vehicle_db['Class56'][i]
+        bp = re.search(this_vehicle[2], blueprint.text, flags=re.IGNORECASE)
+        if bp:
+            rv_orig = number.text
+            rv_num = number.text
+            if 'RSC' in provider.text and 'Class56Pack01' in product.text:
+                rv_num = cl56rsc_to_apsecdep_or_blanksecdep(number.text)
+                if config.get('defaults', 'c56_rf') == c56_opts[1]:
+                    # Skip swapping in AP loco unless it has both the sectors logo and depot plaque
+                    # of the loco it is to replace
+                    if rv_num[0:1] == '*':
+                        return False
+                    if rv_num[1:2] == '*':
+                        return False
+            provider.text = this_vehicle[3]
+            product.text = this_vehicle[4]
+            blueprint.text = this_vehicle[5]
+            name.text = this_vehicle[6]
+            number.text = str(rv_num)
+            rv_list.append(number.text)
+            rv_pairs.append([rv_orig, number.text])
+            return True
     return False
 
 
@@ -2941,7 +2941,7 @@ if __name__ == "__main__":
         elif event == 'About':
             sg.Popup('About RSSwapTool',
                      'Tool for swapping rolling stock in Train Simulator (Dovetail Games) scenarios',
-                     'Version 1.0.1 / 23 January 2022',
+                     'Version 1.0.2 / 24 January 2022',
                      'Copyright 2022 JR McKenzie (jrmknz@yahoo.co.uk)', 'https://github.com/jrmckenzie/RSSwapTool',
                      'This program is free software: you can redistribute it and / or modify '
                      'it under the terms of the GNU General Public License as published by '
