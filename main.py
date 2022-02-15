@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+#
 #     RSSwapTool - A script to swap in up to date or enhanced rolling stock
 #     for older versions of stock in Train Simulator scenarios.
 #     Copyright (C) 2022 James McKenzie jrmknz@yahoo.co.uk
@@ -34,7 +36,7 @@ from data_file import hha_e_wagons, hha_l_wagons, HTO_141_numbers, HTO_143_numbe
     ap40headcodes_62_69, rsc20headcodes_62_69, c168_chiltern, c170_ex_ar_aga_ap, c170_lm, c170_ct_xc, c170_ar23, \
     c170_scotrail, c170_ftpe, c170_ga_hull, c170_mml, c171_southern, c350_lb_ftpe, c365_ecmls_nse, c365_apcxse, \
     c450_gu_swt, c465_se, c375_dtg_pack, c377_lb_se, c377_lg_sn, c377_fcc, c170_bp_name_lookup, c375_dmos_lookup, \
-    c456_nse, c456_southern, c319_dest, c350_lm_wcmls, c375_southern_wcmls
+    c456_nse, c456_southern, c319_dest, c350_lm_wcmls, c375_southern_wcmls, c86_TOPS_HC
 
 # If you want to run this script on Linux you must enter the path to the wine executable. You need wine in order to
 # run the serz.exe utility which converts between .bin and .xml scenario files.
@@ -1927,8 +1929,8 @@ def c86_replace(provider, product, blueprint, name, number):
                     (w_blueprint, w_name) = set_weathering(3, this_vehicle)
                     provider.text = this_vehicle[3]
                     product.text = this_vehicle[4]
-                    blueprint.text = w_blueprint
-                    name.text = w_name
+                    blueprint.text = this_vehicle[5]
+                    #name.text = w_name
                     rv_orig = number.text
                     nm = re.match('(86[0-9]{3}).*', number.text)
                     if nm:
@@ -1941,10 +1943,12 @@ def c86_replace(provider, product, blueprint, name, number):
                                      this_vehicle[7].replace('\\', '/')), rv_found, '([0-9]{5})(.*)')
                         # Set number
                         number.text = str(rv_num)
+                        name.text = w_name
+                        blueprint.text = w_blueprint
                         rv_list.append(number.text)
                         rv_pairs.append([rv_orig, number.text])
                         return True
-                    nm = re.search('([0-9][a-zA-Z][0-9]{2})(86[0-9]{3})', number.text)
+                    nm = re.search('(....)(86[0-9]{3})', number.text)
                     if nm:
                         # This has the number of a RSC Class 86 BR Blue with TOPS number and headcode box
                         # Replace with Vulcan Productions headcode loco if the user asked for it - otherwise
@@ -1958,11 +1962,19 @@ def c86_replace(provider, product, blueprint, name, number):
                             # is no dead / low panto version
                             blueprint.text = vehicle_db['Class86'][0][5]
                             name.text = vehicle_db['Class86'][0][6]
-                            rv_num = dcsv_get_num(
-                                Path(railworks_path, 'Assets', vehicle_db['Class86'][0][3], vehicle_db['Class86'][0][4],
-                                     vehicle_db['Class86'][0][7].replace('\\', '/')), nm.group(2), '([0-9]{5})(.*)')
+                            rv_num = c86_TOPS_HC[nm.group(2)]
+                            if nm.group(2) in c86_TOPS_HC:
+                                # Look up the TOPS number in the dictionary of VP vehicle numbers and configurations
+                                # and use the matching value as the VP railvehicle number
+                                rv_num = c86_TOPS_HC[nm.group(2)]
+                            else:
+                                # TOPS number not found in dictionary so assign the VP railvehicle number below
+                                rv_num = tops_num + 'E31830O00;B=E5;P=old;HL=0'
                             # Set the headcode into the VP number
                             rv_num = rv_num.replace('0O00', nm.group(1))
+                            # Fix the dot and blank @ and ~ headcode characters where VP use ? and # instead
+                            rv_num = rv_num.replace('@', '?')
+                            rv_num = rv_num.replace('~', '#')
                             # Set number
                             number.text = str(rv_num)
                             rv_list.append(number.text)
@@ -3166,20 +3178,28 @@ if __name__ == "__main__":
                     # intermediate file
                     if not cmd.is_file():
                         sg.popup('serz.exe could not be found in ' + str(railworks_path) + '. Is this definitely your '
-                                                                                           'RailWorks folder?',
-                                 'This application will now exit.')
+                                        'RailWorks folder?', 'This application will now exit.')
                         sys.exit()
                     inFile = scenarioPath.parent / Path(str(scenarioPath.stem) + '.xml')
+                    inFileW = str(PureWindowsPath(inFile))
+                    scenarioPathW = str(PureWindowsPath(scenarioPath))
                     if platform.system() == 'Windows':
-                        p1 = subprocess.Popen([str(cmd), str(PureWindowsPath(scenarioPath)), '/xml:' +
-                                               str(PureWindowsPath(inFile))], stdout=subprocess.PIPE)
+                        # Operating system is Microsoft Windows
+                        p1 = subprocess.Popen([str(cmd), scenarioPathW, '/xml:' + inFileW], stdout=subprocess.PIPE)
+                    elif (platform.system() == 'Linux' and platform.release()[-5:-1] == 'WSL2'):
+                        # Operating system is Windows Subsystem Linux (WSL2)
+                        # Linux-style pathnames can be converted to windows style with drive letters
+                        inFileW = inFileW[5] + ':' + inFileW[6:]
+                        scenarioPathW = scenarioPathW[5] + ':' + scenarioPathW[6:]
+                        p1 = subprocess.Popen([str(cmd), scenarioPathW, '/xml:' + inFileW], stdout=subprocess.PIPE)
                     else:
+                        # Operating system has wine to run serz.eze
                         try:
                             wine_executable
                         except NameError:
                             wine_executable = '/usr/bin/wine'
-                        p1 = subprocess.Popen([wine_executable, str(cmd), str(PureWindowsPath(scenarioPath)), '/xml:' +
-                                               str(PureWindowsPath(inFile))], stdout=subprocess.PIPE)
+                        p1 = subprocess.Popen([wine_executable, str(cmd), scenarioPathW, '/xml:' +
+                            inFileW], stdout=subprocess.PIPE)
                     p1.wait()
                     # Uncomment the line below to see the output of the serz.exe command
                     # serz_output = 'serz.exe ' + p1.communicate()[0].decode('ascii')
@@ -3203,16 +3223,25 @@ if __name__ == "__main__":
                 if str(scenarioPath.suffix) == '.bin':
                     # Run the serz.exe command again to generate the output scenario .bin file
                     binFile = scenarioPath.parent / Path(str(scenarioPath.stem) + '.bin')
+                    binFileW = str(PureWindowsPath(binFile))
+                    xmlFileW = str(PureWindowsPath(xmlFile))
                     if platform.system() == 'Windows':
-                        p2 = subprocess.Popen([str(cmd), str(PureWindowsPath(xmlFile)), '/bin:' +
-                                               str(PureWindowsPath(binFile))], stdout=subprocess.PIPE)
+                        # Operating system is Microsoft Windows
+                        p2 = subprocess.Popen([str(cmd), xmlFileW, '/bin:' + binFileW], stdout=subprocess.PIPE)
+                    elif (platform.system() == 'Linux' and platform.release()[-5:-1] == 'WSL2'):
+                        # Operating system is Windows Subsystem Linux (WSL2)
+                        # Linux-style pathnames can be converted to windows style with drive letters
+                        binFileW = binFileW[5] + ':' + binFileW[6:]
+                        xmlFileW = xmlFileW[5] + ':' + xmlFileW[6:]
+                        p2 = subprocess.Popen([str(cmd), xmlFileW, '/bin:' + binFileW], stdout=subprocess.PIPE)
                     else:
+                        # Operating system has wine to run serz.eze
                         try:
                             wine_executable
                         except NameError:
                             wine_executable = '/usr/bin/wine'
-                        p2 = subprocess.Popen([wine_executable, str(cmd), str(PureWindowsPath(xmlFile)), '/bin:' +
-                                               str(PureWindowsPath(binFile))], stdout=subprocess.PIPE)
+                        p2 = subprocess.Popen([wine_executable, str(cmd), xmlFileW, '/bin:' +
+                                               binFileW], stdout=subprocess.PIPE)
                     p2.wait()
                     inFile.unlink()
                     # Uncomment the following line to see the output of the serz.exe command
