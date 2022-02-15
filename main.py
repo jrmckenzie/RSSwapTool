@@ -1969,7 +1969,7 @@ def c86_replace(provider, product, blueprint, name, number):
                                 rv_num = c86_TOPS_HC[nm.group(2)]
                             else:
                                 # TOPS number not found in dictionary so assign the VP railvehicle number below
-                                rv_num = tops_num + 'E31830O00;B=E5;P=old;HL=0'
+                                rv_num = nm.group(2) + 'E31830O00;B=E5;P=old;HL=0'
                             # Set the headcode into the VP number
                             rv_num = rv_num.replace('0O00', nm.group(1))
                             # Fix the dot and blank @ and ~ headcode characters where VP use ? and # instead
