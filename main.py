@@ -1962,7 +1962,6 @@ def c86_replace(provider, product, blueprint, name, number):
                             # is no dead / low panto version
                             blueprint.text = vehicle_db['Class86'][0][5]
                             name.text = vehicle_db['Class86'][0][6]
-                            rv_num = c86_TOPS_HC[nm.group(2)]
                             if nm.group(2) in c86_TOPS_HC:
                                 # Look up the TOPS number in the dictionary of VP vehicle numbers and configurations
                                 # and use the matching value as the VP railvehicle number
