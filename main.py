@@ -123,6 +123,7 @@ if not config.has_section('defaults'):
     config.set('defaults', 'replace_mk1', 'True')
     config.set('defaults', 'replace_mk2ac', 'True')
     config.set('defaults', 'replace_mk2df', 'True')
+    config.set('defaults', 'replace_mk3ab', 'True')
     config.set('defaults', 'replace_fsa', 'True')
     config.set('defaults', 'replace_haa', 'True')
     config.set('defaults', 'replace_hha', 'True')
@@ -247,6 +248,9 @@ left_column = [
     [sg.Checkbox('Replace Mk2D-F coaches', default=get_my_config_boolean('defaults', 'replace_mk2df'),
                  enable_events=True,
                  tooltip='Tick to enable replacing of Mk2e coaches with AP Mk2D-F Pack', key='Replace_Mk2df')],
+    [sg.Checkbox('Replace Mk3A-B coaches', default=get_my_config_boolean('defaults', 'replace_mk3ab'),
+                 enable_events=True,
+                 tooltip='Tick to enable replacing of Mk3A-B coaches with AP Mk3A-B Pack', key='Replace_Mk3ab')],
     [sg.Checkbox('Replace FSA/FTA wagons', default=get_my_config_boolean('defaults', 'replace_fsa'), enable_events=True,
                  tooltip='Tick to enable replacing of FSA wagons with AP FSA/FTA Wagon Pack', key='Replace_FSA')],
     [sg.Checkbox('Replace HAA wagons', default=get_my_config_boolean('defaults', 'replace_haa'), enable_events=True,
@@ -1003,6 +1007,36 @@ def mk2df_replace(provider, product, blueprint, name, number):
                     if nm:
                         num = nm.group(1)
                         ap_suffix = ";R=Z"
+                        rv_num = num + ap_suffix
+                        rv_pairs.append([rv_orig, rv_num])
+                        rv_list.append(rv_num)
+                        # Following line sets AP coach number
+                        number.text = rv_num
+                    return True
+    return False
+
+
+def mk3ab_replace(provider, product, blueprint, name, number):
+    # Replace any Mk3a/bs - loop through the VehicleDB['Mk3ab'] array of coaches to search for
+    for i in range(0, len(vehicle_db['Mk3ab'])):
+        this_vehicle = vehicle_db['Mk3ab'][i]
+        if this_vehicle[0] in provider.text:
+            if this_vehicle[1] in product.text:
+                bp = re.search(this_vehicle[2], blueprint.text, flags=re.IGNORECASE)
+                if bp:
+                    provider.text = this_vehicle[3]
+                    product.text = this_vehicle[4]
+                    blueprint.text = this_vehicle[5]
+                    name.text = this_vehicle[6]
+                    ap_suffix = this_vehicle[7]
+                    rv_orig = number.text
+                    # Now extract the region code (if there is one) and the coach number
+                    nm = re.search('([a-zA-Z]{0,1})([0-9]{5})', number.text)
+                    if nm:
+                        reg = nm.group(1).upper()
+                        num = nm.group(2)
+                        if len(reg) > 0 and 'R=Z' not in ap_suffix:
+                            ap_suffix = ap_suffix + ";R=" + reg
                         rv_num = num + ap_suffix
                         rv_pairs.append([rv_orig, rv_num])
                         rv_list.append(rv_num)
@@ -2751,6 +2785,8 @@ def vehicle_replacer(provider, product, blueprint, name, number, loaded, flipped
         return True
     if values['Replace_Mk2df'] and mk2df_replace(provider, product, blueprint, name, number):
         return True
+    if values['Replace_Mk3ab'] and mk3ab_replace(provider, product, blueprint, name, number):
+        return True
     if values['Replace_FSA'] and fsafta_replace(provider, product, blueprint, name, number, loaded, flipped, followers, tailmarker):
         return True
     if values['Replace_HAA'] and haa_replace(provider, product, blueprint, name, number, loaded, flipped, followers, tailmarker):
@@ -2952,7 +2988,7 @@ if __name__ == "__main__":
         elif event == 'About':
             sg.Popup('About RSSwapTool',
                      'Tool for swapping rolling stock in Train Simulator (Dovetail Games) scenarios',
-                     'Version 1.0.2 / 24 January 2022',
+                     'Version 1.0.3 / 31 May 2022',
                      'Copyright 2022 JR McKenzie (jrmknz@yahoo.co.uk)', 'https://github.com/jrmckenzie/RSSwapTool',
                      'This program is free software: you can redistribute it and / or modify '
                      'it under the terms of the GNU General Public License as published by '
@@ -2970,6 +3006,7 @@ if __name__ == "__main__":
             config.set('defaults', 'replace_mk1', str(values['Replace_Mk1']))
             config.set('defaults', 'replace_mk2ac', str(values['Replace_Mk2ac']))
             config.set('defaults', 'replace_mk2df', str(values['Replace_Mk2df']))
+            config.set('defaults', 'replace_mk3ab', str(values['Replace_Mk3ab']))
             config.set('defaults', 'replace_fsa', str(values['Replace_FSA']))
             config.set('defaults', 'replace_haa', str(values['Replace_HAA']))
             config.set('defaults', 'replace_hha', str(values['Replace_HHA']))
@@ -3123,6 +3160,7 @@ if __name__ == "__main__":
             config.set('defaults', 'replace_mk1', str(values['Replace_Mk1']))
             config.set('defaults', 'replace_mk2ac', str(values['Replace_Mk2ac']))
             config.set('defaults', 'replace_mk2df', str(values['Replace_Mk2df']))
+            config.set('defaults', 'replace_mk3ab', str(values['Replace_Mk3ab']))
             config.set('defaults', 'replace_fsa', str(values['Replace_FSA']))
             config.set('defaults', 'replace_haa', str(values['Replace_HAA']))
             config.set('defaults', 'replace_hha', str(values['Replace_HHA']))
