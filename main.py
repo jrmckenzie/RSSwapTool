@@ -2981,6 +2981,11 @@ h3,thead {
 
 if __name__ == "__main__":
     window = sg.Window('RSSwapTool - Rolling stock swap tool', layout)
+    try:
+        os.chdir(Path(railworks_path, 'Content', 'Routes'))
+    except:
+        sg.PopupError(str(Path(railworks_path, 'Content', 'Routes')) + ' not found. Please go into Settings and check '
+                                                              'the path to the RailWorks directory is correct')
     while True:
         event, values = window.read()
         if event == 'Exit' or event == sg.WIN_CLOSED:

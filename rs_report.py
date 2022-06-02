@@ -242,7 +242,11 @@ h3,thead {
 
 if __name__ == "__main__":
     window = sg.Window('RSReportTool - Rolling stock report tool', layout)
-    os.chdir(Path(railworks_path, 'Content', 'Routes'))
+    try:
+        os.chdir(Path(railworks_path, 'Content', 'Routes'))
+    except:
+        sg.PopupError(str(Path(railworks_path, 'Content', 'Routes')) + ' not found. Please go into Settings and check '
+                                                              'the path to the RailWorks directory is correct')
     while True:
         event, values = window.read()
         if event == 'Exit' or event == sg.WIN_CLOSED:
@@ -314,8 +318,8 @@ if __name__ == "__main__":
                             wine_executable
                         except NameError:
                             wine_executable = '/usr/bin/wine'
-                        p1 = subprocess.Popen([wine_executable, str(cmd), str(PureWindowsPath(scenarioPath)), '/xml:' +
-                                               str(PureWindowsPath(inFile))], stdout=subprocess.PIPE)
+                        p1 = subprocess.Popen([wine_executable, str(cmd), 'z:' + str(PureWindowsPath(scenarioPath)), '/xml:' +
+                                               'z:' + str(PureWindowsPath(inFile))], stdout=subprocess.PIPE)
                     p1.wait()
                     serz_output = 'serz.exe ' + p1.communicate()[0].decode('ascii')
                     # Now the intermediate .xml has been created by serz.exe, read it in to this script and do the
