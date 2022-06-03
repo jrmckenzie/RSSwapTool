@@ -156,10 +156,52 @@ def parse_xml(xml_file):
     return parser_tree
 
 
-def convert_vlist_to_html_table(html_file_path):
+def route_parser(file):
+    try:
+        route_tree = ET.parse(file)
+    except FileNotFoundError:
+        return False
+    except ET.ParseError:
+        return False
+    return route_tree
+
+
+def scenario_props_parser(file):
+    try:
+        parser_tree = ET.parse(file)
+    except FileNotFoundError:
+        return False
+    except ET.ParseError:
+        return False
+    return parser_tree
+
+
+def parse_properties_xml(dir):
+    # Check we can open the file, parse it and find some rail vehicle consists in it before proceeding
+    xml_props = Path(dir) / 'ScenarioProperties.xml'
+    xml_route = Path(dir).parent.parent / 'RouteProperties.xml'
+    props_tree = scenario_props_parser(xml_props)
+    route_tree = route_parser(xml_route)
+    ET.register_namespace("d", "http://www.kuju.com/TnT/2003/Delta")
+    if props_tree:
+        root = props_tree.getroot()
+        DN = root.find('./DisplayName/Localisation-cUserLocalisedString/English')
+        Desc = root.find('./Description/Localisation-cUserLocalisedString/English')
+        Brief = root.find('./Briefing/Localisation-cUserLocalisedString/English')
+        Start = root.find('./StartLocation/Localisation-cUserLocalisedString/English')
+        properties = [DN.text, Desc.text, Brief.text, Start.text, 'unknown - ' + str(xml_route) + ' not found']
+        if route_tree:
+            root = route_tree.getroot()
+            RN = root.find('./DisplayName/Localisation-cUserLocalisedString/English')
+            properties[4] = RN.text
+        return properties
+    return False
+
+
+def convert_vlist_to_html_table(html_file_path, scenarioProps):
     htmhead = '''<html lang="en">
 <head>
-<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<meta http-equiv=Content-Type content="text/html; charset=utf-8">
 <title>Scenario rail vehicle and asset report</title>
 <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
 <style>
@@ -234,7 +276,16 @@ h3,thead {
     for asset in unique_assets:
         htmas = htmas + '    <tr>\n      <td>' + asset[0] + '</td>\n      <td>' + asset[1] + '</td>\n    </tr>\n'
     htmas = htmas + '  </tbody>\n</table>\n'
-    htm = htmhead + htmas + htmrv + '</body>\n</html>\n'
+    htp = ''
+    if scenarioProps:
+        htp = '\n<h1>Scenario properties</h1>\n<table border=\"1\" class=\"dataframe\" style=\"text-align: left;\">\n' \
+                '    <tr>\n      <th>Title</th>\n      <td>' + scenarioProps[0] + '</td>\n    </tr>\n' \
+                '    <tr>\n      <th>Description</th>\n      <td>' + scenarioProps[1] + '</td>\n    </tr>\n' \
+                '    <tr>\n      <th>Briefing</th>\n      <td>' + scenarioProps[2] + '</td>\n    </tr>\n' \
+                '    <tr>\n      <th>Start From</th>\n      <td>' + scenarioProps[3] + '</td>\n    </tr>\n' \
+                '    <tr>\n      <th>Route</th>\n      <td>' + scenarioProps[4] + '</td>\n    </tr>\n' \
+                '  </table>\n'
+    htm = htmhead + htp + htmas + htmrv + '</body>\n</html>\n'
     html_file_path.touch()
     html_file_path.write_text(htm)
     return True
@@ -332,9 +383,10 @@ if __name__ == "__main__":
                     tree = parse_xml(inFile)
                     if tree is False:
                         continue
+                scenario_properties = parse_properties_xml(scenarioPath.parent)
                 html_report_file = scenarioPath.parent / Path(str(scenarioPath.stem) +
                                                               '-railvehicle_examination_report.html')
-                convert_vlist_to_html_table(html_report_file)
+                convert_vlist_to_html_table(html_report_file, scenario_properties)
                 html_report_status_text = 'Report listing all rail vehicles located in ' + str(html_report_file)
                 browser = sg.popup_yes_no(html_report_status_text,
                                           'Do you want to open the report in your web browser now?')
