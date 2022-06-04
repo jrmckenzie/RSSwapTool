@@ -106,6 +106,10 @@ Remember that for various reasons the scenario may need manual editing in Scenar
 
 It is intended that more will be added to this documentation in due course.
 
+#### Footnote - Windows and Linux
+
+TS is a windows game and these instructions refer to Windows. If you're a Linux user, and you run TS through Steam and its compatability tool Proton, you can still run RSSwapTool in Linux if you like. You will need to have Wine installed (because serz.exe needs to run), Python, PySimpleGUI, Tk, and a working TS install of course. (RSSwapTool has been developed and tested on EndeavourOS, an Arch Linux distribution, as well as on Microsoft Windows. The JetBrains PyCharm IDE has been used for coding.)
+
 Copyright © 2022 JR McKenzie
 
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
