@@ -1046,6 +1046,33 @@ def mk3ab_replace(provider, product, blueprint, name, number):
     return False
 
 
+def mk3ab_replace(provider, product, blueprint, name, number):
+    # Replace any Mk2d/e/fs - loop through the VehicleDB['Mk2df'] array of coaches to search for
+    for i in range(0, len(vehicle_db['Mk3ab'])):
+        this_vehicle = vehicle_db['Mk3ab'][i]
+        if this_vehicle[0] in provider.text:
+            if this_vehicle[1] in product.text:
+                bp = re.search(this_vehicle[2], blueprint.text, flags=re.IGNORECASE)
+                if bp:
+                    provider.text = this_vehicle[3]
+                    product.text = this_vehicle[4]
+                    blueprint.text = this_vehicle[5]
+                    name.text = this_vehicle[6]
+                    rv_orig = number.text
+                    # Now extract the region code (if there is one) and the coach number
+                    nm = re.search('([0-9]{4,5})', number.text)
+                    if nm:
+                        num = nm.group(1)
+                        ap_suffix = ";R=Z"
+                        rv_num = num + ap_suffix
+                        rv_pairs.append([rv_orig, rv_num])
+                        rv_list.append(rv_num)
+                        # Following line sets AP coach number
+                        number.text = rv_num
+                    return True
+    return False
+
+
 def vda_replace(provider, product, blueprint, name, number, loaded, flipped, followers, tailmarker):
     # Replace VDA wagons
     if 'JL' in provider.text:
@@ -3018,11 +3045,11 @@ h3,thead {
     htp = ''
     if scenarioProps:
         htp = '\n<h1>Scenario properties</h1>\n<table border=\"1\" class=\"dataframe\" style=\"text-align: left;\">\n' \
-                '    <tr>\n      <th>Title</th>\n      <td>' + scenarioProps[0] + '</td>\n    </tr>\n' \
-                '    <tr>\n      <th>Description</th>\n      <td>' + scenarioProps[1] + '</td>\n    </tr>\n' \
-                '    <tr>\n      <th>Briefing</th>\n      <td>' + scenarioProps[2] + '</td>\n    </tr>\n' \
-                '    <tr>\n      <th>Start From</th>\n      <td>' + scenarioProps[3] + '</td>\n    </tr>\n' \
-                '    <tr>\n      <th>Route</th>\n      <td>' + scenarioProps[4] + '</td>\n    </tr>\n' \
+                '    <tr>\n      <th>Title</th>\n      <td>' + str(scenarioProps[0]) + '</td>\n    </tr>\n' \
+                '    <tr>\n      <th>Description</th>\n      <td>' + str(scenarioProps[1]) + '</td>\n    </tr>\n' \
+                '    <tr>\n      <th>Briefing</th>\n      <td>' + str(scenarioProps[2]) + '</td>\n    </tr>\n' \
+                '    <tr>\n      <th>Start From</th>\n      <td>' + str(scenarioProps[3]) + '</td>\n    </tr>\n' \
+                '    <tr>\n      <th>Route</th>\n      <td>' + str(scenarioProps[4]) + '</td>\n    </tr>\n' \
                 '  </table>\n'
     htm = htmhead + htp + htmas + htmrv + '</body>\n</html>\n'
     html_file_path.touch()

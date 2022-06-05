@@ -279,11 +279,11 @@ h3,thead {
     htp = ''
     if scenarioProps:
         htp = '\n<h1>Scenario properties</h1>\n<table border=\"1\" class=\"dataframe\" style=\"text-align: left;\">\n' \
-                '    <tr>\n      <th>Title</th>\n      <td>' + scenarioProps[0] + '</td>\n    </tr>\n' \
-                '    <tr>\n      <th>Description</th>\n      <td>' + scenarioProps[1] + '</td>\n    </tr>\n' \
-                '    <tr>\n      <th>Briefing</th>\n      <td>' + scenarioProps[2] + '</td>\n    </tr>\n' \
-                '    <tr>\n      <th>Start From</th>\n      <td>' + scenarioProps[3] + '</td>\n    </tr>\n' \
-                '    <tr>\n      <th>Route</th>\n      <td>' + scenarioProps[4] + '</td>\n    </tr>\n' \
+                '    <tr>\n      <th>Title</th>\n      <td>' + str(scenarioProps[0]) + '</td>\n    </tr>\n' \
+                '    <tr>\n      <th>Description</th>\n      <td>' + str(scenarioProps[1]) + '</td>\n    </tr>\n' \
+                '    <tr>\n      <th>Briefing</th>\n      <td>' + str(scenarioProps[2]) + '</td>\n    </tr>\n' \
+                '    <tr>\n      <th>Start From</th>\n      <td>' + str(scenarioProps[3]) + '</td>\n    </tr>\n' \
+                '    <tr>\n      <th>Route</th>\n      <td>' + str(scenarioProps[4]) + '</td>\n    </tr>\n' \
                 '  </table>\n'
     htm = htmhead + htp + htmas + htmrv + '</body>\n</html>\n'
     html_file_path.touch()
