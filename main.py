@@ -142,6 +142,7 @@ if not config.has_section('defaults'):
     config.set('defaults', 'replace_c67', 'True')
     config.set('defaults', 'replace_c68', 'True')
     config.set('defaults', 'replace_c86', 'True')
+    config.set('defaults', 'replace_c87', 'True')
     config.set('defaults', 'replace_hst', 'True')
     config.set('defaults', 'replace_c91', 'False')
     config.set('defaults', 'replace_c101', 'False')
@@ -301,6 +302,8 @@ mid_column = [
                  tooltip='Replace Class 68s with AP enhancement pack equivalent', key='Replace_C68')],
     [sg.Checkbox('Replace Class 86s', default=get_my_config_boolean('defaults', 'replace_c86'), enable_events=True,
                  tooltip='Replace Class 86s with AP enhancement pack equivalent', key='Replace_C86')],
+    [sg.Checkbox('Replace Class 87s', default=get_my_config_boolean('defaults', 'replace_c87'), enable_events=True,
+                 tooltip='Replace Class 87s with AP equivalent', key='Replace_C87')],
     [sg.Checkbox('Replace HST sets', default=get_my_config_boolean('defaults', 'replace_hst'), enable_events=True,
                  tooltip='Tick to enable replacing of HST sets with AP enhanced versions (Valenta, MTU, VP185)',
                  key='Replace_HST')],
@@ -2060,6 +2063,31 @@ def c86_replace(provider, product, blueprint, name, number):
     return False
 
 
+def c87_replace(provider, product, blueprint, name, number):
+    for i in range(0, len(vehicle_db['Class87'])):
+        this_vehicle = vehicle_db['Class87'][i]
+        if this_vehicle[0] in provider.text:
+            if this_vehicle[1] in product.text:
+                bp = re.search(this_vehicle[2], blueprint.text, flags=re.IGNORECASE)
+                if bp:
+                    (w_blueprint, w_name) = set_weathering(3, this_vehicle)
+                    rv_orig = number.text
+                    nm = re.match('.?(87[0-9]{3}).*', number.text)
+                    if nm:
+                        rv_found = nm.group(1)
+                        rv_num = rv_found + this_vehicle[7];
+                        provider.text = this_vehicle[3]
+                        product.text = this_vehicle[4]
+                        number.text = str(rv_num)
+                        name.text = w_name
+                        blueprint.text = w_blueprint
+                        rv_list.append(number.text)
+                        rv_pairs.append([rv_orig, number.text])
+                        return True
+                    return False
+    return False
+
+
 def c91_replace(provider, product, blueprint, name):
     for i in range(0, len(vehicle_db['Class91_set'])):
         this_vehicle = vehicle_db['Class91_set'][i]
@@ -2884,6 +2912,8 @@ def vehicle_replacer(provider, product, blueprint, name, number, loaded, flipped
         return True
     if values['Replace_C86'] and c86_replace(provider, product, blueprint, name, number):
         return True
+    if values['Replace_C87'] and c87_replace(provider, product, blueprint, name, number):
+        return True
     return True
 
 
@@ -3071,7 +3101,7 @@ if __name__ == "__main__":
         elif event == 'About':
             sg.Popup('About RSSwapTool',
                      'Tool for swapping rolling stock in Train Simulator (Dovetail Games) scenarios',
-                     'Version 1.0.3 / 31 May 2022',
+                     'Version 1.0.4 / 31 July 2022',
                      'Copyright 2022 JR McKenzie (jrmknz@yahoo.co.uk)', 'https://github.com/jrmckenzie/RSSwapTool',
                      'This program is free software: you can redistribute it and / or modify '
                      'it under the terms of the GNU General Public License as published by '
@@ -3108,6 +3138,7 @@ if __name__ == "__main__":
             config.set('defaults', 'replace_c67', str(values['Replace_C67']))
             config.set('defaults', 'replace_c68', str(values['Replace_C68']))
             config.set('defaults', 'replace_c86', str(values['Replace_C86']))
+            config.set('defaults', 'replace_c87', str(values['Replace_C87']))
             config.set('defaults', 'replace_hst', str(values['Replace_HST']))
             config.set('defaults', 'replace_c91', str(values['Replace_C91']))
             config.set('defaults', 'replace_c101', str(values['Replace_C101']))
@@ -3262,6 +3293,7 @@ if __name__ == "__main__":
             config.set('defaults', 'replace_c67', str(values['Replace_C67']))
             config.set('defaults', 'replace_c68', str(values['Replace_C68']))
             config.set('defaults', 'replace_c86', str(values['Replace_C86']))
+            config.set('defaults', 'replace_c87', str(values['Replace_C87']))
             config.set('defaults', 'replace_hst', str(values['Replace_HST']))
             config.set('defaults', 'replace_c91', str(values['Replace_C91']))
             config.set('defaults', 'replace_c101', str(values['Replace_C101']))
