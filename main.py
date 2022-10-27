@@ -129,6 +129,7 @@ if not config.has_section('defaults'):
     config.set('defaults', 'replace_hha', 'True')
     config.set('defaults', 'replace_hto', 'True')
     config.set('defaults', 'replace_htv', 'True')
+    config.set('defaults', 'replace_tta', 'True')
     config.set('defaults', 'replace_vda', 'True')
     config.set('defaults', 'replace_ihh', 'False')
     config.set('defaults', 'replace_user', 'False')
@@ -266,6 +267,9 @@ left_column = [
                  enable_events=True,
                  tooltip='Tick to enable replacing of fitted 21t coal wagons with Fastline Simulation HTV wagons',
                  key='Replace_HTV')],
+    [sg.Checkbox('Replace TTA wagons', default=get_my_config_boolean('defaults', 'replace_tta'), enable_events=True,
+                 tooltip='Tick to enable replacing of TTA wagons with Armstrong Powerhouse TTA pack',
+                 key='Replace_TTA')],
     [sg.Checkbox('Replace VDA wagons', default=get_my_config_boolean('defaults', 'replace_vda'), enable_events=True,
                  tooltip='Tick to enable replacing of VDA wagons with Fastline Simulation VDA pack',
                  key='Replace_VDA')],
@@ -315,11 +319,11 @@ mid_column = [
                  enable_events=True,
                  tooltip='Tick to enable replacing of retired RSC Class101Pack with RSC BritishRailClass101 sets',
                  key='Replace_C101')],
-]
-right_column = [
     [sg.Checkbox('Replace Class 150/2 sets', default=get_my_config_boolean('defaults', 'replace_c150'),
                  enable_events=True,
                  tooltip='Tick to enable replacing Thomson-Oovee Class 150s with AP Class 150/2', key='Replace_C150')],
+]
+right_column = [
     [sg.Checkbox('Replace Class 156 sets', default=get_my_config_boolean('defaults', 'replace_c156'),
                  enable_events=True,
                  tooltip='Tick to enable replacing of Oovee Class 156s with AP Class 156', key='Replace_C156')],
@@ -889,6 +893,38 @@ def fta_replace(provider, product, blueprint, name, number, loaded):
     return False
 
 
+def tta_replace(provider, product, blueprint, name, number, loaded):
+    for i in range(0, len(vehicle_db['TTA'])):
+        this_vehicle = vehicle_db['TTA'][i]
+        if this_vehicle[0] in provider.text:
+            if this_vehicle[1] in product.text:
+                bp = re.search(this_vehicle[2], blueprint.text, flags=re.IGNORECASE)
+                if bp:
+                    provider.text = this_vehicle[3]
+                    product.text = this_vehicle[4]
+                    blueprint.text = this_vehicle[5]
+                    name.text = this_vehicle[6]
+                    number_suffix = this_vehicle[7]
+                    rv_orig = number.text
+                    if number_suffix[0:1] == ';' and 'eTrue' in loaded.text:
+                        # Wagon is loaded
+                        # Change the blueprint and name to the unloaded wagon
+                        blueprint.text = re.sub('.xml', '_LD.xml', blueprint.text,
+                                                flags=re.IGNORECASE)
+                        name.text = re.sub('Empty', 'Loaded', flags=re.IGNORECASE)
+                    elif number_suffix[0:1] != ';':
+                        number_suffix = number_suffix[1:]
+                    loaded.text = 'eFalse'
+                    if '_W0' in blueprint.text:
+                        this_vehicle[5].replace('_W0', '_W1'), this_vehicle[6].replace('W0', 'W1')
+                        (blueprint.text, name.text) = set_weathering(3, this_vehicle)
+                    number.text = rv_orig + number_suffix
+                    rv_pairs.append([rv_orig, number.text])
+                    rv_list.append(number.text)
+                    return True
+    return False
+
+
 def mk1_replace(provider, product, blueprint, name, number):
     # Replace any Mk1s - loop through the VehicleDB['Mk1'] array of coaches to search for
     for i in range(0, len(vehicle_db['Mk1'])):
@@ -1040,33 +1076,6 @@ def mk3ab_replace(provider, product, blueprint, name, number):
                         num = nm.group(2)
                         if len(reg) > 0 and 'R=Z' not in ap_suffix:
                             ap_suffix = ap_suffix + ";R=" + reg
-                        rv_num = num + ap_suffix
-                        rv_pairs.append([rv_orig, rv_num])
-                        rv_list.append(rv_num)
-                        # Following line sets AP coach number
-                        number.text = rv_num
-                    return True
-    return False
-
-
-def mk3ab_replace(provider, product, blueprint, name, number):
-    # Replace any Mk2d/e/fs - loop through the VehicleDB['Mk2df'] array of coaches to search for
-    for i in range(0, len(vehicle_db['Mk3ab'])):
-        this_vehicle = vehicle_db['Mk3ab'][i]
-        if this_vehicle[0] in provider.text:
-            if this_vehicle[1] in product.text:
-                bp = re.search(this_vehicle[2], blueprint.text, flags=re.IGNORECASE)
-                if bp:
-                    provider.text = this_vehicle[3]
-                    product.text = this_vehicle[4]
-                    blueprint.text = this_vehicle[5]
-                    name.text = this_vehicle[6]
-                    rv_orig = number.text
-                    # Now extract the region code (if there is one) and the coach number
-                    nm = re.search('([0-9]{4,5})', number.text)
-                    if nm:
-                        num = nm.group(1)
-                        ap_suffix = ";R=Z"
                         rv_num = num + ap_suffix
                         rv_pairs.append([rv_orig, rv_num])
                         rv_list.append(rv_num)
@@ -2075,7 +2084,7 @@ def c87_replace(provider, product, blueprint, name, number):
                     nm = re.match('.?(87[0-9]{3}).*', number.text)
                     if nm:
                         rv_found = nm.group(1)
-                        rv_num = rv_found + this_vehicle[7];
+                        rv_num = rv_found + this_vehicle[7]
                         provider.text = this_vehicle[3]
                         product.text = this_vehicle[4]
                         number.text = str(rv_num)
@@ -2852,6 +2861,8 @@ def vehicle_replacer(provider, product, blueprint, name, number, loaded, flipped
         return True
     if values['Replace_HTV'] and coal21_t_htv_replace(provider, product, blueprint, name, number, loaded):
         return True
+    if values['Replace_TTA'] and tta_replace(provider, product, blueprint, name, number, loaded):
+        return True
     if values['Replace_VDA'] and vda_replace(provider, product, blueprint, name, number, loaded, flipped, followers, tailmarker):
         return True
     if values['Replace_IHH'] and ihh_replace(provider, product, blueprint, name, number, loaded, flipped, followers, tailmarker):
@@ -3101,7 +3112,7 @@ if __name__ == "__main__":
         elif event == 'About':
             sg.Popup('About RSSwapTool',
                      'Tool for swapping rolling stock in Train Simulator (Dovetail Games) scenarios',
-                     'Version 1.0.4 / 31 July 2022',
+                     'Version 1.0.5 / 27 October 2022',
                      'Copyright 2022 JR McKenzie (jrmknz@yahoo.co.uk)', 'https://github.com/jrmckenzie/RSSwapTool',
                      'This program is free software: you can redistribute it and / or modify '
                      'it under the terms of the GNU General Public License as published by '
@@ -3125,6 +3136,7 @@ if __name__ == "__main__":
             config.set('defaults', 'replace_hha', str(values['Replace_HHA']))
             config.set('defaults', 'replace_hto', str(values['Replace_HTO']))
             config.set('defaults', 'replace_htv', str(values['Replace_HTV']))
+            config.set('defaults', 'replace_tta', str(values['Replace_TTA']))
             config.set('defaults', 'replace_vda', str(values['Replace_VDA']))
             config.set('defaults', 'replace_ihh', str(values['Replace_IHH']))
             config.set('defaults', 'replace_user', str(values['Replace_User']))
@@ -3280,6 +3292,7 @@ if __name__ == "__main__":
             config.set('defaults', 'replace_hha', str(values['Replace_HHA']))
             config.set('defaults', 'replace_hto', str(values['Replace_HTO']))
             config.set('defaults', 'replace_htv', str(values['Replace_HTV']))
+            config.set('defaults', 'replace_tta', str(values['Replace_TTA']))
             config.set('defaults', 'replace_vda', str(values['Replace_VDA']))
             config.set('defaults', 'replace_ihh', str(values['Replace_IHH']))
             config.set('defaults', 'replace_user', str(values['Replace_User']))
