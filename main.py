@@ -902,8 +902,9 @@ def tta_replace(provider, product, blueprint, name, number, loaded):
                 if bp:
                     provider.text = this_vehicle[3]
                     product.text = this_vehicle[4]
-                    blueprint.text = this_vehicle[5]
-                    name.text = this_vehicle[6]
+                    (w_blueprint, w_name) = set_weathering(3, this_vehicle)
+                    blueprint.text = w_blueprint
+                    name.text = w_name
                     number_suffix = this_vehicle[7]
                     rv_orig = number.text
                     if number_suffix[0:1] == ';' and 'eTrue' in loaded.text:
@@ -914,9 +915,6 @@ def tta_replace(provider, product, blueprint, name, number, loaded):
                     elif number_suffix[0:1] != ';':
                         number_suffix = number_suffix[1:]
                     loaded.text = 'eFalse'
-                    if '_W0' in blueprint.text:
-                        this_vehicle[5].replace('_W0', '_W1'), this_vehicle[6].replace('W0', 'W1')
-                        (blueprint.text, name.text) = set_weathering(3, this_vehicle)
                     number.text = rv_orig + number_suffix
                     rv_pairs.append([rv_orig, number.text])
                     rv_list.append(number.text)
