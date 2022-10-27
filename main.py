@@ -911,7 +911,7 @@ def tta_replace(provider, product, blueprint, name, number, loaded):
                         # Change the blueprint and name to the unloaded wagon
                         blueprint.text = re.sub('.xml', '_LD.xml', blueprint.text,
                                                 flags=re.IGNORECASE)
-                        name.text = re.sub('Empty', 'Loaded', flags=re.IGNORECASE)
+                        name.text = re.sub('Empty', 'Loaded', name.text, flags=re.IGNORECASE)
                     elif number_suffix[0:1] != ';':
                         number_suffix = number_suffix[1:]
                     loaded.text = 'eFalse'
