@@ -32,6 +32,8 @@ from pathlib import PureWindowsPath
 wine_executable = '/usr/bin/wine'
 
 # Initialise the script, set the look and feel and get the configuration
+version_number = '1.0.6'
+version_date = '28 October 2022'
 vehicle_list = []
 railworks_path = ''
 sg.LOOK_AND_FEEL_TABLE['Railish'] = {'BACKGROUND': '#00384F', 'TEXT': '#FFFFFF', 'INPUT': '#FFFFFF',
@@ -42,7 +44,7 @@ sg.theme('Railish')
 
 # Set the layout of the GUI
 layout = [
-    [sg.Text('RSReportTool', font='Helvetica 16')],
+    [sg.Text('RSReportTool', font='Helvetica 16'), sg.Text('v' + version_number, font='Helvetica 8')],
     [sg.Text('Rolling stock report generator for existing scenarios.')],
     [sg.FileBrowse('Select scenario file to examine', key='Scenario_xml', tooltip='Locate the scenario .bin or .xml '
                                                                                   'file you wish to examine')],
@@ -306,7 +308,7 @@ if __name__ == "__main__":
             sg.Popup('About RSReportTool',
                      'Tool for listing rolling stock in Train Simulator (Dovetail Games) scenarios, bundled with '
                      'RSSwapTool to provide a standalone tool to examine scenarios and list rolling stock.',
-                     'Version 1.0.5 / 27 October 2022',
+                     'Version ' + version_number + ' / ' + version_date,
                      'Copyright 2022 JR McKenzie (jrmknz@yahoo.co.uk)', 'https://github.com/jrmckenzie/RSSwapTool',
                      'This program is free software: you can redistribute it and / or modify '
                      'it under the terms of the GNU General Public License as published by '
