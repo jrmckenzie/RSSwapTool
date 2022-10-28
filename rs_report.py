@@ -32,7 +32,7 @@ from pathlib import PureWindowsPath
 wine_executable = '/usr/bin/wine'
 
 # Initialise the script, set the look and feel and get the configuration
-version_number = '1.0.6'
+version_number = '1.0.7 '
 version_date = '28 October 2022'
 vehicle_list = []
 railworks_path = ''

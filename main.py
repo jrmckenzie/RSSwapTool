@@ -44,7 +44,7 @@ from data_file import hha_e_wagons, hha_l_wagons, HTO_141_numbers, HTO_143_numbe
 wine_executable = '/usr/bin/wine'
 
 # Initialise the script, set the look and feel and get the configuration
-version_number = '1.0.6'
+version_number = '1.0.7'
 version_date = '28 October 2022'
 rv_list = []
 rv_pairs = []
