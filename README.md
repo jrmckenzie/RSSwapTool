@@ -19,7 +19,7 @@ There are two options - [1] download the code from github, run it with python (w
 
 For [1], if you are familiar with git you can clone the repository as usual, you can get the link by clicking the green "code" button in github (scroll to the top of the page to see it). Or, if you prefer, click the green "code" button and download the zip file instead, then extract the contents of the zip file to your PC somewhere convenient. If you don't have python installed you'll need to get that from https://www.python.org/downloads/ and install it. You're going to need the PySimpleGUI add on for python too. Install it by opening a command prompt and typing "pip install pysimplegui" or consult https://pypi.org/project/PySimpleGUI/ for more information.
 
-If you prefer not to install Python and PySimpleGUI, there is a zip file you can download for windows 10 with packaged applications RSSwapTool.exe and RSReportTool.exe you just need to double-click to open, which you can get from https://github.com/jrmckenzie/RSSwapTool/releases. Just download the whole zip file and extract it to your computer. It may not be as up-to-date as the source code here on github, however. Your anti-virus software may block the file, on account of it containing an .exe file not widely used or tested.
+If you prefer not to install Python and PySimpleGUI, there is a zip file you can download for windows 10 with packaged applications RSSwapTool.exe and RSReportTool.exe you just need to double-click to open, which you can get from https://github.com/jrmckenzie/RSSwapTool/releases. Just download the whole zip file and extract it to your computer. It may not be as up-to-date as the source code here on github, however. Your anti-virus software may block the file, on account of it containing an .exe file and the fact that hardly anyone will have downloaded and used it to establish it is trusted by many users.
 
 Usage
 =====
@@ -110,7 +110,7 @@ It is intended that more will be added to this documentation in due course.
 
 #### Footnote - Windows and Linux
 
-TS is a windows game and these instructions refer to Windows. If you're a Linux user, and you run TS through Steam and its compatability tool Proton, you can still run RSSwapTool in Linux if you like. You will need to have Wine installed (because serz.exe needs to run), Python, PySimpleGUI, Tk, and a working TS install of course. (RSSwapTool has been developed and tested on EndeavourOS, an Arch Linux distribution, as well as on Microsoft Windows. The JetBrains PyCharm IDE has been used for coding.)
+TS is a windows game and these instructions refer to Windows. If you're a Linux user, and you run TS through Steam and its compatability tool Proton, you can still run RSSwapTool in Linux if you like. You will need to have Wine installed (because serz.exe, a program included with TS, needs to run), Python, PySimpleGUI, Tk, and a working TS install of course. (RSSwapTool has been developed and tested on EndeavourOS, an Arch Linux distribution, as well as on Microsoft Windows. The JetBrains PyCharm IDE has been used for coding.)
 
 Copyright © 2022 JR McKenzie
 
