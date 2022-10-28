@@ -53,6 +53,7 @@ The following substitutions are available:
 * Replace HHA wagons - Tick to enable replacing of HHA wagons with mixed wagons from the AP HHA wagon pack
 * Replace unfitted 21t coal wagons - Tick to enable replacing of unfitted 21t coal wagons with mixed wagons from the Fastline Simulation HTO pack
 * Replace fitted 21t coal wagons - Tick to enable replacing of fitted 21t coal wagons with mixed wagons from the Fastline Simulation HTV pack
+* Replace TTA wagons - Tick to enable replacing of various TTA wagons with AP TTA Wagon Pack Volume 1 equivalents
 * Replace VDA wagons - Tick to enable replacing of JL West Highland Line VDA wagons with mixed wagons from the Fastline Simulation VDA pack
 * Replace IHH stock - Tick to enable replacing some of the old Iron Horse House (IHH) stock, if you have any
 * Replace User-configured stock - Tick to enable replacing of user-configured stock, contained in file User.csv (leave this unticked unless you have added your own substitutions to User.csv or want to use the supplied examples).
@@ -66,6 +67,7 @@ The following substitutions are available:
 * Replace Class 67s - Replace Class 67s with AP enhancement pack equivalent
 * Replace Class 68s - Replace Class 68s with AP enhancement pack equivalent
 * Replace Class 86s - Replace Class 86s with AP enhancement pack equivalent
+* Replace Class 87s - Replace Class 86s with AP enhancement pack equivalent
 * Replace HST sets - Tick to enable replacing of HST sets with AP enhanced versions (Valenta, MTU, VP185)
 * Replace Class 91 EC sets - Tick to enable replacing of Class 91 East Coast sets with AP enhanced versions
 * Replace Class 101 sets - Tick to enable replacing of retired RSC Class101Pack with RSC BritishRailClass101 sets - note there is no BR White livery available, these will be replaced with BR Blue
