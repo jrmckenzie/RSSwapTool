@@ -24,13 +24,15 @@ If you prefer not to install Python and PySimpleGUI, there is a zip file you can
 Initial setup
 =============
 
-Two tools are provided - the main rolling stock swap tool, and a second tool which allows you to examine a scenario and generate a report listing all the rolling stock in the scenario in tabular format. The first time you run either program you will need to specify the location of your RailWorks folder by browsing for it when prompted and pressing "Save".
+Two tools are provided - the main rolling stock swap tool, and a second tool which allows you to examine a scenario and generate a report listing all the rolling stock in the scenario in tabular format. The first time you run either program you will need to specify the location of your RailWorks folder by browsing for it when prompted and pressing "Save". Your RailWorks folder will most likely be located somewhere under the folder where all your other Steam games are located. Maybe in the Program Files folder on your C drive, or on another drive in a SteamLibrary folder.
+
 ![Screenshot](/images/Configure_path_to_RailWorks.png?raw=true "Initial setup - Configure path to RailWorks - screenshot")
 
 Usage
 =====
 
 #### RSReportTool
+
 ![Screenshot](/images/RSReportTool-screenshot.png?raw=true "RSReportTool screenshot")
 
 To generate the report of the rolling stock within a scenario with **RSReportTool**, without altering the scenario itself, run rs_report.py from the command prompt or double click it. Then press the "Select scenario file to examine" button and hit "Examine". The "Settings" button will allow you to reconfigure the location of your RailWorks folder if it needs changed. Once a report has been generated, you will be given the option to open it in your web browser. RSReportTool reports will show you the names of the consists, or indicate that they are loose consists if they have no name or driver. The title of the player-driven consist will be in bold and it will say "(Player driven)" after the title. The reports will also show you the asset Provider, Product, Blueprint, Name, Number, and Loaded status. The title of the scenario, description and briefing will also be displayed along with the name of the route the scenario runs on.
@@ -38,6 +40,7 @@ To generate the report of the rolling stock within a scenario with **RSReportToo
 You may find some lines in the report are coloured red, this is because the blueprint .bin file for this piece of stock doesn't exist in the expected location. There are two possible reasons for this: you may not have the stock or reskin on your computer; or, you may have the stock but it is packaged with an ".ap" file archive so RSReportTool can't see it. Other tools like TS-Tools (available from Mike Simpson at http://agenetools.com/downloads.html) explain this a bit more and allow you to extract just the .bin files out of the .ap files. If you do that and re-run RSReportTool on the scenario again, it should only show a few red lines for the stock you definitely don't have (or no red lines at all if you have all the stock in the scenario). 
 
 #### RSSwapTool
+
 ![Screenshot](/images/RSSwapTool-screenshot.png?raw=true "RSSwapTool screenshot")
 
 To swap rolling stock with **RSSwapTool**, run main.py from the command prompt or just double click main.py. On the first run you will be prompted to save the location of your RailWorks folder. The main screen should then appear as a blue box with tick boxes for stock to be swapped. Note that there are some settings which govern the behaviour of some of the swapping operations by the program which you can adjust. These can be found by pressing the "Settings" burron, described in the following text. 
@@ -97,6 +100,7 @@ The following substitutions are available:
 * Replace Class 465 sets - Tick to enable replacing of South London Lines / London-Gillingham / RSC Class 465 Pack Class 465 units with AP enhanced versions
 
 #### Settings
+
 ![Screenshot](/images/RSSwapTool_settings-screenshot.png?raw=true "RSSwapTool settings screenshot")
 
 Pressing the 'Settings' button allows you to update the location of RailWorks folder, and change the substitution policy with Class 56, 86, MGR wagons and FSA/FTA wagons. You can choose how to replace a Class 56 where the AP enhancement pack doesn’t include the sector / depot plate of the original. You can choose to replace any Class 86s with headcode blinds with the Vulcan Productions headcode blinds add-on or with plated over headcode box and marker lights. You can choose whether to replace HAA wagons with AP HAA, HBA, HCA, HDA, HFA, HMA & HNA in Blue, Red, or Sector livery. You can choose whether you want Railfreight Distribution or Freightliner FSA/FTA wagons, and whether the containers should be appropriate for 2000s, 2010s, or 2020s era. You can also enable or disable the saving of a report listing all rail vehicles in the scenario and their key details.
