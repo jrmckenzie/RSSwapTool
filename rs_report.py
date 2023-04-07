@@ -32,8 +32,8 @@ from pathlib import PureWindowsPath
 wine_executable = '/usr/bin/wine'
 
 # Initialise the script, set the look and feel and get the configuration
-version_number = '1.0.7 '
-version_date = '28 October 2022'
+version_number = '1.0.9'
+version_date = '8 April 2023'
 vehicle_list = []
 railworks_path = ''
 sg.LOOK_AND_FEEL_TABLE['Railish'] = {'BACKGROUND': '#00384F', 'TEXT': '#FFFFFF', 'INPUT': '#FFFFFF',
@@ -49,7 +49,7 @@ layout = [
     [sg.FileBrowse('Select scenario file to examine', key='Scenario_xml', tooltip='Locate the scenario .bin or .xml '
                                                                                   'file you wish to examine')],
     [sg.Button('Examine!'), sg.Button('Settings'), sg.Button('About'), sg.Button('Exit')],
-    [sg.Text('© 2022 JR McKenzie', font='Helvetica 7')],
+    [sg.Text('© 2023 JR McKenzie', font='Helvetica 7')],
 ]
 
 # Read configuration and find location of RailWorks folder, or ask user to set it
@@ -309,7 +309,7 @@ if __name__ == "__main__":
                      'Tool for listing rolling stock in Train Simulator (Dovetail Games) scenarios, bundled with '
                      'RSSwapTool to provide a standalone tool to examine scenarios and list rolling stock.',
                      'Version ' + version_number + ' / ' + version_date,
-                     'Copyright 2022 JR McKenzie (jrmknz@yahoo.co.uk)', 'https://github.com/jrmckenzie/RSSwapTool',
+                     'Copyright 2023 JR McKenzie (jrmknz@yahoo.co.uk)', 'https://github.com/jrmckenzie/RSSwapTool',
                      'This program is free software: you can redistribute it and / or modify '
                      'it under the terms of the GNU General Public License as published by '
                      'the Free Software Foundation, either version 3 of the License, or '

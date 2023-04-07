@@ -2,7 +2,7 @@
 #
 #     RSSwapTool - A script to swap in up to date or enhanced rolling stock
 #     for older versions of stock in Train Simulator scenarios.
-#     Copyright (C) 2022 James McKenzie jrmknz@yahoo.co.uk
+#     Copyright (C) 2023 James McKenzie jrmknz@yahoo.co.uk
 #
 #     This program is free software: you can redistribute it and/or modify
 #     it under the terms of the GNU General Public License as published by
@@ -44,8 +44,8 @@ from data_file import hha_e_wagons, hha_l_wagons, HTO_141_numbers, HTO_143_numbe
 wine_executable = '/usr/bin/wine'
 
 # Initialise the script, set the look and feel and get the configuration
-version_number = '1.0.7'
-version_date = '28 October 2022'
+version_number = '1.0.9'
+version_date = '8 April 2023'
 rv_list = []
 rv_pairs = []
 output_vehicle_list = []
@@ -239,7 +239,7 @@ vp_blue_47_db = import_data_from_csv('tables/Class47BRBlue_numbers.csv')
 # Set the layout of the GUI
 left_column = [
     [sg.Text('RSSwapTool', font='Helvetica 16'), sg.Text('v' + version_number, font='Helvetica 8')],
-    [sg.Text('© 2022 JR McKenzie', font='Helvetica 7')],
+    [sg.Text('© 2023 JR McKenzie', font='Helvetica 7')],
     [sg.FileBrowse('Select scenario file to process', key='Scenario_xml', tooltip='Locate the scenario .bin or .xml '
                     'file you wish to process')],
     [sg.Text('Tick the boxes below to choose the\nsubstitutions you would like to make.')],
@@ -3112,7 +3112,7 @@ if __name__ == "__main__":
             sg.Popup('About RSSwapTool',
                      'Tool for swapping rolling stock in Train Simulator (Dovetail Games) scenarios',
                      'Version ' + version_number + ' / ' + version_date,
-                     'Copyright 2022 JR McKenzie (jrmknz@yahoo.co.uk)', 'https://github.com/jrmckenzie/RSSwapTool',
+                     'Copyright 2023 JR McKenzie (jrmknz@yahoo.co.uk)', 'https://github.com/jrmckenzie/RSSwapTool',
                      'This program is free software: you can redistribute it and / or modify '
                      'it under the terms of the GNU General Public License as published by '
                      'the Free Software Foundation, either version 3 of the License, or '

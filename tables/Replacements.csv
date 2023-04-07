@@ -190,6 +190,8 @@ Mk1,DTG,CastlePack01,RailVehicles\Passenger\MK1TSO\BR Chocolate and Cream\mk1tso
 Mk1,DTG,Class24Pack01,RailVehicles\Passenger\Mk1BG\BR_BlueGrey\Coach\mk1bg_br.xml,AP,BRMk1Pack01,RailVehicles\Mk1\BRBlueGrey\BG\Mk1_BG.xml,AP Mk1 BG BR Blue/Grey,RailVehicles\Mk1\BRBlueGrey\BG\Numbers.dcsv
 Mk1,DTG,Class24Pack01,RailVehicles\Passenger\Mk1FK\BR_BlueGrey\Coach\mk1fk_br.xml,AP,BRMk1Pack01,RailVehicles\Mk1\BRBlueGrey\FK\Mk1_FK.xml,AP Mk1 FK BR Blue/Grey,RailVehicles\Mk1\BRBlueGrey\FK\Numbers.dcsv
 Mk1,DTG,Class24Pack01,RailVehicles\Passenger\Mk1SK\BR_BlueGrey\Coach\mk1sk_br.xml,AP,BRMk1Pack01,RailVehicles\Mk1\BRBlueGrey\SK\Mk1_SK.xml,AP Mk1 SK BR Blue/Grey,RailVehicles\Mk1\BRBlueGrey\SK\Numbers.dcsv
+Mk1,DTG,Class47Pack04,RailVehicles\Passenger\Mk1_BG\Default\Coach\Mk1_BG.xml,AP,BRMk1Pack01,RailVehicles\Mk1\BRBlueGrey\BG\Mk1_BG.xml,AP Mk1 BG BR Blue/Grey,RailVehicles\Mk1\BRBlueGrey\BG\Numbers.dcsv
+Mk1,DTG,Class47Pack04,RailVehicles\Passenger\Mk1_BG\Default\Coach\Mk1_BG2.xml,AP,BRMk1Pack01,RailVehicles\Mk1\BRBlueGrey\BG\Mk1_BG.xml,AP Mk1 BG BR Blue/Grey,RailVehicles\Mk1\BRBlueGrey\BG\Numbers.dcsv
 Mk1,DTG,Class67Pack03,RailVehicles\Passenger\MK1BG\RES_Mail\Coach\mk1bg.xml,AP,BRMk1Pack01,RailVehicles\Mk1\RES\BG\Mk1_BG.xml,AP Mk1 BG RES,RailVehicles\Mk1\RES\BG\Numbers.dcsv
 Mk1,DTG,ExeterKingswear,RailVehicles\Passenger\MK1BFK\BR Chocolate and Cream\mk1BFK.xml,AP,BRMk1Pack01,RailVehicles\Mk1\CC\BFK\Mk1_BFK.xml,AP Mk1 BFK C&C,RailVehicles\Mk1\BC\BFK\Numbers.dcsv
 Mk1,DTG,ExeterKingswear,RailVehicles\Passenger\MK1BG\BR Chocolate and Cream\Coach\mk1bg.xml,AP,BRMk1Pack01,RailVehicles\Mk1\CC\BG\Mk1_BG.xml,AP Mk1 BG C&C,RailVehicles\Mk1\BC\BG\Numbers.dcsv
@@ -650,6 +652,10 @@ Mk2ac,RSC,Class47Pack01,RailVehicles\Passenger\Mk2SO\NetworkSouthEast\Coach\mk2s
 Mk2ac,RSC,Class86Pack,RailVehicles\Passenger\Mk2BSO\BR_BlueGrey\Coach\mk2bso_brblue.xml,AP,BRMk2Pack02,RailVehicles\Mk2b\BRBlueGrey\BSO\Mk2b_BSO.xml,AP Mk2b/c BSO BR Blue/Grey,RailVehicles\Mk2b\BRBlueGrey\BSO\Numbers.dcsv
 Mk2ac,RSC,Class86Pack,RailVehicles\Passenger\Mk2FK\BR_BlueGrey\Coach\mk2fk_brblue.xml,AP,BRMk2Pack02,RailVehicles\Mk2b\BRBlueGrey\FK\Mk2b_FK.xml,AP Mk2b/c FK BR Blue/Grey,RailVehicles\Mk2b\BRBlueGrey\FK\Numbers.dcsv
 Mk2ac,RSC,Class86Pack,RailVehicles\Passenger\Mk2SO\BR_BlueGrey\Coach\mk2so_brblue.xml,AP,BRMk2Pack02,RailVehicles\Mk2b\BRBlueGrey\TSO\Mk2b_TSO.xml,AP Mk2b/c TSO BR Blue/Grey,RailVehicles\Mk2b\BRBlueGrey\TSO\Numbers.dcsv
+Mk2ac,DTG,Class47Pack04,RailVehicles\Passenger\Mk2a_TSO\Default\Coach\Mk2a_TSO_brblue.xml,AP,BRMk2Pack02,RailVehicles\Mk2a\BRBlueGrey\TSO\Mk2a_TSO.xml,AP Mk2a TSO BR Blue/Grey,RailVehicles\Mk2a\BRBlueGrey\TSO\Numbers.dcsv
+Mk2ac,DTG,Class47Pack04,RailVehicles\Passenger\Mk2a_TSO\RR\Coach\Mk2a_TSO_rr.xml,AP,BRMk2Pack02,RailVehicles\Mk2a\Provincial\TSO\Mk2a_TSO.xml,AP Mk2a TSO TP,RailVehicles\Mk2a\Provincial\TSO\Numbers.dcsv
+Mk2ac,DTG,Class47Pack04,RailVehicles\Passenger\Mk2a_TSO\Default\Coach\Mk2a_TSO_brblue2.xml,AP,BRMk2Pack02,RailVehicles\Mk2a\BRBlueGrey\TSO\Mk2a_TSO.xml,AP Mk2a TSO BR Blue/Grey,RailVehicles\Mk2a\BRBlueGrey\TSO\Numbers.dcsv
+Mk2ac,DTG,Class47Pack04,RailVehicles\Passenger\Mk2a_TSO\RR\Coach\Mk2a_TSO_rr2.xml,AP,BRMk2Pack02,RailVehicles\Mk2a\Provincial\TSO\Mk2a_TSO.xml,AP Mk2a TSO TP,RailVehicles\Mk2a\Provincial\TSO\Numbers.dcsv
 Mk2df,DT,DT_MK2E_coaches,Anglia\DT_Mk2e_first\Mk2e_first.xml,AP,BRMk2Pack01,RailVehicles\Mk2\Anglia\FO\Mk2e_fo.xml,AP Mk2e FO Anglia,RailVehicles\Mk2\CommonResources\Autonumbers\Numbers\FO\FO_Anglia.dcsv
 Mk2df,DT,DT_MK2E_coaches,Anglia\DT_Mk2e_rfo\Mk2e_rfo.xml,AP,BRMk2Pack01,RailVehicles\Mk2\Anglia\RFO\Mk2e_rfo.xml,AP Mk2e RFO Anglia,RailVehicles\Mk2\CommonResources\Autonumbers\Numbers\RFO\RFO_Anglia.dcsv
 Mk2df,DT,DT_MK2E_coaches,Anglia\DT_Mk2e_tso\Mk2e_tso.xml,AP,BRMk2Pack01,RailVehicles\Mk2\Anglia\TSO\Mk2e_tso.xml,AP Mk2e TSO Anglia,RailVehicles\Mk2\CommonResources\Autonumbers\Numbers\TSO\TSO_Anglia.dcsv
