@@ -36,7 +36,7 @@ from data_file import hha_e_wagons, hha_l_wagons, HTO_141_numbers, HTO_143_numbe
     ap40headcodes_62_69, rsc20headcodes_62_69, c168_chiltern, c170_ex_ar_aga_ap, c170_lm, c170_ct_xc, c170_ar23, \
     c170_scotrail, c170_ftpe, c170_ga_hull, c170_mml, c171_southern, c350_lb_ftpe, c365_ecmls_nse, c365_apcxse, \
     c450_gu_swt, c465_se, c375_dtg_pack, c377_lb_se, c377_lg_sn, c377_fcc, c170_bp_name_lookup, c375_dmos_lookup, \
-    c456_nse, c456_southern, c319_dest, c350_lm_wcmls, c375_southern_wcmls, c86_TOPS_HC
+    c456_nse, c456_southern, c319_dest, c350_lm_wcmls, c375_southern_wcmls, c86_TOPS_HC, c350_lm_cc
 
 # If you want to run this script on Linux you must enter the path to the wine executable. You need wine in order to
 # run the serz.exe utility which converts between .bin and .xml scenario files.
@@ -44,8 +44,8 @@ from data_file import hha_e_wagons, hha_l_wagons, HTO_141_numbers, HTO_143_numbe
 wine_executable = '/usr/bin/wine'
 
 # Initialise the script, set the look and feel and get the configuration
-version_number = '1.0.9'
-version_date = '8 April 2023'
+version_number = '1.0.10'
+version_date = '6 August 2023'
 rv_list = []
 rv_pairs = []
 output_vehicle_list = []
@@ -63,9 +63,9 @@ c86_opts = ['Use VP headcode blinds', 'Use AP plated box with markers', 'Do not 
 fsafta_opts = ['RFD / 2000 era', 'FL / 2000 era', 'FL / 2010 era', 'FL / 2020 era']
 fsafta_cube = ['No high cube containers', 'Allow high cube containers']
 mgr_types = ['HAA only', 'HCA (canopy) only', 'HFA (canopy) only', 'HAA and HCA (canopy) mixed',
-            'HAA, HCA (canopy) and HFA (canopy) mixed', 'HDA only', 'HBA (canopy) only', 'HDA and HBA (canopy) mixed',
-            'HMA only', 'HNA (canopy) only', 'HMA and HNA (canopy) mixed', 'Completely random']
-mgr_liveries = ['Maroon only',  'Blue only', 'Maroon and Blue', 'Sectors only', 'Sectors and Maroon',
+             'HAA, HCA (canopy) and HFA (canopy) mixed', 'HDA only', 'HBA (canopy) only', 'HDA and HBA (canopy) mixed',
+             'HMA only', 'HNA (canopy) only', 'HMA and HNA (canopy) mixed', 'Completely random']
+mgr_liveries = ['Maroon only', 'Blue only', 'Maroon and Blue', 'Sectors only', 'Sectors and Maroon',
                 'Sectors and Blue', 'Completely random']
 vda_liveries = ['Maroon only', 'Railfreight only', 'Mostly Maroon', 'Mostly Railfreight', 'Evenly Mixed']
 vda_whiteroof_probabilities = ['0', '1', '5', '10', '20', '30', '40', '50', '60', '70', '80', '90', '100']
@@ -241,7 +241,7 @@ left_column = [
     [sg.Text('RSSwapTool', font='Helvetica 16'), sg.Text('v' + version_number, font='Helvetica 8')],
     [sg.Text('© 2023 JR McKenzie', font='Helvetica 7')],
     [sg.FileBrowse('Select scenario file to process', key='Scenario_xml', tooltip='Locate the scenario .bin or .xml '
-                    'file you wish to process')],
+                                                                                  'file you wish to process')],
     [sg.Text('Tick the boxes below to choose the\nsubstitutions you would like to make.')],
     [sg.Checkbox('Replace Mk1 coaches', default=get_my_config_boolean('defaults', 'replace_mk1'), enable_events=True,
                  tooltip='Tick to enable replacing of Mk1 coaches with AP Mk1 Coach Pack Vol. 1',
@@ -429,20 +429,20 @@ def dcsv_get_num(this_dcsv, this_rv, this_re):
                 diff = ithis_rv - dcsv_nm
             elif ithis_rv == dcsv_nm:
                 # A matching number is available and has been found - use it.
-                return curr_nm
+                return str(curr_nm)
             elif ithis_rv < dcsv_nm:
                 # We have overshot the number we are looking for - but if this number is even further from the number
                 # we're looking for than the last one we looked at, use the last one.
                 if dcsv_nm - ithis_rv > diff:
-                    return last_nm
+                    return str(last_nm)
                 else:
                     # We've checked and even though we have overshot the number we are looking for, this number is
                     # closer to the number we're looking for than the last one we looked at - so use it.
-                    return curr_nm
+                    return str(curr_nm)
             last_nm = curr_nm
     # We didn't find a number to use. We must have reached the end of the available numbers so we will have to use the
     # last available number we found.
-    return last_nm
+    return str(last_nm)
 
 
 def csv_get_blue47num(front, this_rv):
@@ -655,7 +655,7 @@ def set_weathering(this_weather_variant, this_vehicle):
 
 
 def get_ap_name_from_bp(this_vehicle_db, this_bp):
-    for i in range(0,len(this_vehicle_db)):
+    for i in range(0, len(this_vehicle_db)):
         if this_bp.upper() == this_vehicle_db[i][5].upper():
             return this_vehicle_db[i][6]
     return False
@@ -745,7 +745,8 @@ def haa_replace(provider, product, blueprint, name, number, loaded, flipped, fol
                     else:
                         # Completely random livery
                         lv = random.choice([('EWS', ' Red '), ('Blue', ' Blue '), ('Sector', ' Sector ')])
-                    blueprint.text = 'RailVehicles\\Freight\\HAA\\' + lv[0] + weathering[0] + '\\' + bp + load[0] + '.xml'
+                    blueprint.text = 'RailVehicles\\Freight\\HAA\\' + lv[0] + weathering[0] + '\\' + bp + load[
+                        0] + '.xml'
                     name.text = 'AP ' + bp + lv[1] + load[1] + weathering[1]
                     if not tailmarker == 1:
                         # change to a tail lamp carrying wagon and try to orient it with the lamp outward facing
@@ -1102,12 +1103,12 @@ def vda_replace(provider, product, blueprint, name, number, loaded, flipped, fol
                 elif livery == 'Railfreight only':
                     lv = 'RF'
                 elif livery == 'Mostly Maroon':
-                    lv = random.choice(['M', 'M', 'M', 'RF'])      # 25% probability of Railfreight
+                    lv = random.choice(['M', 'M', 'M', 'RF'])  # 25% probability of Railfreight
                 elif livery == 'Mostly Railfreight':
-                    lv = random.choice(['RF', 'RF', 'RF', 'M'])    # 75% probability of Railfreight
+                    lv = random.choice(['RF', 'RF', 'RF', 'M'])  # 75% probability of Railfreight
                 else:
                     # Evenly mixed Maroon and Railfreight vans
-                    lv = random.choice(['M', 'RF'])                # 50% probability of Railfreight
+                    lv = random.choice(['M', 'RF'])  # 50% probability of Railfreight
                 white_probability = int(config.get('defaults', 'vda_whiteroof_probability', fallback='0'))
                 white_dicethrow = random.randrange(1, 101)
                 dirty_probability = int(config.get('defaults', 'vda_dirty_probability', fallback='90'))
@@ -1225,7 +1226,8 @@ def coal21_t_hto_replace(provider, product, blueprint, name, number, loaded):
                         rv_prefix = no_pretops
                     else:
                         rv_prefix = ''
-                    this_blueprint = 'RailVehicles\\Freight\\HTO\\FS_HT0' + lot[1] + 'A_' + weathering[0] + load + '.xml'
+                    this_blueprint = 'RailVehicles\\Freight\\HTO\\FS_HT0' + lot[1] + 'A_' + weathering[
+                        0] + load + '.xml'
                     this_name = 'HTO 21t Hopper - ' + lot[0] + ': ' + weathering[1] + load
                     rv_num = rv_prefix + 'B' + str(m)
                     product.text = 'HTO 21t Hoppers - ' + lot[0]
@@ -1373,8 +1375,8 @@ def ihh_bonus_replace(provider, product, blueprint, name, number, loaded, flippe
                         provider.text = this_vehicle[3]
                         product.text = this_vehicle[4]
                         random_variant = str(random.randrange(1, 4))
-                        blueprint.text = this_vehicle[5].replace('BR 1','BR ' + random_variant)
-                        name.text = this_vehicle[6].replace('BR 1','BR ' + random_variant)
+                        blueprint.text = this_vehicle[5].replace('BR 1', 'BR ' + random_variant)
+                        name.text = this_vehicle[6].replace('BR 1', 'BR ' + random_variant)
                         number.text = str(550000 + int(rv_orig[2:6]))
                         rv_list.append(number.text)
                         rv_pairs.append([rv_orig, number.text])
@@ -1419,7 +1421,7 @@ def ihh_c14_replace(provider, product, blueprint, name, number):
                     # Replace with a RSC Class 20 and format number accordingly
                     rv_orig = number.text
                     rv_num = str(random.randint(9500, 9555)) + str(random.randint(5, 8)) + 'K' \
-                        + str(random.randint(0, 9)) + str(random.randint(0, 9))
+                             + str(random.randint(0, 9)) + str(random.randint(0, 9))
                     nm = re.search('^D([0-9]{4})([0-9][a-zA-Z][0-9]{2})', number.text)
                     if nm:
                         rv_num = str((int(nm.group(1)) % 56) + 9500) + nm.group(2).upper()
@@ -1444,7 +1446,7 @@ def ihh_c17_replace(provider, product, blueprint, name, number):
                     # Replace with a RSC Class 20 and format number accordingly
                     rv_orig = number.text
                     rv_num = str(random.randint(9500, 9555)) + str(random.randint(5, 8)) + 'K' \
-                        + str(random.randint(0, 9)) + str(random.randint(0, 9))
+                             + str(random.randint(0, 9)) + str(random.randint(0, 9))
                     pretops_nm = re.search('^D([0-9]{4})([0-9])[a-zA-Z][0-9]{2}', number.text)
                     if pretops_nm:
                         # A pre-tops loco - only BR Green disc is available as standard DLC
@@ -2002,7 +2004,7 @@ def c86_replace(provider, product, blueprint, name, number):
                     provider.text = this_vehicle[3]
                     product.text = this_vehicle[4]
                     blueprint.text = this_vehicle[5]
-                    #name.text = w_name
+                    # name.text = w_name
                     rv_orig = number.text
                     nm = re.match('(86[0-9]{3}).*', number.text)
                     if nm:
@@ -2205,7 +2207,7 @@ def c158_replace(provider, product, blueprint, name, number):
                             if (provider.text == 'DTG' and product.text == 'Class158Pack01' and bool(
                                     re.search('Default', blueprint.text, flags=re.IGNORECASE))) or (
                                     provider.text == 'DTG' and product.text == 'NorthWalesCoast' and bool(
-                                    re.search('Default', blueprint.text, flags=re.IGNORECASE))):
+                                re.search('Default', blueprint.text, flags=re.IGNORECASE))):
                                 # Arriva Trains Wales liveried stock
                                 destination = get_destination(c158_nwc, nm.group(1), 'a')
                             elif provider.text == 'DTG' and product.text == 'FifeCircle' and bool(
@@ -2384,8 +2386,8 @@ def c319_replace(provider, product, blueprint, name, number):
                     if v_type:
                         if v_type.group(1).upper() == 'MSO':
                             rv_num = dcsv_get_num(
-                            Path(railworks_path, 'Assets', this_vehicle[3], this_vehicle[4],
-                                 this_vehicle[7].replace('\\', '/')), mso_num[0:6], 'Z([0-9]{6})(.*)')
+                                Path(railworks_path, 'Assets', this_vehicle[3], this_vehicle[4],
+                                     this_vehicle[7].replace('\\', '/')), mso_num[0:6], 'Z([0-9]{6})(.*)')
                             rv_num = c319_dest[mso_num[6:]] + rv_num
                     # Swap vehicle and set number / destination (where possible)
                     provider.text = this_vehicle[3]
@@ -2432,7 +2434,7 @@ def c325_replace(provider, product, blueprint, name, number):
                             rv_num = str(int(rv_num) + 256661)
                             rv_num = dcsv_get_num(
                                 Path(railworks_path, 'Assets', 'RSC', 'Class325Pack01', 'RailVehicles', 'Class325',
-                                'RM1_W1_AP', this_dcsv), rv_num, '([0-9]{6})(.*)')
+                                     'RM1_W1_AP', this_dcsv), rv_num, '([0-9]{6})(.*)')
                     # Swap vehicle and set number / destination (where possible)
                     provider.text = this_vehicle[3]
                     product.text = this_vehicle[4]
@@ -2452,12 +2454,20 @@ def c350_replace(provider, product, blueprint, name, number):
             if this_vehicle[1] in product.text:
                 bp = re.search(this_vehicle[2], blueprint.text, flags=re.IGNORECASE)
                 if bp:
-                    rv_orig = number.text   # 3503696014219
+                    rv_orig = number.text  # 3503696014219
                     destination = ''
                     nm = re.search('([0-9]{6}).....(.*)', number.text)
                     if nm:
                         if bool(re.search(r'\\FTPE\\', blueprint.text, flags=re.IGNORECASE)):
                             destination = get_destination(c350_lb_ftpe, nm.group(2), '0')
+                            if destination == '0':
+                                destination = ''
+                            else:
+                                destination = ';D=' + destination
+                        if product.text == 'CrossCity' and \
+                                bool(re.search(r'RailVehicles\\Electric\\Class350\\Default\\Engine\\Class350_',
+                                               blueprint.text, flags=re.IGNORECASE)):
+                            destination = get_destination(c350_lm_cc, nm.group(2), '0')
                             if destination == '0':
                                 destination = ''
                             else:
@@ -2850,9 +2860,11 @@ def vehicle_replacer(provider, product, blueprint, name, number, loaded, flipped
         return True
     if values['Replace_Mk3ab'] and mk3ab_replace(provider, product, blueprint, name, number):
         return True
-    if values['Replace_FSA'] and fsafta_replace(provider, product, blueprint, name, number, loaded, flipped, followers, tailmarker):
+    if values['Replace_FSA'] and fsafta_replace(provider, product, blueprint, name, number, loaded, flipped, followers,
+                                                tailmarker):
         return True
-    if values['Replace_HAA'] and haa_replace(provider, product, blueprint, name, number, loaded, flipped, followers, tailmarker):
+    if values['Replace_HAA'] and haa_replace(provider, product, blueprint, name, number, loaded, flipped, followers,
+                                             tailmarker):
         return True
     if values['Replace_HHA'] and hha_replace(provider, product, blueprint, name, number, loaded):
         return True
@@ -2862,9 +2874,11 @@ def vehicle_replacer(provider, product, blueprint, name, number, loaded, flipped
         return True
     if values['Replace_TTA'] and tta_replace(provider, product, blueprint, name, number, loaded):
         return True
-    if values['Replace_VDA'] and vda_replace(provider, product, blueprint, name, number, loaded, flipped, followers, tailmarker):
+    if values['Replace_VDA'] and vda_replace(provider, product, blueprint, name, number, loaded, flipped, followers,
+                                             tailmarker):
         return True
-    if values['Replace_IHH'] and ihh_replace(provider, product, blueprint, name, number, loaded, flipped, followers, tailmarker):
+    if values['Replace_IHH'] and ihh_replace(provider, product, blueprint, name, number, loaded, flipped, followers,
+                                             tailmarker):
         return True
     if values['Replace_User'] and user_replace(provider, product, blueprint, name):
         return True
@@ -3067,14 +3081,15 @@ h3,thead {
             for col in in_row[1:7]:
                 col_htm = col_htm + '      <td class="input">' + col + '</td>\n'
         for col in row[1:7]:
-                col_htm = col_htm + '      <td' + tdstyle + '>' + col + '</td>\n'
+            col_htm = col_htm + '      <td' + tdstyle + '>' + col + '</td>\n'
         if (int(row[0]) % 2) == 0:
             htmrv = htmrv + '    <tr>\n' + col_htm + '    </tr>\n'
         else:
             htmrv = htmrv + '    <tr class=\"shaded_row\">\n' + col_htm + '    </tr>\n'
         last_cons = int(row[0])
         row_no = row_no + 1
-    htmrv = htmrv + '  </tbody>\n</table>\n<h3>' + str(len(output_vehicle_list)) + ' vehicles in total in this scenario.</h3>'
+    htmrv = htmrv + '  </tbody>\n</table>\n<h3>' + str(
+        len(output_vehicle_list)) + ' vehicles in total in this scenario.</h3>'
     htmas = '\n<h1>List of rail vehicle assets used</h1>\n<table border=\"1\" class=\"dataframe\">\n  <thead>\n' \
             '    <tr style=\"text-align: right;\">\n      <th>Provider</th>\n      <th>Product</th>\n    </tr>\n' \
             '  </thead>\n  <tbody>\n'
@@ -3085,12 +3100,16 @@ h3,thead {
     htp = ''
     if scenarioProps:
         htp = '\n<h1>Scenario properties</h1>\n<table border=\"1\" class=\"dataframe\" style=\"text-align: left;\">\n' \
-                '    <tr>\n      <th>Title</th>\n      <td>' + str(scenarioProps[0]) + '</td>\n    </tr>\n' \
-                '    <tr>\n      <th>Description</th>\n      <td>' + str(scenarioProps[1]) + '</td>\n    </tr>\n' \
-                '    <tr>\n      <th>Briefing</th>\n      <td>' + str(scenarioProps[2]) + '</td>\n    </tr>\n' \
-                '    <tr>\n      <th>Start From</th>\n      <td>' + str(scenarioProps[3]) + '</td>\n    </tr>\n' \
-                '    <tr>\n      <th>Route</th>\n      <td>' + str(scenarioProps[4]) + '</td>\n    </tr>\n' \
-                '  </table>\n'
+              '    <tr>\n      <th>Title</th>\n      <td>' + str(scenarioProps[0]) + '</td>\n    </tr>\n' \
+                                                                                     '    <tr>\n      <th>Description</th>\n      <td>' + str(
+            scenarioProps[1]) + '</td>\n    </tr>\n' \
+                                '    <tr>\n      <th>Briefing</th>\n      <td>' + str(
+            scenarioProps[2]) + '</td>\n    </tr>\n' \
+                                '    <tr>\n      <th>Start From</th>\n      <td>' + str(
+            scenarioProps[3]) + '</td>\n    </tr>\n' \
+                                '    <tr>\n      <th>Route</th>\n      <td>' + str(
+            scenarioProps[4]) + '</td>\n    </tr>\n' \
+                                '  </table>\n'
     htm = htmhead + htp + htmas + htmrv + '</body>\n</html>\n'
     html_file_path.touch()
     html_file_path.write_text(htm)
@@ -3103,7 +3122,7 @@ if __name__ == "__main__":
         os.chdir(Path(railworks_path, 'Content', 'Routes'))
     except:
         sg.PopupError(str(Path(railworks_path, 'Content', 'Routes')) + ' not found. Please go into Settings and check '
-                                                              'the path to the RailWorks directory is correct')
+                                                                       'the path to the RailWorks directory is correct')
     while True:
         event, values = window.read()
         if event == 'Exit' or event == sg.WIN_CLOSED:
@@ -3207,44 +3226,45 @@ if __name__ == "__main__":
                     size=(72, 0))],
                 [sg.Combo(fsafta_opts, auto_size_text=True, default_value=fsafta_variant, key='fsafta_variant',
                           readonly=True),
-                sg.Combo(fsafta_cube, auto_size_text=True, default_value=fsafta_hc, key='fsafta_hc', readonly=True)],
+                 sg.Combo(fsafta_cube, auto_size_text=True, default_value=fsafta_hc, key='fsafta_hc', readonly=True)],
                 [sg.HSeparator(color='#aaaaaa')],
                 [sg.Text(
                     'If HTO/HTV wagons are found, use data panels: pre-TOPS only, TOPS only, or mixed:',
                     size=(72, 0))],
                 [sg.Combo(htx_eras, auto_size_text=True, default_value=htx_era, key='htx_era', readonly=True),
                  sg.Text('% chance wagon is dirty:'), sg.Combo(dirty_probabilities, auto_size_text=True,
-                                                             default_value=htx_dirty_probability,
-                                                             key='htx_dirty_probability', readonly=True)],
+                                                               default_value=htx_dirty_probability,
+                                                               key='htx_dirty_probability', readonly=True)],
                 [sg.HSeparator(color='#aaaaaa')],
                 [sg.Text(
                     'If HAA wagons are found, replace them with the following type(s):',
                     size=(72, 0))],
                 [sg.Combo(mgr_types, auto_size_text=True, default_value=mgr_variant, key='mgr_variant', readonly=True),
-                sg.Text('Livery:'), sg.Combo(mgr_liveries, auto_size_text=True, default_value=mgr_livery,
-                                             key='mgr_livery', readonly=True)],
+                 sg.Text('Livery:'), sg.Combo(mgr_liveries, auto_size_text=True, default_value=mgr_livery,
+                                              key='mgr_livery', readonly=True)],
                 [sg.HSeparator(color='#aaaaaa')],
                 [sg.Text(
                     'If VDA wagons are found, replace them with the following livery, and choose the percentage '
                     'probability that a swapped wagon will have a white painted roof:',
                     size=(72, 0))],
                 [sg.Text('Livery:'), sg.Combo(vda_liveries, auto_size_text=True, default_value=vda_livery,
-                        key='vda_livery', readonly=True), sg.Text('% chance roof is white:'),
-                        sg.Combo(vda_whiteroof_probabilities, auto_size_text=True,
-                        default_value=vda_whiteroof_probability, key='vda_whiteroof_probability', readonly=True),
-                        sg.Text('% chance van is dirty:'), sg.Combo(dirty_probabilities, auto_size_text=True,
-                        default_value=vda_dirty_probability, key='vda_dirty_probability', readonly=True)],
+                                              key='vda_livery', readonly=True), sg.Text('% chance roof is white:'),
+                 sg.Combo(vda_whiteroof_probabilities, auto_size_text=True,
+                          default_value=vda_whiteroof_probability, key='vda_whiteroof_probability', readonly=True),
+                 sg.Text('% chance van is dirty:'), sg.Combo(dirty_probabilities, auto_size_text=True,
+                                                             default_value=vda_dirty_probability,
+                                                             key='vda_dirty_probability', readonly=True)],
                 [sg.HSeparator(color='#aaaaaa')],
                 [sg.Text('HEA and some VDA wagons can have either steady or flashing (1970s onwards) red tail lamp '
-                    'styles. \nIn the event there is a choice, which type would you prefer to see:'),
+                         'styles. \nIn the event there is a choice, which type would you prefer to see:'),
                  sg.Combo(tail_opts, auto_size_text=True, default_value=tail_style, key='tail_style', readonly=True)],
                 [sg.HSeparator(color='#aaaaaa')],
                 [sg.Text("Save a report of vehicles in the scenario"),
-                    sg.Combo(report_opts, auto_size_text=True, default_value=save_report, key='save_report', readonly=True,
-                             tooltip='You may choose to save a report listing all the rail vehicles (and their numbers)'
-                                     ' in the scenario, in .html format, alongside the scenario output file. Optionally,'
-                                     ' the report can include details of both the original vehicle and the vehicle after'
-                                     ' processing by this application.')],
+                 sg.Combo(report_opts, auto_size_text=True, default_value=save_report, key='save_report', readonly=True,
+                          tooltip='You may choose to save a report listing all the rail vehicles (and their numbers)'
+                                  ' in the scenario, in .html format, alongside the scenario output file. Optionally,'
+                                  ' the report can include details of both the original vehicle and the vehicle after'
+                                  ' processing by this application.')],
                 [sg.Button('Save changes'), sg.Button('Cancel')]
             ]
             locwindow = sg.Window('RSSwapTool - Settings', loclayout)
@@ -3343,7 +3363,8 @@ if __name__ == "__main__":
                     # intermediate file
                     if not cmd.is_file():
                         sg.popup('serz.exe could not be found in ' + str(railworks_path) + '. Is this definitely your '
-                                        'RailWorks folder?', 'This application will now exit.')
+                                                                                           'RailWorks folder?',
+                                 'This application will now exit.')
                         sys.exit()
                     inFile = scenarioPath.parent / Path(str(scenarioPath.stem) + '.xml')
                     inFileW = str(PureWindowsPath(inFile))
@@ -3351,7 +3372,7 @@ if __name__ == "__main__":
                     if platform.system() == 'Windows':
                         # Operating system is Microsoft Windows
                         p1 = subprocess.Popen([str(cmd), scenarioPathW, '/xml:' + inFileW], stdout=subprocess.PIPE)
-                    elif (platform.system() == 'Linux' and platform.release()[-5:-1] == 'WSL2'):
+                    elif platform.system() == 'Linux' and platform.release()[-5:-1] == 'WSL2':
                         # Operating system is Windows Subsystem Linux (WSL2)
                         # Linux-style pathnames can be converted to windows style with drive letters
                         inFileW = inFileW[5] + ':' + inFileW[6:]
@@ -3364,7 +3385,7 @@ if __name__ == "__main__":
                         except NameError:
                             wine_executable = '/usr/bin/wine'
                         p1 = subprocess.Popen([wine_executable, str(cmd), scenarioPathW, '/xml:' +
-                            inFileW], stdout=subprocess.PIPE)
+                                               inFileW], stdout=subprocess.PIPE)
                     p1.wait()
                     # Uncomment the line below to see the output of the serz.exe command
                     # serz_output = 'serz.exe ' + p1.communicate()[0].decode('ascii')
@@ -3393,7 +3414,7 @@ if __name__ == "__main__":
                     if platform.system() == 'Windows':
                         # Operating system is Microsoft Windows
                         p2 = subprocess.Popen([str(cmd), xmlFileW, '/bin:' + binFileW], stdout=subprocess.PIPE)
-                    elif (platform.system() == 'Linux' and platform.release()[-5:-1] == 'WSL2'):
+                    elif platform.system() == 'Linux' and platform.release()[-5:-1] == 'WSL2':
                         # Operating system is Windows Subsystem Linux (WSL2)
                         # Linux-style pathnames can be converted to windows style with drive letters
                         binFileW = binFileW[5] + ':' + binFileW[6:]

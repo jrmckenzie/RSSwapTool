@@ -32,8 +32,8 @@ from pathlib import PureWindowsPath
 wine_executable = '/usr/bin/wine'
 
 # Initialise the script, set the look and feel and get the configuration
-version_number = '1.0.9'
-version_date = '8 April 2023'
+version_number = '1.0.10'
+version_date = '6 August 2023'
 vehicle_list = []
 railworks_path = ''
 sg.LOOK_AND_FEEL_TABLE['Railish'] = {'BACKGROUND': '#00384F', 'TEXT': '#FFFFFF', 'INPUT': '#FFFFFF',
