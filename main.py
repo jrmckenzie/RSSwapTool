@@ -2,7 +2,7 @@
 #
 #     RSSwapTool - A script to swap in up to date or enhanced rolling stock
 #     for older versions of stock in Train Simulator scenarios.
-#     Copyright (C) 2023 James McKenzie jrmknz@yahoo.co.uk
+#     Copyright (C) 2025 James McKenzie jrmknz@yahoo.co.uk
 #
 #     This program is free software: you can redistribute it and/or modify
 #     it under the terms of the GNU General Public License as published by
@@ -44,8 +44,8 @@ from data_file import hha_e_wagons, hha_l_wagons, HTO_141_numbers, HTO_143_numbe
 wine_executable = '/usr/bin/wine'
 
 # Initialise the script, set the look and feel and get the configuration
-version_number = '1.0.10'
-version_date = '6 August 2023'
+version_number = '1.0.11'
+version_date = '1 December 2025'
 rv_list = []
 rv_pairs = []
 output_vehicle_list = []
@@ -677,7 +677,7 @@ def direction_flip(flipped, followers):
 
 def add_taillamp(tailmarker, this_blueprint, bp_suffix, this_name, name_suffix, flipped, followers):
     # The vehicle is at one end of the consist and should have a red tail light
-    this_blueprint = re.sub('\.xml', bp_suffix, this_blueprint, flags=re.IGNORECASE)
+    this_blueprint = re.sub('.xml', bp_suffix, this_blueprint, flags=re.IGNORECASE)
     this_name = this_name + name_suffix
     # If the vehicle is at the top of the consist it will need to be flipped to have the tail
     # light facing the right direction
@@ -813,9 +813,9 @@ def fsa_replace(provider, product, blueprint, name, number, loaded, flipped, fol
                         w = ['FL', '_2020', '(2020)']
                     provider.text = this_vehicle[3]
                     product.text = this_vehicle[4]
-                    blueprint.text = re.sub('RFD|FL', w[0].upper(), re.sub('_20[0-2]0', w[1], this_vehicle[5]),
+                    blueprint.text = re.sub("RFD|FL", w[0].upper(), re.sub("_20[0-2]0", w[1], this_vehicle[5]),
                                             flags=re.IGNORECASE)
-                    name.text = re.sub('RFD|FL', w[0], re.sub('\(20[0-2]0\)', w[2], this_vehicle[6]),
+                    name.text = re.sub("RFD|FL", w[0], re.sub('(20[0-2]0)', w[2], this_vehicle[6]),
                                        flags=re.IGNORECASE)
                     rv_orig = number.text
                     if 'eFalse' in loaded.text:
@@ -866,9 +866,9 @@ def fta_replace(provider, product, blueprint, name, number, loaded):
                         w = ['FL', '_2020', '(2020)']
                     provider.text = this_vehicle[3]
                     product.text = this_vehicle[4]
-                    blueprint.text = re.sub('RFD|FL', w[0].upper(), re.sub('_20[0-2]0', w[1], this_vehicle[5]),
+                    blueprint.text = re.sub("RFD|FL", w[0].upper(), re.sub("_20[0-2]0", w[1], this_vehicle[5]),
                                             flags=re.IGNORECASE)
-                    name.text = re.sub('RFD|FL', w[0], re.sub('\(20[0-2]0\)', w[2], this_vehicle[6]),
+                    name.text = re.sub("RFD|FL", w[0], re.sub('(20[0-2]0)', w[2], this_vehicle[6]),
                                        flags=re.IGNORECASE)
                     rv_orig = number.text
                     if 'eFalse' in loaded.text:
@@ -1919,10 +1919,11 @@ def c66_replace(provider, product, blueprint, name, number):
             if this_vehicle[1] in product.text:
                 bp = re.search(this_vehicle[2], blueprint.text, flags=re.IGNORECASE)
                 if bp:
+                    (w_blueprint, w_name) = set_weathering(3, this_vehicle)
                     provider.text = this_vehicle[3]
                     product.text = this_vehicle[4]
-                    blueprint.text = this_vehicle[5]
-                    name.text = this_vehicle[6]
+                    blueprint.text = w_blueprint
+                    name.text = w_name
                     rv_orig = rv_num = number.text
                     nm = re.search('(66[0-9]{3})', number.text)
                     if nm:
