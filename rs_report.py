@@ -1,6 +1,6 @@
 #     RSSwapTool - A script to swap in up to date or enhanced rolling stock
 #     for older versions of stock in Train Simulator scenarios.
-#     Copyright (C) 2022 James McKenzie jrmknz@yahoo.co.uk
+#     Copyright © 2026 James McKenzie jrmknz@yahoo.co.uk
 #
 #     This program is free software: you can redistribute it and/or modify
 #     it under the terms of the GNU General Public License as published by
@@ -21,7 +21,7 @@ import os
 import subprocess
 import platform
 import configparser
-import PySimpleGUI as sg
+import FreeSimpleGUI as sg
 import webbrowser
 from pathlib import Path
 from pathlib import PureWindowsPath
@@ -32,8 +32,8 @@ from pathlib import PureWindowsPath
 wine_executable = '/usr/bin/wine'
 
 # Initialise the script, set the look and feel and get the configuration
-version_number = '1.0.10'
-version_date = '6 August 2023'
+version_number = '1.0.12'
+version_date = '12 February 2026'
 vehicle_list = []
 railworks_path = ''
 sg.LOOK_AND_FEEL_TABLE['Railish'] = {'BACKGROUND': '#00384F', 'TEXT': '#FFFFFF', 'INPUT': '#FFFFFF',
@@ -49,7 +49,7 @@ layout = [
     [sg.FileBrowse('Select scenario file to examine', key='Scenario_xml', tooltip='Locate the scenario .bin or .xml '
                                                                                   'file you wish to examine')],
     [sg.Button('Examine!'), sg.Button('Settings'), sg.Button('About'), sg.Button('Exit')],
-    [sg.Text('© 2023 JR McKenzie', font='Helvetica 7')],
+    [sg.Text('© ' + version_date[-4:] + ' JR McKenzie', font='Helvetica 7')],
 ]
 
 # Read configuration and find location of RailWorks folder, or ask user to set it
@@ -72,14 +72,14 @@ else:
                 if values['RWloc'] is not None and len(values['RWloc']) > 1:
                     break
             else:
-                sg.Popup('You must specify the path to your RailWorks folder for this application to work. '
+                sg.popup('You must specify the path to your RailWorks folder for this application to work. '
                          'The application will now close.')
                 sys.exit()
         elif event == 'Save':
             if len(values['RWloc']) > 1:
                 railworks_path = values['RWloc']
             else:
-                sg.Popup('Please browse for the path to your RailWorks folder and try again.')
+                sg.popup('Please browse for the path to your RailWorks folder and try again.')
                 continue
             if not config.has_section('RailWorks'):
                 config.add_section('RailWorks')
@@ -305,11 +305,11 @@ if __name__ == "__main__":
         if event == 'Exit' or event == sg.WIN_CLOSED:
             break
         elif event == 'About':
-            sg.Popup('About RSReportTool',
+            sg.popup('About RSReportTool',
                      'Tool for listing rolling stock in Train Simulator (Dovetail Games) scenarios, bundled with '
                      'RSSwapTool to provide a standalone tool to examine scenarios and list rolling stock.',
                      'Version ' + version_number + ' / ' + version_date,
-                     'Copyright 2023 JR McKenzie (jrmknz@yahoo.co.uk)', 'https://github.com/jrmckenzie/RSSwapTool',
+                     'Copyright © ' + version_date[-4:] + ' JR McKenzie (jrmknz@yahoo.co.uk)', 'https://github.com/jrmckenzie/RSSwapTool',
                      'This program is free software: you can redistribute it and / or modify '
                      'it under the terms of the GNU General Public License as published by '
                      'the Free Software Foundation, either version 3 of the License, or '

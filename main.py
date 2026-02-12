@@ -2,7 +2,7 @@
 #
 #     RSSwapTool - A script to swap in up to date or enhanced rolling stock
 #     for older versions of stock in Train Simulator scenarios.
-#     Copyright (C) 2025 James McKenzie jrmknz@yahoo.co.uk
+#     Copyright © 2026 James McKenzie jrmknz@yahoo.co.uk
 #
 #     This program is free software: you can redistribute it and/or modify
 #     it under the terms of the GNU General Public License as published by
@@ -26,7 +26,7 @@ import os
 import subprocess
 import platform
 import configparser
-import PySimpleGUI as sg
+import FreeSimpleGUI as sg
 import webbrowser
 from pathlib import Path
 from pathlib import PureWindowsPath
@@ -44,8 +44,8 @@ from data_file import hha_e_wagons, hha_l_wagons, HTO_141_numbers, HTO_143_numbe
 wine_executable = '/usr/bin/wine'
 
 # Initialise the script, set the look and feel and get the configuration
-version_number = '1.0.11'
-version_date = '1 December 2025'
+version_number = '1.0.12'
+version_date = '12 February 2026'
 rv_list = []
 rv_pairs = []
 output_vehicle_list = []
@@ -103,14 +103,14 @@ else:
                 if values['RWloc'] is not None and len(values['RWloc']) > 1:
                     break
             else:
-                sg.Popup('You must specify the path to your RailWorks folder for this application to work. '
+                sg.popup('You must specify the path to your RailWorks folder for this application to work. '
                          'The application will now close.')
                 sys.exit()
         elif event == 'Save':
             if values['RWloc'] is not None and len(values['RWloc']) > 1:
                 railworks_path = values['RWloc']
             else:
-                sg.Popup('Please browse for the path to your RailWorks folder and try again.')
+                sg.popup('Please browse for the path to your RailWorks folder and try again.')
                 continue
             if not config.has_section('RailWorks'):
                 config.add_section('RailWorks')
@@ -239,7 +239,7 @@ vp_blue_47_db = import_data_from_csv('tables/Class47BRBlue_numbers.csv')
 # Set the layout of the GUI
 left_column = [
     [sg.Text('RSSwapTool', font='Helvetica 16'), sg.Text('v' + version_number, font='Helvetica 8')],
-    [sg.Text('© 2023 JR McKenzie', font='Helvetica 7')],
+    [sg.Text('© ' + version_date[-4:] + ' JR McKenzie', font='Helvetica 7')],
     [sg.FileBrowse('Select scenario file to process', key='Scenario_xml', tooltip='Locate the scenario .bin or .xml '
                                                                                   'file you wish to process')],
     [sg.Text('Tick the boxes below to choose the\nsubstitutions you would like to make.')],
@@ -653,6 +653,14 @@ def set_weathering(this_weather_variant, this_vehicle):
         return this_vehicle[5].replace('W1', weather), this_vehicle[6].replace('W1', weather)
     return False
 
+def set_hstweathering(this_weather_variant, this_vehicle):
+    if this_weather_variant == 2:
+        weather = 'W' + str(random.randint(1, 2))
+        return this_vehicle[5].replace('W2', weather), this_vehicle[6].replace('W2', weather)
+    elif this_weather_variant == 3:
+        weather = 'W' + str(random.randint(1, 3))
+        return this_vehicle[5].replace('W1', weather), this_vehicle[6].replace('W1', weather)
+    return False
 
 def get_ap_name_from_bp(this_vehicle_db, this_bp):
     for i in range(0, len(this_vehicle_db)):
@@ -1651,14 +1659,14 @@ def hst_replace(provider, product, blueprint, name, number):
                     product.text = this_vehicle[4]
                     blueprint.text = this_vehicle[5]
                     name.text = this_vehicle[6]
+                    if blueprint.text == 'HSTPack01':
+                        (blueprint.text, name.text) = set_hstweathering(3, this_vehicle)
                     rv_orig = number.text
                     # Now extract the vehicle number
-                    if 'Class43' in this_vehicle[5]:
-                        nm = re.search('(.?43[0-9]{3}.*)', number.text)
+                    if '4' in this_vehicle[5]:
+                        nm = re.search('(.?4[0-8][0-9]{3})', number.text)
                         if nm:
-                            rv_num = dcsv_gethstloco(
-                                Path(railworks_path, 'Assets', this_vehicle[3], this_vehicle[4],
-                                     this_vehicle[7].replace('\\', '/')), number.text)
+                            rv_num = nm.group(1) + this_vehicle[7]
                             number.text = str(rv_num)
                             rv_list.append(number.text)
                             rv_pairs.append([rv_orig, number.text])
@@ -1932,8 +1940,6 @@ def c66_replace(provider, product, blueprint, name, number):
                             Path(railworks_path, 'Assets', this_vehicle[3], this_vehicle[4],
                                  this_vehicle[7].replace('\\', '/')), rv_found, '([0-9]{5})(.*)')
                     # Set number
-                    if len(rv_num) < 6:
-                        rv_num = rv_num + 'x'
                     number.text = rv_num
                     rv_list.append(number.text)
                     rv_pairs.append([rv_orig, number.text])
@@ -3129,10 +3135,10 @@ if __name__ == "__main__":
         if event == 'Exit' or event == sg.WIN_CLOSED:
             break
         elif event == 'About':
-            sg.Popup('About RSSwapTool',
+            sg.popup('About RSSwapTool',
                      'Tool for swapping rolling stock in Train Simulator (Dovetail Games) scenarios',
                      'Version ' + version_number + ' / ' + version_date,
-                     'Copyright 2023 JR McKenzie (jrmknz@yahoo.co.uk)', 'https://github.com/jrmckenzie/RSSwapTool',
+                     'Copyright © ' + version_date[-4:] + ' JR McKenzie (jrmknz@yahoo.co.uk)', 'https://github.com/jrmckenzie/RSSwapTool',
                      'This program is free software: you can redistribute it and / or modify '
                      'it under the terms of the GNU General Public License as published by '
                      'the Free Software Foundation, either version 3 of the License, or '
