@@ -1659,10 +1659,18 @@ def hst_replace(provider, product, blueprint, name, number):
                     product.text = this_vehicle[4]
                     blueprint.text = this_vehicle[5]
                     name.text = this_vehicle[6]
-                    if blueprint.text == 'HSTPack01':
-                        (blueprint.text, name.text) = set_hstweathering(3, this_vehicle)
                     rv_orig = number.text
-                    # Now extract the vehicle number
+                    if product.text == 'HSTPack01':
+                        (blueprint.text, name.text) = set_hstweathering(3, this_vehicle)
+                        # Power car vehicle number will be 43***
+                        nm = re.search('(43[0-9]{3})', number.text)
+                        if nm:
+                            rv_num = nm.group(1) + this_vehicle[7]
+                            number.text = str(rv_num)
+                            rv_list.append(number.text)
+                            rv_pairs.append([rv_orig, number.text])
+                        return True
+                    # This is not a power car so extract the coach vehicle number
                     if '4' in this_vehicle[5]:
                         nm = re.search('(.?4[0-8][0-9]{3})', number.text)
                         if nm:

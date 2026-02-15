@@ -1228,7 +1228,9 @@ HST_set,Kuju,RailSimulator,RailVehicles\Diesel\HST\VIRGIN_HST\Mk3TSO\mk3tgs_ic.x
 HST_set,Kuju,RailSimulator,RailVehicles\Diesel\HST\VIRGIN_HST\Mk3TSO\mk3tso_ic.xml,AP,BRMk3Pack01,RailVehicles\Mk3Coaches\VT_AP\Mk3_TS_2.xml,AP Mk3 VTXC TS,;OHL=2;CDL=1;L=4
 HST_set,Kuju,RailSimulator,RailVehicles\Diesel\HST\VIRGIN_HST_AP\Class43\class43.xml,AP,HSTPack01,RailVehicles\Liveries\VT\Class43_W1\43_W1.xml,AP 43 VTXC2 (W1),;CF=VTXC
 HST_set,Kuju,RailSimulator,RailVehicles\Diesel\HST\VT_AP\Class43\class43.xml,AP,HSTPack01,RailVehicles\Liveries\VT\Class43_W1\43_W1.xml,AP 43 VTXC2 (W1),;CF=VTXC
+HST_set,Kuju,RailSimulator,RailVehicles\Diesel\HST\VT_AP\Class43\class43_nd.xml,AP,HSTPack01,RailVehicles\Liveries\VT\Class43_W1\43_W1.xml,AP 43 VTXC2 (W1),;CF=VTXC
 HST_set,Kuju,RailSimulator,RailVehicles\Diesel\HST\VT_AP\Class43Buffers\class43.xml,AP,HSTPack01,RailVehicles\Liveries\VT\Class43_W1\43_W1.xml,AP 43 VTXC2 (W1),;CF=VTXC
+HST_set,Kuju,RailSimulator,RailVehicles\Diesel\HST\VT_AP\Class43Buffers\class43_nd.xml,AP,HSTPack01,RailVehicles\Liveries\VT\Class43_W1\43_W1.xml,AP 43 VTXC2 (W1),;CF=VTXC
 HST_set,Kuju,RailSimulator,RailVehicles\Diesel\HST\VT_AP\Mk3\1\2\Mk3TFO\mk3tfo_ic.xml,AP,BRMk3Pack01,RailVehicles\Mk3Coaches\VT_AP\Mk3_TF_2.xml,AP Mk3 VTXC TF,;OHL=2;CDL=1;L=4
 HST_set,Kuju,RailSimulator,RailVehicles\Diesel\HST\VT_AP\Mk3\1\2\Mk3TRFB\mk3trfb_ic.xml,AP,BRMk3Pack01,RailVehicles\Mk3Coaches\VT_AP\Mk3_TRSB_2.xml,AP Mk3 VTXC TRSB,;OHL=2;CDL=1;L=4
 HST_set,Kuju,RailSimulator,RailVehicles\Diesel\HST\VT_AP\Mk3\1\2\Mk3TSO\mk3tgs_ic.xml,AP,BRMk3Pack01,RailVehicles\Mk3Coaches\VT_AP\Mk3_TGS_2.xml,AP Mk3 VTXC TGS,;OHL=2;CDL=1;L=4
