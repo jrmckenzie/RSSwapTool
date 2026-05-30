@@ -32,8 +32,8 @@ from pathlib import PureWindowsPath
 wine_executable = '/usr/bin/wine'
 
 # Initialise the script, set the look and feel and get the configuration
-version_number = '1.0.12'
-version_date = '12 February 2026'
+version_number = '1.0.13'
+version_date = '30 May 2026'
 vehicle_list = []
 railworks_path = ''
 sg.LOOK_AND_FEEL_TABLE['Railish'] = {'BACKGROUND': '#00384F', 'TEXT': '#FFFFFF', 'INPUT': '#FFFFFF',
@@ -148,9 +148,14 @@ def parse_xml(xml_file):
                 name = coentity.find('Name')
                 number = coentity.find('Component/*/UniqueNumber')
                 loaded = coentity.find('Component/cCargoComponent/IsPreLoaded')
+                flipped = coentity.find('Component/cWagon/Flipped')
+                if flipped is not None:
+                    flipval = flipped.text
+                else:
+                    flipval = '-'
                 vehicle_list.append(
                     [str(consist_nr), provider.text, product.text, blueprint.text, name.text, number.text, loaded.text,
-                     service, playerdriven])
+                     flipval, service, playerdriven])
         consist_nr += 1
         progress_bar.UpdateBar(consist_nr, len(consists))
     # All necessary elements processed, now close progress bar window and return the new xml tree object
@@ -235,7 +240,7 @@ h3,thead {
     htmrv = '<h1>Rail vehicle list</h1>\n<table border=\'1\' class=\'dataframe\'>\n  <thead>\n' \
             '    <tr style=\'text-align: right;\'>\n      <th>Consist</th>\n      <th>Provider</th>\n' \
             '      <th>Product</th>\n      <th>Blueprint</th>\n      <th>Name</th>\n      <th>Number</th>\n' \
-            '      <th>Loaded</th>\n    </tr>\n  </thead>\n  <tbody>\n'
+            '      <th>Loaded</th>\n      <th>Flipped</th>\n    </tr>\n  </thead>\n  <tbody>\n'
     unique_assets = []
     last_cons = -1
     col_no = 0
@@ -254,11 +259,11 @@ h3,thead {
             tdstyle = ''
         else:
             tdstyle = ' class="missing"'
-        cname = '<i>' + str(row[7]) + '</i>'
-        if row[8] is True:
+        cname = '<i>' + str(row[8]) + '</i>'
+        if row[9] is True:
             # Consist is driven by the player - make the name bold and append (Player driven)
             cname = '<b>' + cname + '</b> (Player driven)'
-        for col in row[0:7]:
+        for col in row[0:8]:
             col_no += 1
             if rowspan > 0 and col_no == 1:
                 col_htm = col_htm + '      <td rowspan=' + str(rowspan) + '>' + cname + '</td>\n'

@@ -541,6 +541,14 @@ c168_chiltern = {'a': 'o', 'b': 'b', 'c': 'c', 'd': 'd', 'e': 'm', 'f': 's', 'g'
                  'E': 'a', 'F': 'a', 'G': 'a', 'H': 'a', 'I': 'a', 'J': 'a', 'K': 'a', 'L': 'a', 'M': 'a', 'N': 'a',
                  'O': 'a', 'P': 'o', 'Q': 'a', 'R': 'a', 'S': 'a', 'T': 'a', 'U': 'a', 'V': 'a', 'W': 'a', 'X': 'a',
                  'Y': 'a', 'Z': 'A'}
+# Class 220 DTG
+c220_dtg = {'A': 'ABD', 'B': 'DEE', 'C': 'GLC', 'D': 'EDB', 'E': 'NCL', 'F': 'DAR', 'G': 'YRK', 'H': 'BHM', 'I': 'BRI',
+            'J': '0', 'K': 'PGN', 'L': 'EXD', 'M': 'PNZ', 'N': 'PLY', 'O': 'SOU', 'P': 'GLD', 'Q': 'RDG', 'R': 'GTW',
+            'S': 'MAN', 'T': 'BMH', 'U': '0', 'V': 'CNM', 'W': 'BSK', 'X': 'OXF', 'Y': 'DBY', 'Z': 'BTN', '!': 'OOS' }
+# Class 221 DTG (NWC, WCML London Euston)
+c221_dtg = {'A': 'ABD', 'B': 'BNG', 'C': 'BSK', 'D': '0', 'E': 'BHM', 'F': 'BPN', 'G': 'BMH', 'H': 'BTN', 'I': 'BRI',
+            'J': 'CAR', 'K': 'CNM', 'L': 'CTR', 'M': 'CRE', 'N': 'DBY', 'O': 'DEE', 'P': 'EDB', 'Q': 'EXD', 'R': 'GTW',
+            'S': 'GLC', 'T': 'GLD', 'U': 'HHD', 'V': 'LAN', 'W': 'LDS', 'X': 'LIV', 'Y': 'LLD', 'Z': 'EUS', '!': 'OOS' }
 # Class 350
 c350_lb_ftpe = {'A': '1', 'B': '0', 'C': '2', 'D': '3', 'E': '4', 'F': '0', 'G': '5', 'H': '6', 'I': '7', 'J': '0',
                 'K': '8', 'L': '9', 'M': '10', 'N': '11', 'O': '12', 'P': '0', 'Q': '0', 'R': '13', 'S': '0'}

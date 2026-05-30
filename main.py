@@ -36,7 +36,8 @@ from data_file import hha_e_wagons, hha_l_wagons, HTO_141_numbers, HTO_143_numbe
     ap40headcodes_62_69, rsc20headcodes_62_69, c168_chiltern, c170_ex_ar_aga_ap, c170_lm, c170_ct_xc, c170_ar23, \
     c170_scotrail, c170_ftpe, c170_ga_hull, c170_mml, c171_southern, c350_lb_ftpe, c365_ecmls_nse, c365_apcxse, \
     c450_gu_swt, c465_se, c375_dtg_pack, c377_lb_se, c377_lg_sn, c377_fcc, c170_bp_name_lookup, c375_dmos_lookup, \
-    c456_nse, c456_southern, c319_dest, c350_lm_wcmls, c375_southern_wcmls, c86_TOPS_HC, c350_lm_cc
+    c456_nse, c456_southern, c319_dest, c350_lm_wcmls, c375_southern_wcmls, c86_TOPS_HC, c350_lm_cc, c220_dtg, \
+    c221_dtg
 
 # If you want to run this script on Linux you must enter the path to the wine executable. You need wine in order to
 # run the serz.exe utility which converts between .bin and .xml scenario files.
@@ -44,8 +45,8 @@ from data_file import hha_e_wagons, hha_l_wagons, HTO_141_numbers, HTO_143_numbe
 wine_executable = '/usr/bin/wine'
 
 # Initialise the script, set the look and feel and get the configuration
-version_number = '1.0.12'
-version_date = '12 February 2026'
+version_number = '1.0.13'
+version_date = '30 May 2026'
 rv_list = []
 rv_pairs = []
 output_vehicle_list = []
@@ -1648,7 +1649,7 @@ def ihh_c56_replace(provider, product, blueprint, name, number):
     return False
 
 
-def hst_replace(provider, product, blueprint, name, number):
+def hst_replace(provider, product, blueprint, name, number, flipped):
     for i in range(0, len(vehicle_db['HST_set'])):
         this_vehicle = vehicle_db['HST_set'][i]
         if this_vehicle[0] in provider.text:
@@ -1671,13 +1672,18 @@ def hst_replace(provider, product, blueprint, name, number):
                             rv_pairs.append([rv_orig, number.text])
                         return True
                     # This is not a power car so extract the coach vehicle number
-                    if '4' in this_vehicle[5]:
+                    if '4' in number.text:
                         nm = re.search('(.?4[0-8][0-9]{3})', number.text)
                         if nm:
                             rv_num = nm.group(1) + this_vehicle[7]
                             number.text = str(rv_num)
                             rv_list.append(number.text)
                             rv_pairs.append([rv_orig, number.text])
+                    if 'Mk3_TGS' in blueprint.text:
+                        if flipped.text == '0':
+                            flipped.text = '1'
+                        else:
+                            flipped.text = '0'
                     return True
     return False
 
@@ -2358,18 +2364,32 @@ def c221_replace(provider, product, blueprint, name, number):
                 bp = re.search(this_vehicle[2], blueprint.text, flags=re.IGNORECASE)
                 if bp:
                     rv_orig = rv_num = number.text
-                    nm_driven = re.search('^..([0-9]{6})([0-9]{5})$', number.text)
-                    nm_coach = re.search('^..([0-9]{5})$', number.text)
-                    if nm_driven:
-                        # Driving vehicle found.
-                        rv_num = nm_driven.group(1) + nm_driven.group(2)
-                    elif nm_coach:
-                        # Coach found
-                        rv_num = '221012' + nm_coach.group(1)
-                    # Swap vehicle and set number / destination (where possible)
+                    destination = ';D=0'
+                    if provider.text == 'DTG':
+                        if product.text == 'Class220Pack01':
+                            nm = re.search('.([A-Z!])220.*', number.text)
+                            if nm:
+                                destination = ';D=' + get_destination(c220_dtg, nm.group(1), '0')
+                        elif product.text == 'NWC-CreweCaergybi' or product.text == 'NorthWalesCoast' or product.text == 'WCML-South':
+                            is_class_221 = re.search('SuperVoyager_Coach', blueprint.text)
+                            if is_class_221:
+                                nm = re.search('.([A-Z!])221.*', number.text)
+                                if nm:
+                                    destination = ';D=' + get_destination(c221_dtg, nm.group(1), '0')
+                    # Swap vehicle and set number / destination (where possible) from the DMSO
                     provider.text = this_vehicle[3]
                     product.text = this_vehicle[4]
                     blueprint.text = this_vehicle[5]
+                    is_220_DMSO = re.search('220_DMSO', this_vehicle[5])
+                    is_221_DMSO = re.search('221_DMSO', this_vehicle[5])
+                    if is_220_DMSO:
+                        unit_num = re.search('(220[0-9]{3})', rv_num)
+                        if unit_num:
+                            rv_num = unit_num.group(1) + destination + this_vehicle[7]
+                    elif is_221_DMSO:
+                        unit_num = re.search('(221[0-9]{3})', rv_num)
+                        if unit_num:
+                            rv_num = unit_num.group(1) + destination + this_vehicle[7]
                     name.text = this_vehicle[6]
                     number.text = str(rv_num)
                     rv_list.append(number.text)
@@ -2897,7 +2917,7 @@ def vehicle_replacer(provider, product, blueprint, name, number, loaded, flipped
         return True
     if values['Replace_User'] and user_replace(provider, product, blueprint, name):
         return True
-    if values['Replace_HST'] and hst_replace(provider, product, blueprint, name, number):
+    if values['Replace_HST'] and hst_replace(provider, product, blueprint, name, number, flipped):
         return True
     if values['Replace_C91'] and c91_replace(provider, product, blueprint, name):
         return True
