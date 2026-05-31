@@ -269,6 +269,8 @@ Mk1,JustTrains,Mark1Coach,RailVehicles\Passenger\Mk1_BSO\WR\Coach\jt_mk1_bso_bro
 Mk1,JustTrains,Mark1Coach,RailVehicles\Passenger\Mk1_BSO\WR\Coach\jt_mk1_bso_brown_riviera.xml,AP,BRMk1Pack01,RailVehicles\Mk1\CC\BSK\Mk1_BSK.xml,AP Mk1 BSK C&C,RailVehicles\Mk1\BC\BSK\Numbers.dcsv
 Mk1,JustTrains,Mark1Coach,RailVehicles\Passenger\Mk1_BSO\WR\Coach\jt_mk1_bso_brown_TBE.xml,AP,BRMk1Pack01,RailVehicles\Mk1\CC\BSK\Mk1_BSK.xml,AP Mk1 BSK C&C,RailVehicles\Mk1\BC\BSK\Numbers.dcsv
 Mk1,JustTrains,Mark1Coach,RailVehicles\Passenger\Mk1_BSO\WR\Coach\jt_mk1_bso_brown.xml,AP,BRMk1Pack01,RailVehicles\Mk1\CC\BSK\Mk1_BSK.xml,AP Mk1 BSK C&C,RailVehicles\Mk1\BC\BSK\Numbers.dcsv
+Mk1,JustTrains,Mark1Coach,RailVehicles\Passenger\Mk1_BSO\WR\Coach\jt_mk1_bso_brown_gwr.xml,AP,BRMk1Pack01,RailVehicles\Mk1\CC\BSK\Mk1_BSK.xml,AP Mk1 BSK C&C,RailVehicles\Mk1\BC\BSK\Numbers.dcsv
+Mk1,JustTrains,Mark1Coach,RailVehicles\Passenger\Mk1_BSO\WR\Coach\jt_mk1_bso_brown_gwr_riviera.xml,AP,BRMk1Pack01,RailVehicles\Mk1\CC\BSK\Mk1_BSK.xml,AP Mk1 BSK C&C,RailVehicles\Mk1\BC\BSK\Numbers.dcsv
 Mk1,JustTrains,Mark1Coach,RailVehicles\Passenger\Mk1_FO\BG\Coach\jt_mk1_fo_blue_grey.xml,AP,BRMk1Pack01,RailVehicles\Mk1\BRBlueGrey\FO\Mk1_FO.xml,AP Mk1 FO BR Blue/Grey,RailVehicles\Mk1\BRBlueGrey\FO\Numbers.dcsv
 Mk1,JustTrains,Mark1Coach,RailVehicles\Passenger\Mk1_FO\CC\Coach\jt_mk1_fo_crimson_cream_devonian.xml,AP,BRMk1Pack01,RailVehicles\Mk1\BC\FO\Mk1_FO.xml,AP Mk1 FO B&C,RailVehicles\Mk1\BC\FO\Numbers.dcsv
 Mk1,JustTrains,Mark1Coach,RailVehicles\Passenger\Mk1_FO\CC\Coach\jt_mk1_fo_crimson_cream.xml,AP,BRMk1Pack01,RailVehicles\Mk1\BC\FO\Mk1_FO.xml,AP Mk1 FO B&C,RailVehicles\Mk1\BC\FO\Numbers.dcsv
@@ -279,6 +281,8 @@ Mk1,JustTrains,Mark1Coach,RailVehicles\Passenger\Mk1_FO\SR\Coach\jt_mk1_fo_green
 Mk1,JustTrains,Mark1Coach,RailVehicles\Passenger\Mk1_FO\WCR\Coach\jt_mk1_fo_wcr.xml,AP,BRMk1Pack01,RailVehicles\Mk1\WCRC\FO\Mk1_FO.xml,AP Mk1 FO WCRC,RailVehicles\Mk1\WCRC\FO\Numbers.dcsv
 Mk1,JustTrains,Mark1Coach,RailVehicles\Passenger\Mk1_FO\WR\Coach\jt_mk1_fo_brown_riviera.xml,AP,BRMk1Pack01,RailVehicles\Mk1\CC\FO\Mk1_FO.xml,AP Mk1 FO C&C,RailVehicles\Mk1\BC\FO\Numbers.dcsv
 Mk1,JustTrains,Mark1Coach,RailVehicles\Passenger\Mk1_FO\WR\Coach\jt_mk1_fo_brown.xml,AP,BRMk1Pack01,RailVehicles\Mk1\CC\FO\Mk1_FO.xml,AP Mk1 FO C&C,RailVehicles\Mk1\BC\FO\Numbers.dcsv
+Mk1,JustTrains,Mark1Coach,RailVehicles\Passenger\Mk1_FO\WR\Coach\jt_mk1_fo_brown_gwr.xml,AP,BRMk1Pack01,RailVehicles\Mk1\CC\FO\Mk1_FO.xml,AP Mk1 FO C&C,RailVehicles\Mk1\BC\FO\Numbers.dcsv
+Mk1,JustTrains,Mark1Coach,RailVehicles\Passenger\Mk1_FO\WR\Coach\jt_mk1_fo_brown_gwr_riviera.xml,AP,BRMk1Pack01,RailVehicles\Mk1\CC\FO\Mk1_FO.xml,AP Mk1 FO C&C,RailVehicles\Mk1\BC\FO\Numbers.dcsv
 Mk1,JustTrains,Mark1Coach,RailVehicles\Passenger\Mk1_TSO\BG\Coach\jt_mk1_tso_blue_grey.xml,AP,BRMk1Pack01,RailVehicles\Mk1\BRBlueGrey\TSO\Mk1_TSO.xml,AP Mk1 TSO BR Blue/Grey,RailVehicles\Mk1\BRBlueGrey\TSO\Numbers.dcsv
 Mk1,JustTrains,Mark1Coach,RailVehicles\Passenger\Mk1_TSO\CC\Coach\jt_mk1_tso_crimson_cream_devonian.xml,AP,BRMk1Pack01,RailVehicles\Mk1\BC\TSO\Mk1_TSO.xml,AP Mk1 TSO B&C,RailVehicles\Mk1\BC\TSO\Numbers.dcsv
 Mk1,JustTrains,Mark1Coach,RailVehicles\Passenger\Mk1_TSO\CC\Coach\jt_mk1_tso_crimson_cream.xml,AP,BRMk1Pack01,RailVehicles\Mk1\BC\TSO\Mk1_TSO.xml,AP Mk1 TSO B&C,RailVehicles\Mk1\BC\TSO\Numbers.dcsv
@@ -292,6 +296,8 @@ Mk1,JustTrains,Mark1Coach,RailVehicles\Passenger\Mk1_TSO\WR\Coach\jt_mk1_tso_bro
 Mk1,JustTrains,Mark1Coach,RailVehicles\Passenger\Mk1_TSO\WR\Coach\jt_mk1_tso_brown_riviera.xml,AP,BRMk1Pack01,RailVehicles\Mk1\CC\TSO\Mk1_TSO.xml,AP Mk1 TSO C&C,RailVehicles\Mk1\BC\TSO\Numbers.dcsv
 Mk1,JustTrains,Mark1Coach,RailVehicles\Passenger\Mk1_TSO\WR\Coach\jt_mk1_tso_brown_TBE.xml,AP,BRMk1Pack01,RailVehicles\Mk1\CC\TSO\Mk1_TSO.xml,AP Mk1 TSO C&C,RailVehicles\Mk1\BC\TSO\Numbers.dcsv
 Mk1,JustTrains,Mark1Coach,RailVehicles\Passenger\Mk1_TSO\WR\Coach\jt_mk1_tso_brown.xml,AP,BRMk1Pack01,RailVehicles\Mk1\CC\TSO\Mk1_TSO.xml,AP Mk1 TSO C&C,RailVehicles\Mk1\BC\TSO\Numbers.dcsv
+Mk1,JustTrains,Mark1Coach,RailVehicles\Passenger\Mk1_TSO\WR\Coach\jt_mk1_tso_brown_gwr.xml,AP,BRMk1Pack01,RailVehicles\Mk1\CC\TSO\Mk1_TSO.xml,AP Mk1 TSO C&C,RailVehicles\Mk1\BC\TSO\Numbers.dcsv
+Mk1,JustTrains,Mark1Coach,RailVehicles\Passenger\Mk1_TSO\WR\Coach\jt_mk1_tso_brown_gwr_riviera.xml,AP,BRMk1Pack01,RailVehicles\Mk1\CC\TSO\Mk1_TSO.xml,AP Mk1 TSO C&C,RailVehicles\Mk1\BC\TSO\Numbers.dcsv
 Mk1,keithmross,Port Road,RailVehicles\Passenger\MK1BG\BR Crimson\Coach\mk1bg.xml,AP,BRMk1Pack01,RailVehicles\Mk1\Maroon\BG\Mk1_BG.xml,AP Mk1 BG Maroon,RailVehicles\Mk1\BC\BG\Numbers.dcsv
 Mk1,keithmross,Port Road,RailVehicles\Passenger\MK1BSK\BR Crimson\Coach\mk1sk.xml,AP,BRMk1Pack01,RailVehicles\Mk1\Maroon\BSK\Mk1_BSK.xml,AP Mk1 BSK Maroon,RailVehicles\Mk1\BC\BSK\Numbers.dcsv
 Mk1,keithmross,Port Road,RailVehicles\Passenger\MK1FK\BR Crimson\Coach\mk1fk - ecs.xml,AP,BRMk1Pack01,RailVehicles\Mk1\Maroon\FK\Mk1_FK.xml,AP Mk1 FK Maroon,RailVehicles\Mk1\BC\FK\Numbers.dcsv
@@ -2449,7 +2455,7 @@ DMU220-1_set,JustTrains,Voyager,RailVehicles\Diesel\221\Default\Engine\a25_locom
 DMU220-1_set,JustTrains,Voyager,RailVehicles\Diesel\221\Brown\Engine\a25_locomotive_221_dmf_xc.xml,JustTrains,Voyager,RailVehicles\Diesel\221\AXC_AP\Engine\221_DMRFO.xml,APEP 221 AXC1 DMF,
 DMU220-1_set,JustTrains,Voyager,RailVehicles\Diesel\221\Brown\Engine\a25_locomotive_221_msb_xc.xml,JustTrains,Voyager,RailVehicles\Diesel\221\AXC_AP\Engine\221_MSO1.xml,APEP 221 AXC1 MS1,
 DMU220-1_set,JustTrains,Voyager,RailVehicles\Diesel\221\Brown\Engine\a25_locomotive_221_msb2_xc.xml,JustTrains,Voyager,RailVehicles\Diesel\221\AXC_AP\Engine\221_MSO2.xml,APEP 221 AXC1 MS2,
-DMU220-1_set,JustTrains,Voyager,RailVehicles\Diesel\221\Brown\Engine\a25_locomotive_221_msa_xc.xml,JustTrains,Voyager,RailVehicles\Diesel\221\AXC_AP\Engine\221_MSORMB.xml,APEP 221 AXC1 (DB) MSRMB,
+DMU220-1_set,JustTrains,Voyager,RailVehicles\Diesel\221\Brown\Engine\a25_locomotive_221_msa_xc.xml,JustTrains,Voyager,RailVehicles\Diesel\221\AXC_AP\Engine\221_MSORMB.xml,APEP 221 AXC1 MSRMB,
 DMU220-1_set,JustTrains,Voyager,RailVehicles\Diesel\221\Brown\Engine\a25_locomotive_221_dmsl_xc.xml,JustTrains,Voyager,RailVehicles\Diesel\221\AXC_AP\Engine\221_DMSO.xml,APEP 221 AXC1 DMS (5 Car),
 EMU317_set,DTG,Class455Pack02,RailVehicles\Class455_8\GreaterAnglia317\Class317_GreaterAnglia_EX-GN_DTSOA_nd.xml,AP,Class317Pack01,RailVehicles\Class317_1\Liveries\Ex-ONE-NXEA\DTSO\Class317_DTSOA.xml,AP 317/1 Ex-ONE (NXEA) DTSOA,
 EMU317_set,DTG,Class455Pack02,RailVehicles\Class455_8\GreaterAnglia317\Class317_GreaterAnglia_EX-GN_DTSOA.xml,AP,Class317Pack01,RailVehicles\Class317_1\Liveries\Ex-ONE-NXEA\DTSO\Class317_DTSOA.xml,AP 317/1 Ex-ONE (NXEA) DTSOA,
