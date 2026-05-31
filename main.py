@@ -91,6 +91,10 @@ config.read(path_to_config)
 # Read configuration and find location of RailWorks folder, or ask user to set it
 if config.has_option('RailWorks', 'path'):
     railworks_path = config.get('RailWorks', 'path')
+    if not config.has_section('LastScenario'):
+        config.add_section('LastScenario')
+        config.set('LastScenario', 'path', str(Path(railworks_path, 'Content/Routes')))
+    lastscenario_path = str(Path(config.get('LastScenario', 'path')).parent)
 else:
     loclayout = [[sg.T('')],
                  [sg.Text('Please locate your RailWorks folder:'), sg.Input(key='-IN2-', change_submits=False,
@@ -241,8 +245,8 @@ vp_blue_47_db = import_data_from_csv('tables/Class47BRBlue_numbers.csv')
 left_column = [
     [sg.Text('RSSwapTool', font='Helvetica 16'), sg.Text('v' + version_number, font='Helvetica 8')],
     [sg.Text('© ' + version_date[-4:] + ' JR McKenzie', font='Helvetica 7')],
-    [sg.FileBrowse('Select scenario file to process', key='Scenario_xml', tooltip='Locate the scenario .bin or .xml '
-                                                                                  'file you wish to process')],
+    [sg.FileBrowse('Select scenario file to process', key='Scenario_xml', initial_folder=lastscenario_path,
+                   tooltip='Locate the scenario .bin or .xml file you wish to process')],
     [sg.Text('Tick the boxes below to choose the\nsubstitutions you would like to make.')],
     [sg.Checkbox('Replace Mk1 coaches', default=get_my_config_boolean('defaults', 'replace_mk1'), enable_events=True,
                  tooltip='Tick to enable replacing of Mk1 coaches with AP Mk1 Coach Pack Vol. 1',
@@ -3378,6 +3382,8 @@ if __name__ == "__main__":
             config.set('defaults', 'replace_c450', str(values['Replace_C450']))
             config.set('defaults', 'replace_c456', str(values['Replace_C456']))
             config.set('defaults', 'replace_c465', str(values['Replace_C465']))
+            if len(values['Scenario_xml']) > 0:
+                config.set('LastScenario', 'path', str(values['Scenario_xml']))
             with open(path_to_config, 'w') as configfile:
                 config.write(configfile)
                 configfile.close()
