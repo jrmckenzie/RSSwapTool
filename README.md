@@ -89,7 +89,7 @@ The following substitutions are available:
 * Replace Class 158 sets - Tick to enable replacing of North Wales Coast / Settle Carlisle / Fife Circle Class 158s with AP enhanced versions (Cummins, Perkins)
 * Replace Class 168, 170, 171 sets - Tick to enable replacing of Thomson Class 170s with AP enhanced versions
 * Replace Class 175 sets - Tick to enable replacing of South Wales Coastal / North Wales / Welsh Marches Class 175s with AP enhanced versions (2.0)
-* Replace Class 220, 221 sets - Tick to enable replacing of DTG Class 220 Pack XC, Class 221 North Wales Coast and WCML-South sets with AP enhanced JT Advanced Voyagers. Note that, in the case of the DTG WCML-South units, it will replace the WCML-South Avanti livery with a different look - one with Avanti vinyl wraps over the old Virgin livery.   
+* Replace Class 220/1/2 sets - Tick to enable replacing of DTG Class 220 Pack XC, Class 221 North Wales Coast, WCML-South sets and JustTrains 222 sets with AP Enhancement Pack versions. Note that, in the case of the DTG WCML-South units, it will replace the WCML-South Avanti livery with a different look - one with Avanti vinyl wraps over the old Virgin livery.   
 * Replace Class 319 sets - Tick to enable replacing of BedPanLine 319, DTG Class 319 NSE and RSC Class 319 units with AP versions
 * Replace Class 325 sets - Tick to enable replacing of RSC Class 325 pack units with AP enhanced versions
 * Replace Class 350 sets - Tick to enable replacing of Portsmouth Direct / Brighton Main Line / WCML Trent Valley / WCML South Class 350 units with AP enhanced versions

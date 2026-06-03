@@ -37,7 +37,7 @@ from data_file import hha_e_wagons, hha_l_wagons, HTO_141_numbers, HTO_143_numbe
     c170_scotrail, c170_ftpe, c170_ga_hull, c170_mml, c171_southern, c350_lb_ftpe, c365_ecmls_nse, c365_apcxse, \
     c450_gu_swt, c465_se, c375_dtg_pack, c377_lb_se, c377_lg_sn, c377_fcc, c170_bp_name_lookup, c375_dmos_lookup, \
     c456_nse, c456_southern, c319_dest, c350_lm_wcmls, c375_southern_wcmls, c86_TOPS_HC, c350_lm_cc, c220_dtg, \
-    c221_dtg
+    c221_dtg, c222_jt
 
 # If you want to run this script on Linux you must enter the path to the wine executable. You need wine in order to
 # run the serz.exe utility which converts between .bin and .xml scenario files.
@@ -347,9 +347,9 @@ right_column = [
                  enable_events=True,
                  tooltip='Tick to enable replacing of Class 175s with AP enhanced versions',
                  key='Replace_C175')],
-    [sg.Checkbox('Replace Class 220, 221 sets', default=get_my_config_boolean('defaults', 'replace_c221'),
+    [sg.Checkbox('Replace Class 220/1/2 sets', default=get_my_config_boolean('defaults', 'replace_c221'),
                  enable_events=True,
-                 tooltip='Tick to enable replacing of DTG Voyager with JT Advanced Voyager',
+                 tooltip='Tick to enable replacing of Voyager and Meridian with AP 220/221/222 Enhancement packs',
                  key='Replace_C221')],
     [sg.Checkbox('Replace Class 319 sets', default=get_my_config_boolean('defaults', 'replace_c319'),
                  enable_events=True,
@@ -2380,18 +2380,28 @@ def c221_replace(provider, product, blueprint, name, number):
                                 nm = re.search('.([A-Z!])221.*', number.text)
                                 if nm:
                                     destination = ';D=' + get_destination(c221_dtg, nm.group(1), '0')
+                    if provider.text == 'JustTrains':
+                        if product.text == 'Meridian':
+                            nm = number.text[-2:]
+                            if nm:
+                                destination = ';D=' + get_destination(c222_jt, nm, '0')
                     # Swap vehicle and set number / destination (where possible) from the DMSO
                     provider.text = this_vehicle[3]
                     product.text = this_vehicle[4]
                     blueprint.text = this_vehicle[5]
                     is_220_DMSO = re.search('220_DMSO', this_vehicle[5])
                     is_221_DMSO = re.search('221_DMSO', this_vehicle[5])
+                    is_222_DMSO = re.search('222_DMSO', this_vehicle[5])
                     if is_220_DMSO:
                         unit_num = re.search('(220[0-9]{3})', rv_num)
                         if unit_num:
                             rv_num = unit_num.group(1) + destination + this_vehicle[7]
                     elif is_221_DMSO:
                         unit_num = re.search('(221[0-9]{3})', rv_num)
+                        if unit_num:
+                            rv_num = unit_num.group(1) + destination + this_vehicle[7]
+                    elif is_222_DMSO:
+                        unit_num = re.search('(222[0-9]{3})', rv_num)
                         if unit_num:
                             rv_num = unit_num.group(1) + destination + this_vehicle[7]
                     name.text = this_vehicle[6]
