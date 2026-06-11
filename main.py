@@ -1848,22 +1848,23 @@ def c40_replace(provider, product, blueprint, name, number):
 
 
 def c47_replace(provider, product, blueprint, name, number):
-    for i in range(0, len(vehicle_db['Class47BRBlue'])):
-        this_vehicle = vehicle_db['Class47BRBlue'][i]
+    for i in range(0, len(vehicle_db['Class47'])):
+        this_vehicle = vehicle_db['Class47'][i]
         if this_vehicle[0] in provider.text:
             if this_vehicle[1] in product.text:
                 bp = re.search(this_vehicle[2], blueprint.text, flags=re.IGNORECASE)
                 if bp:
                     rv_orig = number.text
                     nm = re.search('^(47[0-9]{3})', number.text)
+                    (w_blueprint, w_name) = set_weathering(3, this_vehicle)
                     if nm:
-                        loco = csv_get_blue47num(this_vehicle[3], nm.group(1))
-                        provider.text = 'Kuju'
-                        product.text = 'RailSimulator'
-                        blueprint.text = loco[4]
-                        name.text = loco[3]
-                        number.text = loco[0]
-                        rv_list.append(number.text)
+                        provider.text = this_vehicle[3]
+                        product.text = this_vehicle[4]
+                        blueprint.text = w_blueprint
+                        name.text = w_name
+                        rv_num = nm.group(1) + this_vehicle[7]
+                        number.text = str(rv_num)
+                        rv_list.append(rv_num)
                         rv_pairs.append([rv_orig, number.text])
                         return True
                     else:
