@@ -73,7 +73,7 @@ The following substitutions are available:
 * Replace Class 31s - Replace Class 31s with AP enhancement pack equivalent
 * Replace Class 37s - Replace Class 37s with AP equivalent
 * Replace Class 40s - Replace DT Class 40s with AP/RailRight equivalent
-* Replace Class 47s - Replace BR Blue Class 47s with Vulcan Productions BR Blue Class 47 Pack versions
+* Replace Class 47s - Replace BR Class 47s with AP Class 47 pack
 * Replace Class 50s - Replace MeshTools Class 50s with AP equivalent
 * Replace Class 56s - Replace RSC Class 56 Railfreight Sectors with AP enhancement pack equivalent
 * Replace Class 66s - Replace Class 66s with AP enhancement pack equivalent
