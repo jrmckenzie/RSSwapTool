@@ -741,7 +741,7 @@ Mk3ab,keithmross,WCML2,RailVehicles\Mk3Coaches\Mk3aFO_AP\mk3a_tfo.xml,AP,BRMk3Pa
 Mk3ab,keithmross,WCML2,RailVehicles\Mk3Coaches\Mk3aFO\mk3a_tfo.xml,AP,BRMk3Pack01,RailVehicles\Mk3Coaches\BR_AP\Mk3a_FO.xml,AP Mk3a/b BR FO,
 Mk3ab,keithmross,WCML2,RailVehicles\Mk3Coaches\Mk3aRFB\mk3a_RFB.xml,AP,BRMk3Pack01,RailVehicles\Mk3Coaches\BR_AP\Mk3a_RFM.xml,AP Mk3a/b BR RFB,;L=0
 Mk3ab,keithmross,WCML2,RailVehicles\Mk3Coaches\Mk3aRSM_AP\mk3a_RFB.xml,AP,BRMk3Pack01,RailVehicles\Mk3Coaches\BR_AP\Mk3a_RUB.xml,AP Mk3a/b BR RUB,;L=0;FC=0
-Mk3ab,keithmross,WCML2,RailVehicles\Mk3Coaches\Mk3aRSM\mk3a_RFB.bin,AP,BRMk3Pack01,RailVehicles\Mk3Coaches\BR_AP\Mk3a_RUB.xml,AP Mk3a/b BR RUB,;L=0;FC=0
+Mk3ab,keithmross,WCML2,RailVehicles\Mk3Coaches\Mk3aRSM\mk3a_RFB.xml,AP,BRMk3Pack01,RailVehicles\Mk3Coaches\BR_AP\Mk3a_RUB.xml,AP Mk3a/b BR RUB,;L=0;FC=0
 Mk3ab,keithmross,WCML2,RailVehicles\Mk3Coaches\Mk3aSO_AP\mk3a_tso.xml,AP,BRMk3Pack01,RailVehicles\Mk3Coaches\BR_AP\Mk3a_TSO.xml,AP Mk3a/b BR TSO,
 Mk3ab,keithmross,WCML2,RailVehicles\Mk3Coaches\Mk3aSO\mk3a_tso.xml,AP,BRMk3Pack01,RailVehicles\Mk3Coaches\BR_AP\Mk3a_TSO.xml,AP Mk3a/b BR TSO,
 Mk3ab,keithmross,WCMLNorth,RailVehicles\Passsenger\MK3a-Anglia\Mk3aRFB\mk3a_rfb_ic.xml,AP,BRMk3Pack01,RailVehicles\Mk3Coaches\AR_AP\Mk3a_RFM.xml,AP Mk3a/b Anglia RFM,;CDL=1;OHL=2
@@ -763,7 +763,7 @@ Mk3ab,keithmross,WCMLNorth,RailVehicles\Passsenger\MK3a-VirginOld\Mk3aRFB\mk3a_r
 Mk3ab,keithmross,WCMLNorth,RailVehicles\Passsenger\MK3a-VirginOld\Mk3aSO\mk3a_so_ic.xml,AP,BRMk3Pack01,RailVehicles\Mk3Coaches\VT_AP\Mk3a_TSO.xml,AP Mk3a/b VT TSO,;CDL=1;OHL=2
 Mk3ab,keithmross,WCMLNorth,RailVehicles\Passsenger\MK3a-VirginOld\Mk3aSO\mk3a_soScot1_ic.xml,AP,BRMk3Pack01,RailVehicles\Mk3Coaches\VT_AP\Mk3a_TSO_4.xml,AP Mk3a/b Ex-VT (FSR) TSO,;CDL=1;OHL=2
 Mk3ab,keithmross,WCMLNorth,RailVehicles\Passsenger\MK3a-VirginOld\Mk3aSO\mk3a_soScot2_ic.xml,AP,BRMk3Pack01,RailVehicles\Mk3Coaches\VT_AP\Mk3a_TSO_3.xml,AP Mk3a/b Ex-VT (SR) TSO,;CDL=1;OHL=2
-Mk3ab,keithmross,WCMLNorth,RailVehicles\Passsenger\MK3a-VirginOldUB\Mk3aFO\mk3a_fo_ic.bin,AP,BRMk3Pack01,RailVehicles\Mk3Coaches\VT_AP\Mk3a_FO_2.xml,AP Mk3a/b Ex-VT FO,;CDL=1;OHL=2
+Mk3ab,keithmross,WCMLNorth,RailVehicles\Passsenger\MK3a-VirginOldUB\Mk3aFO\mk3a_fo_ic.xml,AP,BRMk3Pack01,RailVehicles\Mk3Coaches\VT_AP\Mk3a_FO_2.xml,AP Mk3a/b Ex-VT FO,;CDL=1;OHL=2
 Mk3ab,keithmross,WCMLNorth,RailVehicles\Passsenger\MK3a-VirginOldUB\Mk3aRFB\mk3a_rfb_ic.xml,AP,BRMk3Pack01,RailVehicles\Mk3Coaches\VT_AP\Mk3a_RFM_2.xml,AP Mk3a/b Ex-VT RFM,;CDL=1;OHL=2
 Mk3ab,keithmross,WCMLNorth,RailVehicles\Passsenger\MK3a-VirginOldUB\Mk3aSO\mk3a_so_ic.xml,AP,BRMk3Pack01,RailVehicles\Mk3Coaches\VT_AP\Mk3a_TSO_2.xml,AP Mk3a/b Ex-VT TSO,;CDL=1;OHL=2
 Mk3ab,keithmross,WCMLNorth,RailVehicles\Passsenger\Mk3a-VTold\Mk3aFO\mk3a_fo_ic-np.xml,AP,BRMk3Pack01,RailVehicles\Mk3Coaches\VT_AP\Mk3a_FO.xml,AP Mk3a/b VT FO,;CDL=1;OHL=2
@@ -2433,15 +2433,15 @@ DMU220-1_set,JustTrains,Voyager,RailVehicles\Diesel\220\Brown\Engine\a25_locomot
 DMU220-1_set,JustTrains,Voyager,RailVehicles\Diesel\220\Brown\Engine\a25_locomotive_220_dmsl_xc_s.xml,JustTrains,Voyager,RailVehicles\Diesel\220\AXC_AP\Engine\220_DMSO_2.xml,APEP 220 AXC2 DMS,;N=2
 DMU220-1_set,JustTrains,Voyager,RailVehicles\Diesel\220\Brown\Engine\a25_locomotive_220_dmsl_xc_s_nd.xml,JustTrains,Voyager,RailVehicles\Diesel\220\AXC_AP\Engine\220_DMSO_2.xml,APEP 220 AXC2 DMS,;N=2
 DMU220-1_set,JustTrains,Voyager,RailVehicles\Diesel\220\Transitional\Engine\a25_locomotive_220_dmf_xc.xml,JustTrains,Voyager,RailVehicles\Diesel\220\VT_AP\Engine\220_DMRFO_5.xml,APEP 220 VT (AXC) DMF,
-DMU220-1_set,JustTrains,Voyager,RailVehicles\Diesel\220\Transitional\Engine\a25_locomotive_220_msb_xc.xml,JustTrains,Voyager,RailVehicles\Diesel\220\VT_AP\Engine\220_MSO1_5.bin,APEP 220 VT (AXC) MS1,
+DMU220-1_set,JustTrains,Voyager,RailVehicles\Diesel\220\Transitional\Engine\a25_locomotive_220_msb_xc.xml,JustTrains,Voyager,RailVehicles\Diesel\220\VT_AP\Engine\220_MSO1_5.xml,APEP 220 VT (AXC) MS1,
 DMU220-1_set,JustTrains,Voyager,RailVehicles\Diesel\220\Transitional\Engine\a25_locomotive_220_msa_xc.xml,JustTrains,Voyager,RailVehicles\Diesel\220\VT_AP\Engine\220_MSORMB_5.xml,APEP 220 VT (AXC) MSRMB,
 DMU220-1_set,JustTrains,Voyager,RailVehicles\Diesel\220\Transitional\Engine\a25_locomotive_220_dmsl_xc.xml,JustTrains,Voyager,RailVehicles\Diesel\220\VT_AP\Engine\220_DMSO_5.xml,APEP 220 VT (AXC) DMS,;L=3
 DMU220-1_set,JustTrains,Voyager,RailVehicles\Diesel\220\Transitional\Engine\a25_locomotive_220_dmf_trans.xml,JustTrains,Voyager,RailVehicles\Diesel\220\VT_AP\Engine\220_DMRFO_4.xml,APEP 220 VT (UB) DMF,
-DMU220-1_set,JustTrains,Voyager,RailVehicles\Diesel\220\Transitional\Engine\a25_locomotive_220_msb_trans.xml,JustTrains,Voyager,RailVehicles\Diesel\220\VT_AP\Engine\220_MSO1_4.bin,APEP 220 VT (UB) MS1,
+DMU220-1_set,JustTrains,Voyager,RailVehicles\Diesel\220\Transitional\Engine\a25_locomotive_220_msb_trans.xml,JustTrains,Voyager,RailVehicles\Diesel\220\VT_AP\Engine\220_MSO1_4.xml,APEP 220 VT (UB) MS1,
 DMU220-1_set,JustTrains,Voyager,RailVehicles\Diesel\220\Transitional\Engine\a25_locomotive_220_msa_trans.xml,JustTrains,Voyager,RailVehicles\Diesel\220\VT_AP\Engine\220_MSORMB_4.xml,APEP 220 VT (UB) MSRMB,
 DMU220-1_set,JustTrains,Voyager,RailVehicles\Diesel\220\Transitional\Engine\a25_locomotive_220_dmsl_trans.xml,JustTrains,Voyager,RailVehicles\Diesel\220\VT_AP\Engine\220_DMSO_4.xml,APEP 220 VT (UB) DMS,;L=0
 DMU220-1_set,JustTrains,Voyager,RailVehicles\Diesel\220\Default\Engine\a25_locomotive_220_dmf.xml,JustTrains,Voyager,RailVehicles\Diesel\220\VT_AP\Engine\220_DMRFO_2.xml,APEP 220 VT (UB) DMF,
-DMU220-1_set,JustTrains,Voyager,RailVehicles\Diesel\220\Default\Engine\a25_locomotive_220_msb.xml,JustTrains,Voyager,RailVehicles\Diesel\220\VT_AP\Engine\220_MSO1_2.bin,APEP 220 VT (UB) MS1,
+DMU220-1_set,JustTrains,Voyager,RailVehicles\Diesel\220\Default\Engine\a25_locomotive_220_msb.xml,JustTrains,Voyager,RailVehicles\Diesel\220\VT_AP\Engine\220_MSO1_2.xml,APEP 220 VT (UB) MS1,
 DMU220-1_set,JustTrains,Voyager,RailVehicles\Diesel\220\Default\Engine\a25_locomotive_220_msa.xml,JustTrains,Voyager,RailVehicles\Diesel\220\VT_AP\Engine\220_MSORMB_2.xml,APEP 220 VT (UB) MSRMB,
 DMU220-1_set,JustTrains,Voyager,RailVehicles\Diesel\220\Default\Engine\a25_locomotive_220_dmsl.xml,JustTrains,Voyager,RailVehicles\Diesel\220\VT_AP\Engine\220_DMSO_2.xml,APEP 220 VT (UB) DMS,;L=2
 DMU220-1_set,JustTrains,Voyager,RailVehicles\Diesel\221\Transitional\Engine\a25_locomotive_221_dmf_xc.xml,JustTrains,Voyager,RailVehicles\Diesel\221\VT_AP\Engine\221_DMRFO_5.xml,APEP 221 VT (AXC) DMF,
