@@ -1557,6 +1557,17 @@ Class40,DT,DT_class40,RailVehicles\Diesel\Class40\BR Green\Engine\DT_class40.xml
 Class40,DT,DT_class40,RailVehicles\Diesel\Class40\BR_green_split\Engine\DT_class40.xml,RailRight,Class40Green,RailVehicles\Class40Split\Vac\Engine\Class40BRGreen.xml,Class 40 Green Split Vac,AutoNumber\NumbersSplit.dcsv
 Class47,keithmross,WCML2,RailVehicles\Diesel\Class47\Default\Engine\class47_br.xml,AP,Class47Pack01,RailVehicles\Diesel\Class47\BR_Blue_2_W1\47.xml,AP 47 BR Blue 4 (W1),;Config=BRBlue4
 Class47,keithmross,WCML2,RailVehicles\Diesel\Class47\Large Logo\Engine\class47_br.xml,AP,Class47Pack01,RailVehicles\Diesel\Class47\BR_LL_2_W1\47.xml,AP 47 BR LL 2 (W1),;Config=BRLL2
+Class47,DTG,Class47Pack02,RailVehicles\Diesel\Class47\BR_Scotrail_Stag\Engine\class47_br.xml,AP,Class47Pack01,RailVehicles\Diesel\Class47\BR_LL_W1\47.xml,AP 47 BR LL 1 (W1),;Config=BRLL1;L=3;no1front=bhc_dom;no2front=bhc_dom
+Class47,DTG,Class47Pack04,RailVehicles\Diesel\Class47\Default\Engine\class47_ic.xml,AP,Class47Pack01,RailVehicles\Diesel\Class47\IC_W1\47.xml,AP 47 IC (W1),;Config=IC
+Class47,DTG,Class47Pack04,RailVehicles\Diesel\Class47\Default\Engine\class47_largelogo.xml,AP,Class47Pack01,RailVehicles\Diesel\Class47\BR_LL_2_W1\47.xml,AP 47 BR LL 2 (W1),;Config=BRLL2;no1front=bhc_dom;no2front=bhc_dom
+Class47,DTG,Class47Pack04,RailVehicles\Diesel\Class47\Default\Engine\class47_parcels.xml,AP,Class47Pack01,RailVehicles\Diesel\Class47\Parcels_W1\47_2.xml,AP 47 Parcels (UB) (W1),;Config=Parcels;BR=0
+Class47,DTG,Class47Pack04,RailVehicles\Diesel\Class47\RESPack\Engine_Parcels\class474_par.xml,AP,Class47Pack01,RailVehicles\Diesel\Class47\Parcels_W1\47.xml,AP 47 Parcels (W1),;Config=Parcels
+Class47,DTG,Class47Pack04,RailVehicles\Diesel\Class47\RESPack\Engine_TOHRES\class47_res.xml,AP,Class47Pack01,RailVehicles\Diesel\Class47\RES_W1\47.xml,AP 47 RES (W1),;Config=RES
+Class47,DTG,Class47Pack04,RailVehicles\Diesel\Class47\RESPack\Engine\class474_res.xml,AP,Class47Pack01,RailVehicles\Diesel\Class47\RES_W1\47.xml,AP 47 RES (W1),;Config=RES
+Class47,DTG,Class47Pack04,RailVehicles\Diesel\Class47\RESPack\Engine_BRSR\class47_brsr.xml,AP,Class47Pack01,RailVehicles\Diesel\Class47\SR_W1\47.xml,AP 47 SR (W1),;Config=IC
+Class47,DTG,Class47Pack04,RailVehicles\Diesel\Class47\RESPack\Engine_Parcels\class47_par.xml,AP,Class47Pack01,RailVehicles\Diesel\Class47\Parcels_W1\47_2.xml,AP 47 Parcels (UB) (W1),;Config=Parcels;BR=0
+Class47,DTG,Class47Pack04,RailVehicles\Diesel\Class47\RESPack\Engine\class47_res.xml,AP,Class47Pack01,RailVehicles\Diesel\Class47\RES_W1\47_2.xml,AP 47 RES (UB) (W1),;Config=RESUB
+Class47,DTG,Class47Pack04,RailVehicles\Diesel\Class47\RESPack\Engine_ICS\class478_ics.xml,AP,Class47Pack01,RailVehicles\Diesel\Class47\ICS_W1\47_2.xml,AP 47 ICS2 (W1),;Config=ICS2
 Class47,Kuju,RailSimulator,RailVehicles\Diesel\Class47\JT47RESFaded\Engine\class47_br.xml,AP,Class47Pack01,RailVehicles\Diesel\Class47\BR_Blue_2_W1\47.xml,AP 47 BR Blue 4 (W1),;Config=BRBlue4
 Class47,Kuju,RailSimulator,RailVehicles\Diesel\Class47\BR-Blue_1_AP\Engine\class47_br.xml,AP,Class47Pack01,RailVehicles\Diesel\Class47\BR_Blue_2_W1\47.xml,AP 47 BR Blue 4 (W1),;Config=BRBlue4
 Class47,Kuju,RailSimulator,RailVehicles\Diesel\Class47\BR-Blue_2_AP\Engine\class47_br.xml,AP,Class47Pack01,RailVehicles\Diesel\Class47\BR_Blue_2_W1\47.xml,AP 47 BR Blue 4 (W1),;Config=BRBlue4
@@ -1573,6 +1584,8 @@ Class47,Kuju,RailSimulator,RailVehicles\Diesel\Class47\ICS\Engine\class47_ICS.xm
 Class47,Kuju,RailSimulator,RailVehicles\Diesel\Class47\InterCity-Black-HC\Engine\class47_IC.xml,AP,Class47Pack01,RailVehicles\Diesel\Class47\IC_W1\47.xml,AP 47 IC (W1),;Config=IC
 Class47,Kuju,RailSimulator,RailVehicles\Diesel\Class47\ICS-Yellow-HC\Engine\class47_ICS.xml,AP,Class47Pack01,RailVehicles\Diesel\Class47\ICS_W1\47.xml,AP 47 ICS1 (W1),;Config=ICS1;no1front=hc_dom;no2front=hc_dom
 Class47,Kuju,RailSimulator,RailVehicles\Diesel\Class47\JT47RESFaded\Engine\class47_res.xml,AP,Class47Pack01,RailVehicles\Diesel\Class47\RES_W1\47.xml,AP 47 RES (W1),;Config=RES
+Class47,RSC,Class47Pack01,RailVehicles\Diesel\Class47\NetworkSouthEast\Engine\class47_nse.xml,AP,Class47Pack01,RailVehicles\Diesel\Class47\NSE1_W1\47.xml,AP 47 NSE1 (W1),;Config=NSE1
+Class47,RSC,Class47Pack01,RailVehicles\Diesel\Class47\NetworkSouthEast2\Engine\class47_nse2.xml,AP,Class47Pack01,RailVehicles\Diesel\Class47\NSE2_W1\47_2.xml,AP 47 NSE2 (W1),;Config=NSE3
 Class50,MichaelWhiteley,Class 50,RailVehicles\Diesel\Class 50\50007\Engine\engine.xml,AP,Class50Pack01,RailVehicles\Diesel\Class50\GWR_50007\50_W2.xml,AP Class 50 GWR (W2),RailVehicles\Diesel\Class50\GWR_50007\Engine\class50_numbers.dcsv
 Class50,MichaelWhiteley,Class 50,RailVehicles\Diesel\Class 50\Br green\Engine\engine.xml,AP,Class50Pack01,RailVehicles\Diesel\Class50\BR_Blue_Orig\50_W1.xml,AP Class 50 BR Blue (UR/Pre-TOPS) (W1),RailVehicles\Diesel\Class50\BR_Blue_Orig\Engine\class50_numbers.dcsv
 Class50,MichaelWhiteley,Class 50,RailVehicles\Diesel\Class 50\Br blue pretops\Engine\engine.xml,AP,Class50Pack01,RailVehicles\Diesel\Class50\BR_Blue_Orig\50_W1.xml,AP Class 50 BR Blue (UR/Pre-TOPS) (W1),RailVehicles\Diesel\Class50\BR_Blue_Orig\Engine\class50_numbers.dcsv
